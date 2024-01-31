@@ -1,7 +1,10 @@
 # cmake -DCMAKE_TOOLCHAIN_FILE=cmake/DevkitArm3DS.cmake ..
 set(CMAKE_TOOLCHAIN_FILE cmake/DevkitArm3DS.cmake)
+set(project_title DetKit_UI)
 cmake_minimum_required(VERSION 3.14)
-project(DetKit_DEMO.elf)
+
+
+project(${project_title}.elf)
 
 set(APP_TITLE DetKit_DEMO)
 set(APP_DESCRIPTION "A Demo of DetKit")
@@ -19,24 +22,24 @@ find_package(CTRULIB REQUIRED) # Look for ctrulib
 
 # Create executable
 file(GLOB_RECURSE SOURCES src/*)
-add_executable(DetKit_DEMO.elf ${SOURCES}) # Create the elf file
-target_include_directories(DetKit_DEMO.elf PRIVATE src)
+add_executable(${project_title}.elf ${SOURCES}) # Create the elf file
+target_include_directories(${project_title}.elf PRIVATE src)
 # file(GLOB SOURCES src/*)
 # add_executable(DetKit_DEMO.elf ${SOURCES}) # Create the elf file
 # target_include_directories(DetKit_DEMO.elf PRIVATE src)
 # target_link_libraries(DetKit_DEMO.elf detkit)
 
 
-target_link_libraries(DetKit_DEMO.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !
+target_link_libraries(${project_title}.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !
 # target_include_directories(LVGL-demo.elf PRIVATE ../../cpp_libs/rapidjson-1.1.0/include) # Link RapidJSON
 
 
 set(ncnn_DIR ../../cpp_libs/ncnn_master_3ds/lib/cmake/ncnn) # Link ncnn
 find_package(ncnn REQUIRED)
-target_link_libraries(DetKit_DEMO.elf ncnn)
+target_link_libraries(${project_title}.elf ncnn)
 
 
-add_3dsx_target(DetKit_DEMO.elf 
+add_3dsx_target(${project_title}.elf 
     ${APP_TITLE}
     ${APP_DESCRIPTION}
     ${APP_AUTHOR}
