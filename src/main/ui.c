@@ -20,37 +20,6 @@ void list_item_delete_cb(lv_event_t *e)
     lv_obj_del_async(item);
 }
 
-void color_flip_cb(lv_event_t *e)
-{
-    lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t *label = lv_event_get_user_data(e);
-    lv_obj_t *target =lv_event_get_current_target(e);
-    // lv_obj_t *label = lv_obj_get_child(target, 0);
-
-    switch(code) 
-    {
-        case LV_EVENT_PRESSED:
-            lv_obj_set_style_text_color(label, lv_color_hex(0x2986cc), NULL);
-            // lv_label_set_text(label, "PRESSED");
-            // lv_obj_set_style_bg_color(target, lv_color_hex(0xffffff), NULL);
-            break;
-        case LV_EVENT_CLICKED:
-            lv_obj_set_style_text_color(label, lv_color_hex(0xffffff), NULL);
-            break;
-        case LV_EVENT_LONG_PRESSED:
-            lv_obj_set_style_text_color(label, lv_color_hex(0x2986cc), NULL);
-            // lv_obj_set_style_bg_color(target, lv_color_hex(0xffffff), NULL);
-            break;
-        case LV_EVENT_LONG_PRESSED_REPEAT:
-            lv_obj_set_style_text_color(label, lv_color_hex(0x2986cc), NULL);
-            // lv_obj_set_style_bg_color(target, lv_color_hex(0xffffff), NULL);
-            break;
-        default:
-            lv_obj_set_style_text_color(label, lv_color_hex(0xffffff), NULL);
-            break;
-    }
-}
-
 void display_event_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -95,30 +64,6 @@ lv_obj_t *create_box_list(lv_group_t *g)
 
     free(glt);
     return boxxes;
-}
-
-lv_obj_t *create_joystick()
-{
-    // Create the container 
-    lv_obj_t *cont = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(cont, CANVAS_WIDTH, CANVAS_HEIGHT);
-    lv_obj_align(cont, LV_ALIGN_LEFT_MID, 10, -40);
-    lv_obj_set_style_radius(cont, LV_RADIUS_CIRCLE, NULL);
-    lv_obj_set_style_clip_corner(cont, true, NULL);
-    lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
-
-    // Create the Joy stick
-    lv_obj_t *js = lv_obj_create(cont);
-    lv_obj_set_size(js, 50, 50);
-    lv_obj_center(js);
-    lv_obj_set_style_radius(js, LV_RADIUS_CIRCLE, NULL);
-    lv_obj_set_style_clip_corner(cont, true, NULL);
-    lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_style_bg_color(js, lv_color_hex(0x777777), NULL);
-    lv_obj_set_style_border_width(js, 5, NULL);
-    lv_obj_set_style_border_color(js, lv_color_hex(0xbcbcbc), NULL);
-
-    return js;
 }
 
 ui_LR_t create_shoulder_button()
@@ -176,88 +121,6 @@ ui_LR_t create_shoulder_button()
     return output;
 }
 
-ui_ABXY_t create_ABXY()
-{
-    // Create container
-    lv_obj_t *cont = lv_obj_create(lv_scr_act());
-    lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_size(cont, 130, 130);
-    lv_obj_align(cont, LV_ALIGN_RIGHT_MID, 0, -20);
-
-    lv_obj_set_style_border_opa(cont, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, NULL);;
-
-    // Create button
-    lv_obj_t *btn_ptr[4];
-    lv_point_t *points_array_ptr[4];
-    const char *btn_labels[] = {"A", "B", "Y", "X"};
-    lv_color_t colors[] = 
-    {
-        lv_color_hex(0xe06666), lv_color_hex(0xffd966),
-        lv_color_hex(0x8fce00), lv_color_hex(0x6fa8dc)
-    };
-    u32 offset = 35;
-    const u32 btn_position[] = {offset, 0, 0, offset, -offset, 0, 0, -offset};
-    static lv_indev_drv_t drv_list_ABXY[4];
-    void (*press_callbacks[4])() = {virtual_A_cb, virtual_B_cb, virtual_Y_cb, virtual_X_cb};
-
-    
-    for (int i=0; i < 4;i++)
-    {
-        btn_ptr[i] = lv_btn_create(cont);
-        lv_obj_t *label = lv_label_create(btn_ptr[i]);
-        lv_label_set_text(label, btn_labels[i]);
-        lv_label_set_recolor(label, true);
-        lv_obj_center(label);
-
-        // Shape circle
-        lv_obj_set_size(btn_ptr[i], 30, 30);
-        lv_obj_set_style_radius(btn_ptr[i], LV_RADIUS_CIRCLE, NULL);
-        lv_obj_set_style_clip_corner(btn_ptr[i], true, NULL);
-        lv_obj_set_scrollbar_mode(btn_ptr[i], LV_SCROLLBAR_MODE_OFF);
-
-        // Position
-        lv_obj_center(btn_ptr[i]);
-        lv_obj_set_pos(btn_ptr[i], btn_position[i * 2], btn_position[i * 2 + 1]);
-
-        // Color
-        lv_obj_set_style_bg_color(btn_ptr[i], colors[i], NULL);
-        lv_obj_set_style_text_color(label, lv_color_hex(0xffffff), NULL);
-        lv_label_set_recolor(label, true);
-
-        // Callback
-        lv_obj_update_layout(btn_ptr[i]);
-        lv_obj_add_event_cb(btn_ptr[i], color_flip_cb, LV_EVENT_ALL, label);
-        // lv_obj_add_event_cb(btn_ptr[i], display_event_cb, LV_EVENT_ALL, label); // Color flip callback
-
-        points_array_ptr[i] = (lv_point_t *) malloc(sizeof(lv_point_t) * 2);
-        points_array_ptr[i][0] = (lv_point_t) {-1, -1};
-        points_array_ptr[i][1] = (lv_point_t)
-        {
-            (btn_ptr[i]->coords.x1 + btn_ptr[i]->coords.x2) / 2,
-            (btn_ptr[i]->coords.y1 + btn_ptr[i]->coords.y2) / 2
-        };
-
-        drv_list_ABXY[i].type = LV_INDEV_TYPE_BUTTON;
-        drv_list_ABXY[i].read_cb = press_callbacks[i];
-        lv_indev_t *indev = lv_indev_drv_register(&drv_list_ABXY[i]);
-        lv_indev_set_button_points(indev, points_array_ptr[i]);
-    }
-    
-
-    ui_ABXY_t output;
-    output.container = cont;
-    output.A = btn_ptr[0];
-    output.B = btn_ptr[1];
-    output.X = btn_ptr[2];
-    output.Y = btn_ptr[3];
-    output.point_array_A = points_array_ptr[0];
-    output.point_array_B = points_array_ptr[1];
-    output.point_array_X = points_array_ptr[2];
-    output.point_array_Y = points_array_ptr[3];
-    return output;
-}
-
 lv_obj_t *put_text_example(const char *string)
 {
     static lv_style_t style;
@@ -282,11 +145,3 @@ lv_obj_t *put_text_example(const char *string)
     return label;
 }
 
-void update_joy_stick(lv_obj_t *js, circlePosition *js_read)
-{
-    lv_obj_set_pos(
-        js,
-        js_read->dx * 0.07792f,
-        -js_read->dy * 0.07792f
-    );
-}

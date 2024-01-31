@@ -12,9 +12,6 @@
 #define WIDTH_TOP 400
 #define HEIGHT_TOP 240
 
-//Debug
-static char debug_string[30] = {"Bubug"};
-
 
 // display.c
 void writePic2FrameBuf565(void *fb, lv_color_t * color, u16 x, u16 y, u16 w, u16 h);
@@ -34,34 +31,16 @@ typedef struct
 
 typedef struct
 {
-    lv_obj_t *container;
-    lv_obj_t *A;
-    lv_obj_t *B;
-    lv_obj_t *X;
-    lv_obj_t *Y;
-    lv_point_t *point_array_A;
-    lv_point_t *point_array_B;
-    lv_point_t *point_array_X;
-    lv_point_t *point_array_Y;
-} ui_ABXY_t;
-
-typedef struct
-{
     lv_group_t *g;
     lv_obj_t *list;
 } lv_group_list_t;
 
 void list_item_add_cb(lv_event_t *e);
 void list_item_delete_cb(lv_event_t *e);
-void color_flip_cb(lv_event_t *e);
 void display_event_cb(lv_event_t *e);
 lv_obj_t *create_box_list();
-lv_obj_t *create_joystick();
 ui_LR_t create_shoulder_button();
-ui_ABXY_t create_ABXY();
-lv_obj_t *create_bottom_container();
 lv_obj_t *put_text_example(const char *string);
-void update_joy_stick(lv_obj_t *js, circlePosition *js_read);
 
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
