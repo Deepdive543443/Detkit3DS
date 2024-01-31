@@ -56,7 +56,9 @@ int main(int argc, char** argv)
     lv_group_t *g = lv_group_create();
     
     lv_obj_t *btm_text = put_text_example("Hello\nLVGL 3DS");
+    lv_obj_t *model_list = create_model_list();
     ui_LR_t ui_LR = create_shoulder_button();
+
 
     // Input init
     static lv_indev_drv_t indev_drv_cross;
