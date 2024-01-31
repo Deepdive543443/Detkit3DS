@@ -6,8 +6,8 @@ cmake_minimum_required(VERSION 3.14)
 
 project(${project_title}.elf)
 
-set(APP_TITLE DetKit_DEMO)
-set(APP_DESCRIPTION "A Demo of DetKit")
+set(APP_TITLE DetKit_UI)
+set(APP_DESCRIPTION "DetKitNCNN with UI backend")
 set(APP_AUTHOR Deepdive543443)
 set(APP_ICON 48_ncnn.png)
 set(ROMFS romfs)
