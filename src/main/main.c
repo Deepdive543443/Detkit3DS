@@ -59,6 +59,7 @@ int main(int argc, char** argv)
     lv_obj_t *model_list = create_model_list();
     ui_LR_t ui_LR = create_shoulder_button();
     lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
+    ui_LR_t btm_btn = create_bottom_btn();
 
 
 

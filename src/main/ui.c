@@ -169,3 +169,10 @@ lv_obj_t *create_model_list()
     lv_obj_add_event_cb(models, model_list_hanlder, LV_EVENT_ALL, NULL);
 }
 
+ui_LR_t create_bottom_btn()
+{
+    lv_obj_t *cont = lv_obj_create(lv_scr_act());
+    lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_size(cont, WIDTH_BTM, 30);
+    lv_obj_align(cont, LV_ALIGN_BOTTOM_MID, 0, 0);
+}
