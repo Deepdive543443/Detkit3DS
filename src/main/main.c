@@ -55,9 +55,11 @@ int main(int argc, char** argv)
     lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE); // We don't want the screen to be scrollable
     lv_group_t *g = lv_group_create();
     
-    lv_obj_t *btm_text = put_text_example("Hello\nLVGL 3DS");
+    // lv_obj_t *btm_text = put_text_example("Hello\nLVGL 3DS");
     lv_obj_t *model_list = create_model_list();
     ui_LR_t ui_LR = create_shoulder_button();
+    lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
+
 
 
     // Input init

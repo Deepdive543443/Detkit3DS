@@ -47,8 +47,8 @@ lv_obj_t *create_box_list(lv_group_t *g)
 {
 
     lv_obj_t *boxxes = lv_list_create(lv_scr_act());
-    lv_obj_set_size(boxxes, 150, 160);
-    lv_obj_align(boxxes, LV_ALIGN_TOP_MID, 0, 0);
+    lv_obj_set_size(boxxes, WIDTH_BTM, 160);
+    lv_obj_align(boxxes, LV_ALIGN_TOP_MID, 0, 40);
 
     lv_group_list_t *glt = (lv_group_list_t *) malloc(sizeof(lv_group_list_t));
     glt->g = g;
