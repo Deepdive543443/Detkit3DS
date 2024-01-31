@@ -175,4 +175,9 @@ ui_LR_t create_bottom_btn()
     lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_size(cont, WIDTH_BTM, 30);
     lv_obj_align(cont, LV_ALIGN_BOTTOM_MID, 0, 0);
+
+    // Container style
+    lv_obj_set_style_border_opa(cont, LV_OPA_TRANSP, NULL);
+    lv_obj_set_style_radius(cont, 0, NULL);
+
 }
