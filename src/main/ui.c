@@ -171,13 +171,45 @@ lv_obj_t *create_model_list()
 
 ui_LR_t create_bottom_btn()
 {
-    lv_obj_t *cont = lv_obj_create(lv_scr_act());
-    lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_size(cont, WIDTH_BTM, 30);
-    lv_obj_align(cont, LV_ALIGN_BOTTOM_MID, 0, 0);
+    ui_LR_t btn_BA;
 
-    // Container style
-    lv_obj_set_style_border_opa(cont, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_radius(cont, 0, NULL);
+    lv_obj_t *btns[2] = {btn_BA.L, btn_BA.R};
+    lv_point_t *pts_arrays[2] = {btn_BA.point_array_L, btn_BA.point_array_R};
+    
+    const *labels[] = {"B quit", "A continue"};
+    void (*functions[2])() = {virtual_B_cb, virtual_A_cb};
+    static lv_indev_drv_t drv_list_BA[2];
 
+
+    int align[2] = {LV_ALIGN_BOTTOM_LEFT, LV_ALIGN_BOTTOM_RIGHT};
+    for(int i=0; i < 2; i++)
+    {
+        btns[i] = lv_btn_create(lv_scr_act());
+        lv_obj_set_size(btns[i], lv_pct(50), 30);
+
+        // Positions
+        lv_obj_t *label = lv_label_create(btns[i]);
+        lv_label_set_text(label, labels[i]);
+        lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+        lv_obj_align(btns[i], align[i], 0, 0);
+
+        //Styles
+        // lv_obj_set_style_border_opa(btns[i], LV_OPA_TRANSP, NULL);
+        lv_obj_set_style_border_width(btns[i], 1, NULL);
+        lv_obj_set_style_border_color(btns[i], lv_color_hex(0x999999), NULL);
+        lv_obj_set_style_radius(btns[i], 0, NULL);
+        lv_obj_set_style_pad_all(btns[i], 0, NULL);
+
+        // Assign click button activities
+        lv_obj_update_layout(btns[i]);
+        drv_list_BA[i].type = LV_INDEV_TYPE_BUTTON;
+        drv_list_BA[i].read_cb = functions[i];
+        lv_indev_t *BA_indev = lv_indev_drv_register(&drv_list_BA[i]);
+        pts_arrays[i] = (lv_point_t *) malloc(sizeof(lv_point_t) * 2);
+        pts_arrays[i][0] = (lv_point_t){-1, -1};
+        pts_arrays[i][1] = (lv_point_t) {(btns[i]->coords.x1 + btns[i]->coords.x2) / 2, (btns[i]->coords.y1 + btns[i]->coords.y2) / 2};
+
+
+        lv_indev_set_button_points(BA_indev, pts_arrays[i]);
+    }
 }
