@@ -199,6 +199,10 @@ ui_LR_t create_bottom_btn()
         lv_obj_set_style_border_color(btns[i], lv_color_hex(0x999999), NULL);
         lv_obj_set_style_radius(btns[i], 0, NULL);
         lv_obj_set_style_pad_all(btns[i], 0, NULL);
+        lv_obj_set_style_bg_color(btns[i], lv_palette_lighten(LV_PALETTE_GREY, 2), NULL);
+        lv_obj_set_style_bg_grad_color(btns[i], lv_palette_main(LV_PALETTE_GREY), NULL);
+        lv_obj_set_style_bg_grad_dir(btns[i], LV_GRAD_DIR_VER, NULL);
+        // lv_style_set_bg_grad_dir(&style_btn, LV_GRAD_DIR_VER);
 
         // Assign click button activities
         lv_obj_update_layout(btns[i]);
