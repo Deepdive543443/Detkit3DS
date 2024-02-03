@@ -37,12 +37,6 @@ typedef struct
     lv_point_t *point_array_R;
 } ui_LR_t;
 
-typedef struct
-{
-    lv_group_t *g;
-    lv_obj_t *list;
-} lv_group_list_t;
-
 void list_item_add_cb(lv_event_t *e);
 void list_item_delete_cb(lv_event_t *e);
 void display_event_cb(lv_event_t *e);

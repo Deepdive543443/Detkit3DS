@@ -50,9 +50,6 @@ lv_obj_t *create_box_list(lv_group_t *g)
     lv_obj_set_size(boxxes, WIDTH_BTM, 160);
     lv_obj_align(boxxes, LV_ALIGN_TOP_MID, 0, 40);
 
-    lv_group_list_t *glt = (lv_group_list_t *) malloc(sizeof(lv_group_list_t));
-    glt->g = g;
-    glt->list = boxxes;
 
     lv_obj_t *btn;
     lv_list_add_text(boxxes, "Boxxes");
@@ -62,7 +59,6 @@ lv_obj_t *create_box_list(lv_group_t *g)
     lv_group_add_obj(g, btn);
     lv_group_add_obj(g, lv_list_add_btn(boxxes, LV_SYMBOL_GPS, "Navigate"));
 
-    free(glt);
     return boxxes;
 }
 
