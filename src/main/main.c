@@ -112,10 +112,10 @@ int main(int argc, char** argv)
     // lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
     ui_LR_t btm_btn = create_bottom_btn();
 
-    // Detector objects and group of enconder containers
+    // Detector, Detector objects and group of enconder containers
+    Detector det;
     lv_group_t *g = lv_group_create();
     BoxVec objects;
-
 
 
     // Input init
