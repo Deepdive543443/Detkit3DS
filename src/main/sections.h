@@ -11,7 +11,12 @@
 
 #define WIDTH_TOP 400
 #define HEIGHT_TOP 240
+#define SCRSIZE_TOP WIDTH_TOP * HEIGHT_TOP
 
+//cam.c
+#define WAIT_TIMEOUT 1000000000ULL
+
+void writeCamToFramebufferRGB565(void *fb, void *img, u16 x, u16 y, u16 width, u16 height);
 
 // display.c
 void writePic2FrameBuf565(void *fb, lv_color_t * color, u16 x, u16 y, u16 w, u16 h);

@@ -62,12 +62,45 @@ int main(int argc, char** argv)
     // consoleInit(GFX_TOP, &topScreen);
     // consoleSelect(&topScreen);
 
+    // Cam init
+    camInit();
+    CAMU_SetSize(SELECT_OUT1, SIZE_CTR_TOP_LCD, CONTEXT_A);
+    CAMU_SetOutputFormat(SELECT_OUT1, OUTPUT_RGB_565, CONTEXT_A);
+    CAMU_SetFrameRate(SELECT_OUT1, FRAME_RATE_15);
+    CAMU_SetNoiseFilter(SELECT_OUT1, true);
+    CAMU_SetAutoExposure(SELECT_OUT1, true);
+    CAMU_SetAutoWhiteBalance(SELECT_OUT1, true);
+    CAMU_SetTrimming(PORT_CAM1, false);
+
+
+    void *cam_buf = malloc(SCRSIZE_TOP * 2); // RBG565 frame buffer
+    if(!cam_buf)
+    {
+        hang_err("Failed to allocate memory!");
+    }
+
+    u32 bufSize;
+    CAMU_GetMaxBytes(&bufSize, WIDTH_TOP, HEIGHT_TOP);
+    CAMU_SetTransferBytes(PORT_CAM1, bufSize, WIDTH_TOP, HEIGHT_TOP);
+    // CAMU_SetTransferBytes(PORT_BOTH, bufSize, WIDTH_TOP, HEIGHT_TOP);
+
+    CAMU_Activate(SELECT_OUT1);
+
+    Handle camReceiveEvent[2] = {0};
+    bool captureInterrupted = false;
+    s32 index = 0;
+
+    CAMU_GetBufferErrorInterruptEvent(&camReceiveEvent[0], PORT_CAM1);
+    CAMU_ClearBuffer(PORT_CAM1);
+    CAMU_StartCapture(PORT_CAM1);
+    CAMU_PlayShutterSound(SHUTTER_SOUND_TYPE_MOVIE);
+
     // IVGL init
     lv_init();
 
     // Display init
     static lv_disp_draw_buf_t draw_buf_btm;
-    static lv_color_t buf1_btm[WIDTH_TOP * HEIGHT_TOP];
+    static lv_color_t buf1_btm[WIDTH_BTM * HEIGHT_BTM];
     static lv_disp_drv_t disp_drv_btm;        /*Descriptor of a display driver*/
     lv_disp_t *disp_btm = display_init(GFX_BOTTOM, &draw_buf_btm, &buf1_btm, &disp_drv_btm);
 
@@ -104,20 +137,71 @@ int main(int argc, char** argv)
     while(aptMainLoop())
     {
         clock_gettime(CLOCK_MONOTONIC, &start);
-        // User input
-        hidScanInput();
-        kDown = hidKeysDown();
-        kHeld = hidKeysHeld();
-        hidCircleRead(&joy_stick);
+                if (camReceiveEvent[1] == 0) 
+        {
+            CAMU_SetReceiving(&camReceiveEvent[1], cam_buf, PORT_CAM1, SCRSIZE_TOP * 2, (s16)bufSize);
+        }
 
-        // Quit App
-        if(kHeld & KEY_START) break;
+        if (captureInterrupted) 
+        {
+            CAMU_StartCapture(PORT_CAM1);
+            captureInterrupted = false;
+        }
 
-        lv_timer_handler();
-        while (ticker());
+        svcWaitSynchronizationN(&index, camReceiveEvent, 2, false, WAIT_TIMEOUT);
+        switch (index)
+        {
+            case 0:
+                svcCloseHandle(camReceiveEvent[1]);
+                camReceiveEvent[1] = 0;
+                captureInterrupted = true;
 
-        // Display joystick    
-        lv_tick_inc(TICK_S);
+                continue;
+                break;
+
+            case 1:
+                svcCloseHandle(camReceiveEvent[1]);
+                camReceiveEvent[1] = 0;
+
+                break;
+
+            default:
+                break;
+
+        }
+
+        gfxSet3D(false);
+        writeCamToFramebufferRGB565(
+            gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+            cam_buf,
+            0,
+            0,
+            WIDTH_TOP,
+            HEIGHT_TOP
+        );
+
+        // Flush and swap framebuffers
+        gfxFlushBuffers();
+        gfxScreenSwapBuffers(GFX_TOP, true);
+        gspWaitForVBlank();
+
+        if (!captureInterrupted) 
+        {
+            // User input
+            hidScanInput();
+            kDown = hidKeysDown();
+            kHeld = hidKeysHeld();
+            hidCircleRead(&joy_stick);
+
+            // Quit App
+            if(kHeld & KEY_START) break;
+
+            lv_timer_handler();
+            while (ticker());
+
+            // Display joystick    
+            lv_tick_inc(TICK_S);   
+        }
     }
 
     free(ui_LR.point_array_L);
