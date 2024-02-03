@@ -72,6 +72,8 @@ int main(int argc, char** argv)
     CAMU_SetAutoWhiteBalance(SELECT_OUT1, true);
     CAMU_SetTrimming(PORT_CAM1, false);
 
+    bool cam_update = true;
+
 
     void *cam_buf = malloc(SCRSIZE_TOP * 2); // RBG565 frame buffer
     if(!cam_buf)
@@ -137,53 +139,56 @@ int main(int argc, char** argv)
     while(aptMainLoop())
     {
         clock_gettime(CLOCK_MONOTONIC, &start);
-                if (camReceiveEvent[1] == 0) 
+        if (cam_update)
         {
-            CAMU_SetReceiving(&camReceiveEvent[1], cam_buf, PORT_CAM1, SCRSIZE_TOP * 2, (s16)bufSize);
+            if (camReceiveEvent[1] == 0) 
+            {
+                CAMU_SetReceiving(&camReceiveEvent[1], cam_buf, PORT_CAM1, SCRSIZE_TOP * 2, (s16)bufSize);
+            }
+
+            if (captureInterrupted) 
+            {
+                CAMU_StartCapture(PORT_CAM1);
+                captureInterrupted = false;
+            }
+
+            svcWaitSynchronizationN(&index, camReceiveEvent, 2, false, WAIT_TIMEOUT);
+            switch (index)
+            {
+                case 0:
+                    svcCloseHandle(camReceiveEvent[1]);
+                    camReceiveEvent[1] = 0;
+                    captureInterrupted = true;
+
+                    continue;
+                    break;
+
+                case 1:
+                    svcCloseHandle(camReceiveEvent[1]);
+                    camReceiveEvent[1] = 0;
+
+                    break;
+
+                default:
+                    break;
+
+            }
+
+            gfxSet3D(false);
+            writeCamToFramebufferRGB565(
+                gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+                cam_buf,
+                0,
+                0,
+                WIDTH_TOP,
+                HEIGHT_TOP
+            );
+
+            // Flush and swap framebuffers
+            gfxFlushBuffers();
+            gfxScreenSwapBuffers(GFX_TOP, true);
+            gspWaitForVBlank();   
         }
-
-        if (captureInterrupted) 
-        {
-            CAMU_StartCapture(PORT_CAM1);
-            captureInterrupted = false;
-        }
-
-        svcWaitSynchronizationN(&index, camReceiveEvent, 2, false, WAIT_TIMEOUT);
-        switch (index)
-        {
-            case 0:
-                svcCloseHandle(camReceiveEvent[1]);
-                camReceiveEvent[1] = 0;
-                captureInterrupted = true;
-
-                continue;
-                break;
-
-            case 1:
-                svcCloseHandle(camReceiveEvent[1]);
-                camReceiveEvent[1] = 0;
-
-                break;
-
-            default:
-                break;
-
-        }
-
-        gfxSet3D(false);
-        writeCamToFramebufferRGB565(
-            gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
-            cam_buf,
-            0,
-            0,
-            WIDTH_TOP,
-            HEIGHT_TOP
-        );
-
-        // Flush and swap framebuffers
-        gfxFlushBuffers();
-        gfxScreenSwapBuffers(GFX_TOP, true);
-        gspWaitForVBlank();
 
         if (!captureInterrupted) 
         {
@@ -195,6 +200,8 @@ int main(int argc, char** argv)
 
             // Quit App
             if(kHeld & KEY_START) break;
+
+            if(kDown & KEY_SELECT) cam_update = !cam_update;
 
             lv_timer_handler();
             while (ticker());
