@@ -3,16 +3,6 @@
 #define CANVAS_WIDTH 80
 #define CANVAS_HEIGHT 80
 
-void list_item_add_cb(lv_event_t *e)
-{
-    lv_event_code_t code = lv_event_get_code(e);
-    lv_group_list_t *glt = lv_event_get_user_data(e);
-
-    lv_obj_t *btn;  
-    btn = lv_list_add_btn(glt->list,  LV_SYMBOL_LIST, "x1:    x2:");
-    lv_obj_add_event_cb(btn, list_item_delete_cb, LV_EVENT_PRESSED, NULL);
-    lv_group_add_obj(glt->g, btn);
-}
 
 void list_item_delete_cb(lv_event_t *e)
 {
