@@ -107,6 +107,10 @@ int main(int argc, char** argv)
     
     
     // lv_obj_t *btm_text = put_text_example("Hello\nLVGL 3DS");
+    LV_IMG_DECLARE(ncnn_bg_transprant);
+    lv_obj_t *bg = lv_img_create(lv_scr_act());
+    lv_img_set_src(bg, &ncnn_bg_transprant);
+    
     lv_obj_t *model_list = create_model_list();
     ui_LR_t ui_LR = create_shoulder_button();
     // lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
