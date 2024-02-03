@@ -72,7 +72,7 @@ int main(int argc, char** argv)
     CAMU_SetAutoWhiteBalance(SELECT_OUT1, true);
     CAMU_SetTrimming(PORT_CAM1, false);
 
-    bool cam_update = true;
+    bool detecting = false;
 
 
     void *cam_buf = malloc(SCRSIZE_TOP * 2); // RBG565 frame buffer
@@ -139,7 +139,7 @@ int main(int argc, char** argv)
     while(aptMainLoop())
     {
         clock_gettime(CLOCK_MONOTONIC, &start);
-        if (cam_update)
+        if (!detecting)
         {
             if (camReceiveEvent[1] == 0) 
             {
@@ -201,7 +201,7 @@ int main(int argc, char** argv)
             // Quit App
             if(kHeld & KEY_START) break;
 
-            if(kDown & KEY_SELECT) cam_update = !cam_update;
+            if(kDown & KEY_SELECT) detecting = !detecting;
 
             lv_timer_handler();
             while (ticker());
