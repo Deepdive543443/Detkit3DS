@@ -58,7 +58,7 @@ lv_obj_t *create_box_list(lv_group_t *g)
     lv_list_add_text(boxxes, "Boxxes");
 
     btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, "New");
-    lv_obj_add_event_cb(btn, list_item_add_cb, LV_EVENT_PRESSED, glt);
+    // lv_obj_add_event_cb(btn, list_item_add_cb, LV_EVENT_PRESSED, glt);
     lv_group_add_obj(g, btn);
     lv_group_add_obj(g, lv_list_add_btn(boxxes, LV_SYMBOL_GPS, "Navigate"));
 
