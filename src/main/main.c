@@ -17,6 +17,26 @@ bool ticker()
     return delta_us < TICK_MS;
 }
 
+void cleanup() 
+{
+    camExit();
+    gfxExit();
+    acExit();
+}
+
+void hang_err(const char *message)
+{
+    printf("%s\nPress START to exit\n", message);
+    while (aptMainLoop())
+    {
+        hidScanInput();
+        u32 kDown = hidKeysDown();
+
+        if (kDown & KEY_START) break;
+    }
+}
+
+
 // User input place holder
 static u32 kDown;
 static u32 kHeld;
@@ -36,6 +56,8 @@ int main(int argc, char** argv)
     }
 
     gfxInitDefault();
+    gfxSetDoubleBuffering(GFX_TOP, true);
+    gfxSetDoubleBuffering(GFX_BOTTOM, true);
     // PrintConsole topScreen;
     // consoleInit(GFX_TOP, &topScreen);
     // consoleSelect(&topScreen);
@@ -100,5 +122,6 @@ int main(int argc, char** argv)
 
     free(ui_LR.point_array_L);
     free(ui_LR.point_array_R);
+    cleanup();
     return 0;
 }
