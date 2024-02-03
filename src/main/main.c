@@ -58,11 +58,8 @@ int main(int argc, char** argv)
     gfxInitDefault();
     gfxSetDoubleBuffering(GFX_TOP, true);
     gfxSetDoubleBuffering(GFX_BOTTOM, true);
-    // PrintConsole topScreen;
-    // consoleInit(GFX_TOP, &topScreen);
-    // consoleSelect(&topScreen);
 
-    // Cam init
+    // Camera framebuffer, state, hanlder init
     camInit();
     CAMU_SetSize(SELECT_OUT1, SIZE_CTR_TOP_LCD, CONTEXT_A);
     CAMU_SetOutputFormat(SELECT_OUT1, OUTPUT_RGB_565, CONTEXT_A);
@@ -71,9 +68,6 @@ int main(int argc, char** argv)
     CAMU_SetAutoExposure(SELECT_OUT1, true);
     CAMU_SetAutoWhiteBalance(SELECT_OUT1, true);
     CAMU_SetTrimming(PORT_CAM1, false);
-
-    bool detecting = false;
-
 
     void *cam_buf = malloc(SCRSIZE_TOP * 2); // RBG565 frame buffer
     if(!cam_buf)
@@ -84,18 +78,18 @@ int main(int argc, char** argv)
     u32 bufSize;
     CAMU_GetMaxBytes(&bufSize, WIDTH_TOP, HEIGHT_TOP);
     CAMU_SetTransferBytes(PORT_CAM1, bufSize, WIDTH_TOP, HEIGHT_TOP);
-    // CAMU_SetTransferBytes(PORT_BOTH, bufSize, WIDTH_TOP, HEIGHT_TOP);
-
     CAMU_Activate(SELECT_OUT1);
 
     Handle camReceiveEvent[2] = {0};
-    bool captureInterrupted = false;
-    s32 index = 0;
-
     CAMU_GetBufferErrorInterruptEvent(&camReceiveEvent[0], PORT_CAM1);
     CAMU_ClearBuffer(PORT_CAM1);
     CAMU_StartCapture(PORT_CAM1);
     CAMU_PlayShutterSound(SHUTTER_SOUND_TYPE_MOVIE);
+
+    bool captureInterrupted = false;
+    s32 index = 0;
+    bool detecting = false;
+
 
     // IVGL init
     lv_init();
@@ -110,13 +104,17 @@ int main(int argc, char** argv)
     // Initial top screen's display, ui, and control 
     lv_disp_set_default(disp_btm);
     lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE); // We don't want the screen to be scrollable
-    lv_group_t *g = lv_group_create();
+    
     
     // lv_obj_t *btm_text = put_text_example("Hello\nLVGL 3DS");
     lv_obj_t *model_list = create_model_list();
     ui_LR_t ui_LR = create_shoulder_button();
-    lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
+    // lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
     ui_LR_t btm_btn = create_bottom_btn();
+
+    // Detector objects and group of enconder containers
+    lv_group_t *g = lv_group_create();
+    BoxVec objects;
 
 
 
