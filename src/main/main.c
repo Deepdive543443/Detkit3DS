@@ -116,7 +116,7 @@ int main(int argc, char** argv)
     // Detector, Detector objects and group of enconder containers
     Detector det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
     BoxVec objects;    
-    lv_group_t *g = lv_group_create();
+    lv_group_t *g;
     lv_obj_t *box_list;    // lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
 
     // Other UI widget
