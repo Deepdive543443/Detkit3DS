@@ -151,7 +151,7 @@ lv_obj_t *create_model_list()
                             "FastestDet\n"
                             "Nuts");
 
-    lv_obj_align(models, LV_ALIGN_TOP_MID, 0, 0);
+    lv_obj_align(models, LV_ALIGN_TOP_MID, 0, -10);
     lv_obj_add_event_cb(models, model_list_hanlder, LV_EVENT_ALL, NULL);
 }
 
