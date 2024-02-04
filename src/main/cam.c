@@ -1,6 +1,25 @@
 #include "sections.h"
 
 
+void pause_cam_capture(void *cam_buf)
+{
+    writeCamToFramebufferRGB565_filter(
+        gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+        cam_buf,
+        0,
+        0,
+        WIDTH_TOP,
+        HEIGHT_TOP,
+        0.5
+    );
+
+    // Flush and swap framebuffers
+    gfxFlushBuffers();
+    gfxScreenSwapBuffers(GFX_TOP, true);
+    gspWaitForVBlank(); 
+}
+
+
 void writeCamToFramebufferRGB565_filter(void *fb, void *img, u16 x, u16 y, u16 width, u16 height, float weight)
 {
     writeCamToFramebufferRGB565(fb, img, x, y, width, height);

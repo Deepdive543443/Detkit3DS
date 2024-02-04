@@ -18,6 +18,7 @@
 //cam.c
 #define WAIT_TIMEOUT 1000000000ULL
 
+void pause_cam_capture(void *cam_buf);
 void writeCamToFramebufferRGB565_filter(void *fb, void *img, u16 x, u16 y, u16 width, u16 height, float weight);
 void writeCamToFramebufferRGB565(void *fb, void *img, u16 x, u16 y, u16 width, u16 height);
 void writeCamToPixels(unsigned char *pixels, void *img, u16 x0, u16 y0, u16 width, u16 height);
@@ -45,7 +46,7 @@ lv_obj_t *create_box_list();
 ui_LR_t create_shoulder_button();
 lv_obj_t *put_text_example(const char *string);
 void model_list_hanlder(lv_event_t *e);
-lv_obj_t *create_model_list();
+lv_obj_t *create_model_list(Detector *det);
 ui_LR_t create_bottom_btn();
 
 // input.c

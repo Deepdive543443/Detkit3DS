@@ -107,19 +107,24 @@ int main(int argc, char** argv)
     
     
     // lv_obj_t *btm_text = put_text_example("Hello\nLVGL 3DS");
+
+    // BG
     LV_IMG_DECLARE(ncnn_bg_transprant);
     lv_obj_t *bg = lv_img_create(lv_scr_act());
     lv_img_set_src(bg, &ncnn_bg_transprant);
-    
-    lv_obj_t *model_list = create_model_list();
-    ui_LR_t ui_LR = create_shoulder_button();
-    // lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
-    ui_LR_t btm_btn = create_bottom_btn();
 
     // Detector, Detector objects and group of enconder containers
     Detector det;
+    BoxVec objects;    
     lv_group_t *g = lv_group_create();
-    BoxVec objects;
+    lv_obj_t *box_list;    // lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
+
+    // Other UI widget
+    lv_obj_t *model_list = create_model_list(&det);
+    ui_LR_t ui_LR = create_shoulder_button();
+    // ui_LR_t btm_btn = create_bottom_btn();
+
+
 
 
     // Input init
@@ -206,20 +211,7 @@ int main(int argc, char** argv)
             if(kDown & KEY_SELECT) 
             {
                 detecting = !detecting;
-                writeCamToFramebufferRGB565_filter(
-                    gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
-                    cam_buf,
-                    0,
-                    0,
-                    WIDTH_TOP,
-                    HEIGHT_TOP,
-                    0.5
-                );
-
-                // Flush and swap framebuffers
-                gfxFlushBuffers();
-                gfxScreenSwapBuffers(GFX_TOP, true);
-                gspWaitForVBlank();  
+                pause_cam_capture(cam_buf); 
             }
 
             lv_timer_handler();
