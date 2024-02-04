@@ -27,10 +27,12 @@ void display_event_cb(lv_event_t *e)
             BoxVec_free(objects);
             pause_cam_capture(cam_buf);
 
-
+            // Inference 
             unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
             writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
             *objects = det->detect(pixels, WIDTH_TOP, HEIGHT_TOP, det);
+
+            // Print inference outputs
             draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, objects);
             writePixelsToFrameBuffer(
                 gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 

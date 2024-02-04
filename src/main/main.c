@@ -101,7 +101,7 @@ int main(int argc, char** argv)
     lv_disp_t *disp_btm = display_init(GFX_BOTTOM, &draw_buf_btm, &buf1_btm, &disp_drv_btm);
 
 
-    // Initial top screen's display, ui, and control 
+    // Initial touch screen's display, ui, and control 
     lv_disp_set_default(disp_btm);
     lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE); // We don't want the screen to be scrollable
     
