@@ -198,7 +198,7 @@ BoxVec nanodet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *sel
     ncnn_allocator_destroy(allocator);
     ncnn_option_destroy(opt);
     ncnn_extractor_destroy(ex);
-    ncnn_mat_destroy(mat_pad);
+    // ncnn_mat_destroy(mat_pad);
 
     return objects;
 }

@@ -228,13 +228,13 @@ void qsort_descent_inplace(BoxVec *objects, int left, int right)
         }
     }
 
-    #pragma omp parallel sections
+    // #pragma omp parallel sections
     {
-        #pragma omp section
+        // #pragma omp section
         {
             if (left < j) qsort_descent_inplace(objects, left, j);
         }
-        #pragma omp section
+        // #pragma omp section
         {
             if (i < right) qsort_descent_inplace(objects, i, right);
         }
