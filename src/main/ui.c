@@ -135,24 +135,38 @@ void model_list_hanlder(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *obj = lv_event_get_target(e);
+    Detector *det = (Detector *) lv_event_get_user_data(e);
     if(code == LV_EVENT_VALUE_CHANGED) 
     {
-        char buf[32];
-        lv_dropdown_get_selected_str(obj, buf, sizeof(buf));
-        LV_LOG_USER("Option: %s", buf);
+        destroy_detector(det);
+        uint16_t model_idx = lv_dropdown_get_selected(obj);
+        switch(model_idx)
+        {
+            case 0:
+            *det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
+            break;
+
+            case 1:
+            *det = create_nanodet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
+            break;
+
+            default:
+            break;
+        } 
+        // LV_LOG_USER("Option: %s", buf);
     }
 }
 
 
-lv_obj_t *create_model_list()
+lv_obj_t *create_model_list(Detector *det)
 {
     lv_obj_t *models = lv_dropdown_create(lv_scr_act());
-    lv_dropdown_set_options(models, "Nanodet\n"
-                            "FastestDet\n"
-                            "Nuts");
+    lv_dropdown_set_options(models, "NanoDet-plus\n"
+                            "FastestDet");
 
     lv_obj_align(models, LV_ALIGN_TOP_MID, 0, -10);
-    lv_obj_add_event_cb(models, model_list_hanlder, LV_EVENT_ALL, NULL);
+    lv_obj_set_width(models, 150);
+    lv_obj_add_event_cb(models, model_list_hanlder, LV_EVENT_ALL, det);
 }
 
 ui_LR_t create_bottom_btn()
