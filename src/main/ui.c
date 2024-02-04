@@ -18,18 +18,20 @@ void display_event_cb(lv_event_t *e)
     Detector *det = (Detector *) ptr_list[0];
     void *cam_buf = (void *) ptr_list[1];
     bool *detecting = (bool *) ptr_list[2];
+    BoxVec *objects = (BoxVec *) ptr_list[3];
 
     switch(code) {
         case LV_EVENT_PRESSED:
             // Hang up the video until inference finished
             *detecting = true;
+            BoxVec_free(objects);
             pause_cam_capture(cam_buf);
 
 
             unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
             writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
-            BoxVec objs = det->detect(pixels, WIDTH_TOP, HEIGHT_TOP, det);
-            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objs);
+            *objects = det->detect(pixels, WIDTH_TOP, HEIGHT_TOP, det);
+            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, objects);
             writePixelsToFrameBuffer(
                 gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
                 pixels, 
@@ -71,7 +73,7 @@ lv_obj_t *create_box_list(lv_group_t *g)
     return boxxes;
 }
 
-ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting)
+ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting, BoxVec *objects)
 {
     /** Create L, R button that aligned with top left and top right of screen
      * Width: 90,  Height: 30
@@ -91,10 +93,11 @@ ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting)
     lv_label_set_text(label_R, LV_SYMBOL_IMAGE "  R");                     /*Set the labels text*/
     lv_obj_align(label_R, LV_ALIGN_LEFT_MID, 0, 0);
 
-    lv_obj_t **obj_ptrs = (lv_obj_t **) malloc(sizeof(lv_obj_t *) * 3);
+    lv_obj_t **obj_ptrs = (lv_obj_t **) malloc(sizeof(lv_obj_t *) * 4);
     obj_ptrs[0] = (lv_obj_t *) det;
     obj_ptrs[1] = (lv_obj_t *) cam_buf;
     obj_ptrs[2] = (lv_obj_t *) detecting;
+    obj_ptrs[3] = (lv_obj_t *) objects;
     
     lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, obj_ptrs);
     lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, obj_ptrs); /*Display the press stage of two button*/
@@ -129,7 +132,6 @@ ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting)
     output.point_array_L = points_array_L;
     output.point_array_R = points_array_R;
 
-    // free(obj_ptrs);
     return output;
 }
 
