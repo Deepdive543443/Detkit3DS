@@ -173,7 +173,7 @@ void model_list_hanlder(lv_event_t *e)
             break;
 
             case 1:
-            *det = create_nanodet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
+            *det = create_fastestdet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
             break;
 
             default:

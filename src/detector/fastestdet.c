@@ -131,8 +131,7 @@ BoxVec fastestdet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *
 
     // Clean up
     proposals.free(&proposals);
-    // ncnn_extractor_destroy(ex);
-    ncnn_allocator_destroy(allocator);
+    ncnn_allocator_destroy(allocator); 
     ncnn_mat_destroy(out_mat);
 
     return objects;
