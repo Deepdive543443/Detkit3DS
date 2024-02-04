@@ -13,24 +13,36 @@ void list_item_delete_cb(lv_event_t *e)
 void display_event_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t *label = lv_event_get_user_data(e);
+    unsigned char *ptr_list = (unsigned char *) lv_event_get_user_data(e);
+
+    Detector *det = (Detector *) ptr_list[0];
+    void *cam_buf = ptr_list[1];
 
     switch(code) {
         case LV_EVENT_PRESSED:
-            lv_label_set_text(label, "PRESSED");
+            
             break;
-        case LV_EVENT_CLICKED:
-            lv_label_set_text(label, "CLICKED");
-            break;
-        case LV_EVENT_LONG_PRESSED:
-            lv_label_set_text(label, "LONG_PRE");
-            break;
-        case LV_EVENT_LONG_PRESSED_REPEAT:
-            lv_label_set_text(label, "LONG_PREAT");
-            break;
+
         default:
             break;
+
     }
+
+    // switch(code) {
+    //     case LV_EVENT_PRESSED:
+    //         lv_label_set_text(label, "PRESSED");
+    //         break;
+    //     case LV_EVENT_CLICKED:
+    //         lv_label_set_text(label, "CLICKED");
+    //         break;
+    //     case LV_EVENT_LONG_PRESSED:
+    //         lv_label_set_text(label, "LONG_PRE");
+    //         break;
+    //     case LV_EVENT_LONG_PRESSED_REPEAT:
+    //         lv_label_set_text(label, "LONG_PREAT");
+    //         break;
+    //     default:
+    //         break;
 }
 
 lv_obj_t *create_box_list(lv_group_t *g)
@@ -52,7 +64,7 @@ lv_obj_t *create_box_list(lv_group_t *g)
     return boxxes;
 }
 
-ui_LR_t create_shoulder_button()
+ui_LR_t create_shoulder_button(Detector *det, void *cam_buf)
 {
     /** Create L, R button that aligned with top left and top right of screen
      * Width: 90,  Height: 30
@@ -72,8 +84,10 @@ ui_LR_t create_shoulder_button()
     lv_label_set_text(label_R, LV_SYMBOL_IMAGE "  R");                     /*Set the labels text*/
     lv_obj_align(label_R, LV_ALIGN_LEFT_MID, 0, 0);
 
-    lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, label_L);
-    lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, label_R); /*Display the press stage of two button*/
+    unsigned char *ptr_list[] = {(unsigned char *) det, (unsigned char *) cam_buf};
+
+    lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, &ptr_list);
+    lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, &ptr_list); /*Display the press stage of two button*/
 
     lv_obj_update_layout(btn_L);
     lv_point_t *points_array_L = (lv_point_t *) malloc(sizeof(lv_point_t) * 2);

@@ -43,7 +43,7 @@ void list_item_add_cb(lv_event_t *e);
 void list_item_delete_cb(lv_event_t *e);
 void display_event_cb(lv_event_t *e);
 lv_obj_t *create_box_list();
-ui_LR_t create_shoulder_button();
+ui_LR_t create_shoulder_button(Detector *det, void *cam_buf);
 lv_obj_t *put_text_example(const char *string);
 void model_list_hanlder(lv_event_t *e);
 lv_obj_t *create_model_list(Detector *det);
