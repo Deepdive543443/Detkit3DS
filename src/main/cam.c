@@ -1,5 +1,27 @@
 #include "sections.h"
 
+
+void writeCamToFramebufferRGB565_filter(void *fb, void *img, u16 x, u16 y, u16 width, u16 height, float weight)
+{
+    writeCamToFramebufferRGB565(fb, img, x, y, width, height);
+    u8 *fb_8 = (u8*) fb;
+    int i, j, k, draw_x, draw_y;
+    for(j = 0; j < height; j++) 
+    {
+        for(i = 0; i < width; i++) 
+        {
+            draw_y = y + height - j - 1;
+            draw_x = x + i;
+            u32 v = (draw_y + draw_x * height) * 3;
+            for (k = 0; k < 3; k++)
+            {
+                fb_8[v + k] *= (1 - weight);
+                fb_8[v + k] += 255 * weight;
+            }
+        }
+    }
+}
+
 void writeCamToFramebufferRGB565(void *fb, void *img, u16 x, u16 y, u16 width, u16 height)
 {
     u8 *fb_8 = (u8*) fb;

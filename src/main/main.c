@@ -203,7 +203,24 @@ int main(int argc, char** argv)
             // Quit App
             if(kHeld & KEY_START) break;
 
-            if(kDown & KEY_SELECT) detecting = !detecting;
+            if(kDown & KEY_SELECT) 
+            {
+                detecting = !detecting;
+                writeCamToFramebufferRGB565_filter(
+                    gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+                    cam_buf,
+                    0,
+                    0,
+                    WIDTH_TOP,
+                    HEIGHT_TOP,
+                    0.5
+                );
+
+                // Flush and swap framebuffers
+                gfxFlushBuffers();
+                gfxScreenSwapBuffers(GFX_TOP, true);
+                gspWaitForVBlank();  
+            }
 
             lv_timer_handler();
             while (ticker());
