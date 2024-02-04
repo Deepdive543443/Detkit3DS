@@ -84,3 +84,26 @@ void writeCamToPixels(unsigned char *pixels, void *img, u16 x0, u16 y0, u16 widt
         }
     }
 }
+
+void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x, u16 y, u16 width, u16 height)
+{
+    u8 *fb_8 = (u8 *) fb;
+    unsigned char *pixels_ptr = pixels;
+
+    int draw_x, draw_y;
+    for(int j = 0; j < height; j++) 
+    {
+        for(int i = 0; i < width; i++) 
+        {
+            draw_y = y + height - j - 1;
+            draw_x = x + i;
+            u32 v = (draw_y + draw_x * height) * 3;
+
+            fb_8[v] = pixels_ptr[0];
+            fb_8[v+1] = pixels_ptr[1];
+            fb_8[v+2] = pixels_ptr[2];
+
+            pixels_ptr += 3;
+        }
+    }
+}

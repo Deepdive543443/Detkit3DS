@@ -22,6 +22,7 @@ void pause_cam_capture(void *cam_buf);
 void writeCamToFramebufferRGB565_filter(void *fb, void *img, u16 x, u16 y, u16 width, u16 height, float weight);
 void writeCamToFramebufferRGB565(void *fb, void *img, u16 x, u16 y, u16 width, u16 height);
 void writeCamToPixels(unsigned char *pixels, void *img, u16 x0, u16 y0, u16 width, u16 height);
+void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x0, u16 y0, u16 width, u16 height);
 
 // display.c
 void writePic2FrameBuf565(void *fb, lv_color_t * color, u16 x, u16 y, u16 w, u16 h);
@@ -43,7 +44,7 @@ void list_item_add_cb(lv_event_t *e);
 void list_item_delete_cb(lv_event_t *e);
 void display_event_cb(lv_event_t *e);
 lv_obj_t *create_box_list();
-ui_LR_t create_shoulder_button(Detector *det, void *cam_buf);
+ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting);
 lv_obj_t *put_text_example(const char *string);
 void model_list_hanlder(lv_event_t *e);
 lv_obj_t *create_model_list(Detector *det);

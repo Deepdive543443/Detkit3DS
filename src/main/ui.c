@@ -13,36 +13,43 @@ void list_item_delete_cb(lv_event_t *e)
 void display_event_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    unsigned char *ptr_list = (unsigned char *) lv_event_get_user_data(e);
+    lv_obj_t **ptr_list = (lv_obj_t **) lv_event_get_user_data(e);
 
     Detector *det = (Detector *) ptr_list[0];
-    void *cam_buf = ptr_list[1];
+    void *cam_buf = (void *) ptr_list[1];
+    bool *detecting = (bool *) ptr_list[2];
 
     switch(code) {
         case LV_EVENT_PRESSED:
-            
+            // Hang up the video until inference finished
+            *detecting = true;
+            pause_cam_capture(cam_buf);
+
+
+            unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
+            writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
+            BoxVec objs = det->detect(pixels, WIDTH_TOP, HEIGHT_TOP, det);
+            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objs);
+            writePixelsToFrameBuffer(
+                gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+                pixels, 
+                0, 
+                0, 
+                WIDTH_TOP, 
+                HEIGHT_TOP);
+
+            gfxFlushBuffers();
+            gfxScreenSwapBuffers(GFX_TOP, true);
+            gspWaitForVBlank();
+
+            free(pixels);
+
             break;
 
         default:
             break;
 
     }
-
-    // switch(code) {
-    //     case LV_EVENT_PRESSED:
-    //         lv_label_set_text(label, "PRESSED");
-    //         break;
-    //     case LV_EVENT_CLICKED:
-    //         lv_label_set_text(label, "CLICKED");
-    //         break;
-    //     case LV_EVENT_LONG_PRESSED:
-    //         lv_label_set_text(label, "LONG_PRE");
-    //         break;
-    //     case LV_EVENT_LONG_PRESSED_REPEAT:
-    //         lv_label_set_text(label, "LONG_PREAT");
-    //         break;
-    //     default:
-    //         break;
 }
 
 lv_obj_t *create_box_list(lv_group_t *g)
@@ -64,7 +71,7 @@ lv_obj_t *create_box_list(lv_group_t *g)
     return boxxes;
 }
 
-ui_LR_t create_shoulder_button(Detector *det, void *cam_buf)
+ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting)
 {
     /** Create L, R button that aligned with top left and top right of screen
      * Width: 90,  Height: 30
@@ -84,10 +91,13 @@ ui_LR_t create_shoulder_button(Detector *det, void *cam_buf)
     lv_label_set_text(label_R, LV_SYMBOL_IMAGE "  R");                     /*Set the labels text*/
     lv_obj_align(label_R, LV_ALIGN_LEFT_MID, 0, 0);
 
-    unsigned char *ptr_list[] = {(unsigned char *) det, (unsigned char *) cam_buf};
-
-    lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, &ptr_list);
-    lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, &ptr_list); /*Display the press stage of two button*/
+    lv_obj_t **obj_ptrs = (lv_obj_t **) malloc(sizeof(lv_obj_t *) * 3);
+    obj_ptrs[0] = (lv_obj_t *) det;
+    obj_ptrs[1] = (lv_obj_t *) cam_buf;
+    obj_ptrs[2] = (lv_obj_t *) detecting;
+    
+    lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, obj_ptrs);
+    lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, obj_ptrs); /*Display the press stage of two button*/
 
     lv_obj_update_layout(btn_L);
     lv_point_t *points_array_L = (lv_point_t *) malloc(sizeof(lv_point_t) * 2);
@@ -118,6 +128,8 @@ ui_LR_t create_shoulder_button(Detector *det, void *cam_buf)
     output.R = btn_R;
     output.point_array_L = points_array_L;
     output.point_array_R = points_array_R;
+
+    // free(obj_ptrs);
     return output;
 }
 

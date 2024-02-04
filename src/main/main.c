@@ -121,7 +121,7 @@ int main(int argc, char** argv)
 
     // Other UI widget
     lv_obj_t *model_list = create_model_list(&det);
-    ui_LR_t ui_LR = create_shoulder_button(&det, cam_buf);
+    ui_LR_t ui_LR = create_shoulder_button(&det, cam_buf, &detecting);
     // ui_LR_t btm_btn = create_bottom_btn();
 
 
