@@ -1,6 +1,7 @@
 #ifndef SECTIONS_H
 #define SECTIONS_H
 
+#include "stdio.h"
 #include "stdlib.h"
 
 #include "3ds.h"

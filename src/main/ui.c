@@ -54,7 +54,7 @@ void display_event_cb(lv_event_t *e)
 
             free(pixels);
 
-            box_list = create_box_list(g);
+            box_list = create_box_list();
 
             break;
 
@@ -79,6 +79,19 @@ lv_obj_t *create_box_list()
     // lv_obj_add_event_cb(btn, list_item_add_cb, LV_EVENT_PRESSED, glt);
     lv_group_add_obj(g, btn);
     lv_group_add_obj(g, lv_list_add_btn(boxxes, LV_SYMBOL_GPS, "Navigate"));
+
+    for(size_t i=0; i < objects.num_item; i++)
+    {
+        BoxInfo obj = objects.getItem(i, &objects);
+        char list_item[40];
+        int label = obj.label;
+        int x1 = obj.x1;
+        int x2 = obj.x2;
+        int y1 = obj.y1;
+        int y2 = obj.y2;
+        sprintf(list_item, "Label:%10s,[%3d,%3d,%3d,%3d]", class_names[label], x1, x2, y1, y2);
+        lv_group_add_obj(g, lv_list_add_btn(boxxes, LV_SYMBOL_GPS, list_item));
+    }
 
     return boxxes;
 }
