@@ -21,87 +21,54 @@ void object_display_cb(lv_event_t *e)
     {
         case LV_EVENT_CLICKED:
 
-        unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
-        writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
+            unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
+            writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
 
-        int idx = lv_obj_get_child_id(item) - 1;
-        if (idx >= 0)
-        {
-            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
-        }
-        else
-        {
-            BoxInfo obj = BoxVec_getItem(idx, &objects);//objects.getItem(idx);
+            int idx = lv_obj_get_child_id(item) - 2;
+            if (idx < 0)
+            {
+                draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
+            }
+            else
+            {
+                BoxInfo obj = BoxVec_getItem(idx, &objects);//objects.getItem(idx);
 
-            BoxVec box_Vec_temp;
-            create_box_vector(&box_Vec_temp, 1);
-            BoxVec_push_back(obj, &box_Vec_temp);
-            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &box_Vec_temp);
-            BoxVec_free(&box_Vec_temp);
-        }
+                BoxVec box_Vec_temp;
+                create_box_vector(&box_Vec_temp, 1);
+                BoxVec_push_back(obj, &box_Vec_temp);
+                draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &box_Vec_temp);
+                BoxVec_free(&box_Vec_temp);
+            }
 
 
-        writePixelsToFrameBuffer(
-            gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
-            pixels, 
-            0, 
-            0, 
-            WIDTH_TOP, 
-            HEIGHT_TOP
-        );
+            writePixelsToFrameBuffer(
+                gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+                pixels, 
+                0, 
+                0, 
+                WIDTH_TOP, 
+                HEIGHT_TOP
+            );
 
-        gfxFlushBuffers();
-        gfxScreenSwapBuffers(GFX_TOP, true);
-        gspWaitForVBlank();
+            gfxFlushBuffers();
+            gfxScreenSwapBuffers(GFX_TOP, true);
+            gspWaitForVBlank();
 
-        free(pixels);    
-        break;
+            free(pixels);    
+            break;
 
         default:
-        break;
+            break;
 
-    }
-        // unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
-        // writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
-
-        // int idx = lv_obj_get_child_id(item) - 1;
-        // if (idx >= 0)
-        // {
-        //     draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
-        // }
-        // else
-        // {
-        //     BoxInfo obj = BoxVec_getItem(idx, &objects);//objects.getItem(idx);
-
-        //     BoxVec box_Vec_temp;
-        //     create_box_vector(&box_Vec_temp, 1);
-        //     BoxVec_push_back(obj, &box_Vec_temp);
-        //     draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &box_Vec_temp);
-        //     BoxVec_free(&box_Vec_temp);
-        // }
-
-
-        // writePixelsToFrameBuffer(
-        //     gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
-        //     pixels, 
-        //     0, 
-        //     0, 
-        //     WIDTH_TOP, 
-        //     HEIGHT_TOP
-        // );
-
-        // gfxFlushBuffers();
-        // gfxScreenSwapBuffers(GFX_TOP, true);
-        // gspWaitForVBlank();
-
-        // free(pixels);    
+    }   
 }
 
 void display_event_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
 
-    switch(code) {
+    switch(code) 
+    {
         case LV_EVENT_PRESSED:
             // Hang up the video until inference finished
             if(detecting)
@@ -155,6 +122,7 @@ lv_obj_t *create_box_list()
     char detected[40];
     sprintf(detected, "Founded %ld items", objects.num_item);
     btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, detected);
+    lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, NULL);
     lv_group_add_obj(g, btn);
 
     for(size_t i=0; i < objects.num_item; i++)
@@ -167,22 +135,12 @@ lv_obj_t *create_box_list()
         int y1 = obj.y1;
         int y2 = obj.y2;     
 
-        sprintf(list_item, "Label:%10s,[%3d,%3d,%3d,%3d]", class_names[label], x1, x2, y1, y2);
+        sprintf(list_item, "%10s [%3d,%3d,%3d,%3d]", class_names[label], x1, x2, y1, y2);
         btn = lv_list_add_btn(boxxes, LV_SYMBOL_GPS, list_item);
 
         lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, NULL);
-
-        // sprintf(list_item, "Idx: %d", lv_obj_get_child_id(btn));
-        // lv_list_add_text(boxxes, list_item);
-        
-         
-
         lv_group_add_obj(g, btn);
-        // lv_list_add_text();
-
     }
-    
-
     return boxxes;
 }
 
