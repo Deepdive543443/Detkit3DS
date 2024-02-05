@@ -1,3 +1,4 @@
 build
 src/lvgl-8.3.11
 # src/asset
+.vscode/settings.json

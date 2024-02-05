@@ -64,7 +64,7 @@ void display_event_cb(lv_event_t *e)
     }
 }
 
-lv_obj_t *create_box_list(lv_group_t *g)
+lv_obj_t *create_box_list()
 {
 
     lv_obj_t *boxxes = lv_list_create(lv_scr_act());
@@ -73,7 +73,7 @@ lv_obj_t *create_box_list(lv_group_t *g)
 
 
     lv_obj_t *btn;
-    lv_list_add_text(boxxes, "Boxxes");
+    lv_list_add_text(boxxes, "Press X to continue");
 
     btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, "New");
     // lv_obj_add_event_cb(btn, list_item_add_cb, LV_EVENT_PRESSED, glt);
