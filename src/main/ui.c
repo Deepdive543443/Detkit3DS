@@ -3,6 +3,9 @@
 #define CANVAS_WIDTH 80
 #define CANVAS_HEIGHT 80
 
+extern lv_group_t *g;
+extern lv_obj_t *box_list; 
+
 
 void list_item_delete_cb(lv_event_t *e)
 {
@@ -19,6 +22,8 @@ void display_event_cb(lv_event_t *e)
     void *cam_buf = (void *) ptr_list[1];
     bool *detecting = (bool *) ptr_list[2];
     BoxVec *objects = (BoxVec *) ptr_list[3];
+    // lv_group_t *g = (lv_group_t *) ptr_list[4];
+    // lv_obj_t *box_list = (lv_obj_t *) ptr_list[5];
 
     switch(code) {
         case LV_EVENT_PRESSED:
@@ -48,6 +53,8 @@ void display_event_cb(lv_event_t *e)
 
             free(pixels);
 
+            box_list = create_box_list(g);
+
             break;
 
         default:
@@ -75,7 +82,7 @@ lv_obj_t *create_box_list(lv_group_t *g)
     return boxxes;
 }
 
-ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting, BoxVec *objects)
+ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting, BoxVec *objects, lv_group_t *group, lv_obj_t *box_list)
 {
     /** Create L, R button that aligned with top left and top right of screen
      * Width: 90,  Height: 30
@@ -95,11 +102,13 @@ ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting, Bo
     lv_label_set_text(label_R, LV_SYMBOL_IMAGE "  R");                     /*Set the labels text*/
     lv_obj_align(label_R, LV_ALIGN_LEFT_MID, 0, 0);
 
-    lv_obj_t **obj_ptrs = (lv_obj_t **) malloc(sizeof(lv_obj_t *) * 4);
+    lv_obj_t **obj_ptrs = (lv_obj_t **) malloc(sizeof(lv_obj_t *) * 6);
     obj_ptrs[0] = (lv_obj_t *) det;
     obj_ptrs[1] = (lv_obj_t *) cam_buf;
     obj_ptrs[2] = (lv_obj_t *) detecting;
     obj_ptrs[3] = (lv_obj_t *) objects;
+    obj_ptrs[4] = (lv_obj_t *) group;
+    obj_ptrs[5] = (lv_obj_t *) box_list;
     
     lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, obj_ptrs);
     lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, obj_ptrs); /*Display the press stage of two button*/
