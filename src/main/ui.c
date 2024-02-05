@@ -102,17 +102,9 @@ ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting, Bo
     lv_obj_t *label_R = lv_label_create(btn_R);          /*Add a label to the button*/
     lv_label_set_text(label_R, LV_SYMBOL_IMAGE "  R");                     /*Set the labels text*/
     lv_obj_align(label_R, LV_ALIGN_LEFT_MID, 0, 0);
-
-    lv_obj_t **obj_ptrs = (lv_obj_t **) malloc(sizeof(lv_obj_t *) * 6);
-    obj_ptrs[0] = (lv_obj_t *) det;
-    obj_ptrs[1] = (lv_obj_t *) cam_buf;
-    obj_ptrs[2] = (lv_obj_t *) detecting;
-    obj_ptrs[3] = (lv_obj_t *) objects;
-    obj_ptrs[4] = (lv_obj_t *) group;
-    obj_ptrs[5] = (lv_obj_t *) box_list;
     
-    lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, obj_ptrs);
-    lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, obj_ptrs); /*Display the press stage of two button*/
+    lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, NULL); /*Display the press stage of two button*/
 
     lv_obj_update_layout(btn_L);
     lv_point_t *points_array_L = (lv_point_t *) malloc(sizeof(lv_point_t) * 2);
