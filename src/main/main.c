@@ -226,7 +226,7 @@ int main(int argc, char** argv)
 
             if(kDown & KEY_X)
             {
-                if(box_list != NULL)
+                if(detecting)
                 {
                     lv_obj_del(box_list);
                     detecting = false;        
