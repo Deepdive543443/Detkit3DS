@@ -12,10 +12,89 @@ extern void *cam_buf;
 
 
 
-void list_item_delete_cb(lv_event_t *e)
+void object_display_cb(lv_event_t *e)
 {
+    lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *item = lv_event_get_target(e);
-    lv_obj_del_async(item);
+
+    switch(code) 
+    {
+        case LV_EVENT_CLICKED:
+
+        unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
+        writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
+
+        int idx = lv_obj_get_child_id(item) - 1;
+        if (idx >= 0)
+        {
+            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
+        }
+        else
+        {
+            BoxInfo obj = BoxVec_getItem(idx, &objects);//objects.getItem(idx);
+
+            BoxVec box_Vec_temp;
+            create_box_vector(&box_Vec_temp, 1);
+            BoxVec_push_back(obj, &box_Vec_temp);
+            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &box_Vec_temp);
+            BoxVec_free(&box_Vec_temp);
+        }
+
+
+        writePixelsToFrameBuffer(
+            gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+            pixels, 
+            0, 
+            0, 
+            WIDTH_TOP, 
+            HEIGHT_TOP
+        );
+
+        gfxFlushBuffers();
+        gfxScreenSwapBuffers(GFX_TOP, true);
+        gspWaitForVBlank();
+
+        free(pixels);    
+        break;
+
+        default:
+        break;
+
+    }
+        // unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
+        // writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
+
+        // int idx = lv_obj_get_child_id(item) - 1;
+        // if (idx >= 0)
+        // {
+        //     draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
+        // }
+        // else
+        // {
+        //     BoxInfo obj = BoxVec_getItem(idx, &objects);//objects.getItem(idx);
+
+        //     BoxVec box_Vec_temp;
+        //     create_box_vector(&box_Vec_temp, 1);
+        //     BoxVec_push_back(obj, &box_Vec_temp);
+        //     draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &box_Vec_temp);
+        //     BoxVec_free(&box_Vec_temp);
+        // }
+
+
+        // writePixelsToFrameBuffer(
+        //     gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+        //     pixels, 
+        //     0, 
+        //     0, 
+        //     WIDTH_TOP, 
+        //     HEIGHT_TOP
+        // );
+
+        // gfxFlushBuffers();
+        // gfxScreenSwapBuffers(GFX_TOP, true);
+        // gspWaitForVBlank();
+
+        // free(pixels);    
 }
 
 void display_event_cb(lv_event_t *e)
@@ -71,15 +150,12 @@ lv_obj_t *create_box_list()
     lv_obj_set_size(boxxes, WIDTH_BTM, 160);
     lv_obj_align(boxxes, LV_ALIGN_TOP_MID, 0, 40);
 
-
     lv_obj_t *btn;
     lv_list_add_text(boxxes, "Press X to continue");
     char detected[40];
     sprintf(detected, "Founded %ld items", objects.num_item);
     btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, detected);
-    // lv_obj_add_event_cb(btn, list_item_add_cb, LV_EVENT_PRESSED, glt);
     lv_group_add_obj(g, btn);
-    lv_group_add_obj(g, lv_list_add_btn(boxxes, LV_SYMBOL_GPS, "Navigate"));
 
     for(size_t i=0; i < objects.num_item; i++)
     {
@@ -89,10 +165,23 @@ lv_obj_t *create_box_list()
         int x1 = obj.x1;
         int x2 = obj.x2;
         int y1 = obj.y1;
-        int y2 = obj.y2;
+        int y2 = obj.y2;     
+
         sprintf(list_item, "Label:%10s,[%3d,%3d,%3d,%3d]", class_names[label], x1, x2, y1, y2);
-        lv_group_add_obj(g, lv_list_add_btn(boxxes, LV_SYMBOL_GPS, list_item));
+        btn = lv_list_add_btn(boxxes, LV_SYMBOL_GPS, list_item);
+
+        lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, NULL);
+
+        // sprintf(list_item, "Idx: %d", lv_obj_get_child_id(btn));
+        // lv_list_add_text(boxxes, list_item);
+        
+         
+
+        lv_group_add_obj(g, btn);
+        // lv_list_add_text();
+
     }
+    
 
     return boxxes;
 }
