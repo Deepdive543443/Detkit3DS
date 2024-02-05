@@ -74,8 +74,9 @@ lv_obj_t *create_box_list()
 
     lv_obj_t *btn;
     lv_list_add_text(boxxes, "Press X to continue");
-
-    btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, "New");
+    char detected[40];
+    sprintf(detected, "Founded %ld items", objects.num_item);
+    btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, detected);
     // lv_obj_add_event_cb(btn, list_item_add_cb, LV_EVENT_PRESSED, glt);
     lv_group_add_obj(g, btn);
     lv_group_add_obj(g, lv_list_add_btn(boxxes, LV_SYMBOL_GPS, "Navigate"));
