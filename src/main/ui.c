@@ -5,6 +5,11 @@
 
 extern lv_group_t *g;
 extern lv_obj_t *box_list; 
+extern Detector det;
+extern BoxVec objects; 
+extern bool detecting;
+extern void *cam_buf;
+
 
 
 void list_item_delete_cb(lv_event_t *e)
@@ -16,29 +21,25 @@ void list_item_delete_cb(lv_event_t *e)
 void display_event_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t **ptr_list = (lv_obj_t **) lv_event_get_user_data(e);
-
-    Detector *det = (Detector *) ptr_list[0];
-    void *cam_buf = (void *) ptr_list[1];
-    bool *detecting = (bool *) ptr_list[2];
-    BoxVec *objects = (BoxVec *) ptr_list[3];
-    // lv_group_t *g = (lv_group_t *) ptr_list[4];
-    // lv_obj_t *box_list = (lv_obj_t *) ptr_list[5];
 
     switch(code) {
         case LV_EVENT_PRESSED:
             // Hang up the video until inference finished
-            *detecting = true;
-            BoxVec_free(objects);
+            if(detecting)
+            {
+                lv_obj_del(box_list); 
+            }
+            detecting = true;
+            BoxVec_free(&objects);
             pause_cam_capture(cam_buf);
 
             // Inference 
             unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
             writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
-            *objects = det->detect(pixels, WIDTH_TOP, HEIGHT_TOP, det);
+            objects = det.detect(pixels, WIDTH_TOP, HEIGHT_TOP, &det);
 
             // Print inference outputs
-            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, objects);
+            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
             writePixelsToFrameBuffer(
                 gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
                 pixels, 

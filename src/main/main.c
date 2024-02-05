@@ -9,8 +9,13 @@
 
 static struct timespec start, end;
 
+// Glob
 lv_group_t *g;
 lv_obj_t *box_list; 
+Detector det;
+BoxVec objects; 
+bool detecting;
+void *cam_buf;
 
 bool ticker()
 {
@@ -72,7 +77,7 @@ int main(int argc, char** argv)
     CAMU_SetAutoWhiteBalance(SELECT_OUT1, true);
     CAMU_SetTrimming(PORT_CAM1, false);
 
-    void *cam_buf = malloc(SCRSIZE_TOP * 2); // RBG565 frame buffer
+    cam_buf = malloc(SCRSIZE_TOP * 2); // RBG565 frame buffer
     if(!cam_buf)
     {
         hang_err("Failed to allocate memory!");
@@ -91,7 +96,7 @@ int main(int argc, char** argv)
 
     bool captureInterrupted = false;
     s32 index = 0;
-    bool detecting = false;
+    detecting = false;
 
 
     // IVGL init
@@ -117,14 +122,14 @@ int main(int argc, char** argv)
     lv_img_set_src(bg, &ncnn_bg_transprant);
 
     // Detector, Detector objects and group of enconder containers
-    Detector det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
-    BoxVec objects;    
+    det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
+    // BoxVec objects;    
     // lv_group_t *g;
     // lv_obj_t *box_list;    // lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
 
     // Other UI widget
     lv_obj_t *model_list = create_model_list(&det);
-    ui_LR_t ui_LR = create_shoulder_button(&det, cam_buf, &detecting, &objects, g, box_list);
+    ui_LR_t ui_LR = create_shoulder_button();
     // ui_LR_t btm_btn = create_bottom_btn();
 
 
@@ -136,7 +141,7 @@ int main(int argc, char** argv)
     indev_drv_cross.type = LV_INDEV_TYPE_ENCODER;
     indev_drv_cross.read_cb = encoder_cb_3ds;
     lv_indev_t *enc_indev = lv_indev_drv_register(&indev_drv_cross);
-    lv_indev_set_group(enc_indev, &g);
+    lv_indev_set_group(enc_indev, g);
 
     // Touchpad init
     static lv_indev_drv_t indev_drv_touch;
@@ -211,6 +216,8 @@ int main(int argc, char** argv)
             // Quit App
             if(kHeld & KEY_START) break;
 
+            // TODO --
+            // Select and Key X operation is dangerous at this moment
             if(kDown & KEY_SELECT) 
             {
                 detecting = !detecting;
