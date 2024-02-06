@@ -309,6 +309,11 @@ lv_obj_t *create_model_list(Detector *det)
     lv_obj_add_event_cb(models, model_list_hanlder, LV_EVENT_ALL, det);
 }
 
+void create_LR()
+{
+    
+}
+
 void create_bottom_A()
 {
     button_style_init(&btn_btm);
