@@ -81,6 +81,7 @@ int main(int argc, char** argv)
     gfxInitDefault();
     gfxSetDoubleBuffering(GFX_TOP, true);
     gfxSetDoubleBuffering(GFX_BOTTOM, true);
+    gfxSet3D(false);
 
     // Camera framebuffer, state, hanlder init
     camInit();
@@ -112,7 +113,6 @@ int main(int argc, char** argv)
     bool captureInterrupted = false;
     s32 index = 0;
     detecting = false;
-
 
     // IVGL init
     lv_init();
@@ -196,7 +196,6 @@ int main(int argc, char** argv)
 
             }
 
-            gfxSet3D(false);
             writeCamToFramebufferRGB565(
                 gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
                 cam_buf,
