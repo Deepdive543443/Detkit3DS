@@ -40,7 +40,19 @@ static void button_style_init(lv_style_t *btn)
 
 void quit_detect_cb(lv_event_t *e)
 {
-    
+    lv_event_code_t code = lv_event_get_code(e);
+    if (code == LV_EVENT_CLICKED)
+    {
+        if(detecting)
+        {
+            lv_obj_del_async(btn_B);
+            lv_indev_enable(indev_B, false);
+            create_bottom_A();
+            lv_indev_enable(indev_A, true);
+            lv_obj_del(box_list);
+            detecting = false;        
+        }
+    }
 }
 
 
@@ -449,6 +461,7 @@ void create_bottom_AB()
     lv_obj_add_style(btn_B, &btn_btm, NULL);
     lv_obj_add_style(btn_B, &btn_press, LV_STATE_PRESSED);
 
+    lv_obj_add_event_cb(btn_B, quit_detect_cb, LV_EVENT_ALL, NULL);  
     
     btn_A = lv_btn_create(lv_scr_act());
     lv_obj_remove_style_all(btn_A);
