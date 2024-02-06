@@ -241,22 +241,6 @@ int main(int argc, char** argv)
                 pause_cam_capture(cam_buf); 
             }
 
-            if(kDown & KEY_X)
-            {
-                if(detecting)
-                {
-                    // lv_obj_del_async(btn_A);
-                    lv_obj_del_async(btn_B);
-                    // lv_indev_enable(indev_A, false);
-                    lv_indev_enable(indev_B, false);
-                    create_bottom_A();
-                    lv_indev_enable(indev_A, true);
-                    lv_obj_del(box_list);
-                    detecting = false;        
-                }
-
-            }
-
             lv_timer_handler();
             while (ticker());
 

@@ -165,7 +165,7 @@ lv_obj_t *create_box_list()
     lv_obj_align(boxxes, LV_ALIGN_TOP_MID, 0, 40);
 
     lv_obj_t *btn;
-    lv_list_add_text(boxxes, "Press X to continue");
+    lv_list_add_text(boxxes, "Press B to continue");
     char detected[40];
     sprintf(detected, "Founded %ld items", objects.num_item);
     btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, detected);
@@ -414,7 +414,7 @@ void create_bottom_A()
 
 void create_bottom_AB()
 {
-    const *labels[] = {" continue", " Detect"};
+    const *labels[] = {" Continue", " Detect"};
     lv_indev_t *BA_indev[] = {&indev_B, &indev_A};
     void (*functions[2])() = { virtual_B_cb, virtual_A_cb};
     lv_point_t *pts_arrays[] = {&point_array_A, &point_array_B};
