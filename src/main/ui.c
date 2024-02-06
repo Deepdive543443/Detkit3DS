@@ -424,7 +424,7 @@ void create_bottom_AB()
     lv_obj_set_style_radius(icon_B, LV_RADIUS_CIRCLE, NULL);
     lv_obj_set_style_clip_corner(icon_B, true, NULL);
     lv_obj_set_scrollbar_mode(icon_B, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_style_bg_color(icon_B, lv_color_hex(0xe06666), NULL);
+    lv_obj_set_style_bg_color(icon_B, lv_color_hex(0xffd966), NULL);
     lv_obj_set_style_border_width(icon_B, 2, NULL);
 
     label = lv_label_create(icon_B);
