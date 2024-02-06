@@ -23,10 +23,11 @@ extern lv_point_t point_array_B[2];
 extern lv_point_t point_array_X[2];
 extern lv_point_t point_array_Y[2]; //Encoder 
 
-static lv_style_t btn_btm;
-static lv_style_t btn_press;
+extern lv_style_t btn_btm;
+extern lv_style_t btn_press;
+extern lv_style_t btn_darken;
 
-static void button_style_init(lv_style_t *btn)
+void button_style_init(lv_style_t *btn)
 {
     lv_style_init(btn);
     lv_style_set_border_width(btn, 1);
@@ -311,15 +312,12 @@ lv_obj_t *create_model_list(Detector *det)
 
 void create_LR()
 {
-    
+
 }
 
 void create_bottom_A()
 {
-    button_style_init(&btn_btm);
     lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
-
-    button_style_init(&btn_press);
     lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
 
     btn_A = lv_btn_create(lv_scr_act());
@@ -383,10 +381,7 @@ void create_bottom_AB()
     int align[2] = {LV_ALIGN_BOTTOM_LEFT, LV_ALIGN_BOTTOM_RIGHT};
     static lv_indev_drv_t drv_B, drv_A;
 
-    button_style_init(&btn_btm);
     lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
-
-    button_style_init(&btn_press);
     lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
 
 

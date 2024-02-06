@@ -41,6 +41,7 @@ typedef struct
     lv_point_t *point_array_R;
 } ui_LR_t;
 
+void button_style_init(lv_style_t *btn);
 void quit_detect_cb(lv_event_t *e);
 void object_display_cb(lv_event_t *e);
 void display_event_cb(lv_event_t *e);

@@ -39,6 +39,11 @@ lv_point_t point_array_Y[2];
 lv_point_t point_array_L[2];
 lv_point_t point_array_R[2];//Encoder 
 
+lv_style_t btn_btm;
+lv_style_t btn_press;
+lv_style_t btn_darken;
+
+
 bool ticker()
 {
     /* Hands the main loop until it reach the tick time*/
@@ -163,6 +168,9 @@ int main(int argc, char** argv)
     indev_drv_touch.read_cb = touch_cb_3ds;
     lv_indev_t *touch_indev = lv_indev_drv_register(&indev_drv_touch);
 
+    // Style init
+    button_style_init(&btn_btm);
+    button_style_init(&btn_press);
     
     while(aptMainLoop())
     {
