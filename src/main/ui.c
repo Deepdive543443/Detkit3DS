@@ -327,12 +327,14 @@ void create_bottom_A()
     lv_obj_set_style_radius(icon_A, LV_RADIUS_CIRCLE, NULL);
     lv_obj_set_style_clip_corner(icon_A, true, NULL);
     lv_obj_set_scrollbar_mode(icon_A, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_style_bg_color(icon_A, lv_color_hex(0xe06666), NULL);
+    lv_obj_set_style_bg_opa(icon_A, LV_OPA_TRANSP, NULL);
     lv_obj_set_style_border_width(icon_A, 2, NULL);
+    lv_obj_set_style_border_color(icon_A, lv_color_hex(0x353535), NULL);
+
 
     label = lv_label_create(icon_A);
     lv_label_set_text(label, "A");
-    lv_obj_set_style_text_color(label, lv_color_hex(0xffffff), NULL);
+    lv_obj_set_style_text_color(label, lv_color_hex(0x353535), NULL);
     lv_obj_center(label);
 
     label = lv_label_create(btn_A);
