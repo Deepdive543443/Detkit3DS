@@ -337,6 +337,7 @@ void create_bottom_A()
 
     label = lv_label_create(btn_A);
     lv_label_set_text(label, "  Detect");
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_16, NULL);
 
     // Positions
     lv_obj_align(btn_A, LV_ALIGN_BOTTOM_MID, 0, 0);
@@ -401,6 +402,7 @@ void create_bottom_AB()
 
     label = lv_label_create(btn_B);
     lv_label_set_text(label, labels[0]);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_16, NULL);
     
     // Position 
     lv_obj_align(btn_B, align[0], 0, 0);
@@ -435,6 +437,7 @@ void create_bottom_AB()
 
     label = lv_label_create(btn_A);
     lv_label_set_text(label, labels[1]);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_16, NULL);
 
     // Positions
     lv_obj_align(btn_A, align[1], 0, 0);
