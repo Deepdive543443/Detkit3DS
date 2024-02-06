@@ -11,11 +11,27 @@ static struct timespec start, end;
 
 // Glob
 lv_group_t *g;
-lv_obj_t *box_list; 
+lv_obj_t *box_list;  // LVGL Objects
+
 Detector det;
-BoxVec objects; 
-bool detecting;
+BoxVec objects; // Containers 
 void *cam_buf;
+
+bool detecting; // Stage marker
+
+
+lv_obj_t *btn_A;
+lv_obj_t *btn_B;
+lv_obj_t *btn_X;
+lv_obj_t *btn_Y;
+lv_indev_t *indev_A;
+lv_indev_t *indev_B;
+lv_indev_t *indev_X;
+lv_indev_t *indev_Y; 
+lv_point_t point_array_A[2];
+lv_point_t point_array_B[2];
+lv_point_t point_array_X[2];
+lv_point_t point_array_Y[2];//Encoder 
 
 bool ticker()
 {
@@ -129,7 +145,8 @@ int main(int argc, char** argv)
     // Other UI widget
     lv_obj_t *model_list = create_model_list(&det);
     ui_LR_t ui_LR = create_shoulder_button();
-    ui_LR_t btm_btn = create_bottom_btn();
+    // ui_LR_t btm_btn = create_bottom_btn();
+    create_bottom_A();
 
 
 

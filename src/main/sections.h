@@ -50,6 +50,7 @@ lv_obj_t *put_text_example(const char *string);
 void model_list_hanlder(lv_event_t *e);
 lv_obj_t *create_model_list(Detector *det);
 ui_LR_t create_bottom_btn();
+void create_bottom_A();
 
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);

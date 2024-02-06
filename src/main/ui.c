@@ -10,6 +10,19 @@ extern BoxVec objects;
 extern bool detecting;
 extern void *cam_buf;
 
+extern lv_obj_t *btn_A;
+extern lv_obj_t *btn_B;
+extern lv_obj_t *btn_X;
+extern lv_obj_t *btn_Y;
+extern lv_indev_t *indev_A;
+extern lv_indev_t *indev_B;
+extern lv_indev_t *indev_X;
+extern lv_indev_t *indev_Y;
+extern lv_point_t point_array_A[2];
+extern lv_point_t point_array_B[2];
+extern lv_point_t point_array_X[2];
+extern lv_point_t point_array_Y[2]; //Encoder 
+
 static lv_style_t btn_btm;
 static lv_style_t btn_press;
 
@@ -323,4 +336,42 @@ ui_LR_t create_bottom_btn()
 
         lv_indev_set_button_points(BA_indev, pts_arrays[i]);
     }
+}
+
+void create_bottom_A()
+{
+    button_style_init(&btn_btm);
+    lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
+
+    button_style_init(&btn_press);
+    lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
+
+    btn_A = lv_btn_create(lv_scr_act());
+    lv_obj_remove_style_all(btn_A);
+
+    lv_obj_set_size(btn_A, lv_pct(100), 30);
+
+    // Positions
+    lv_obj_t *label = lv_label_create(btn_A);
+    lv_label_set_text(label, "A Detect");
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_align(btn_A, LV_ALIGN_BOTTOM_MID, 0, 0);
+
+    //Styles
+    lv_obj_add_style(btn_A, &btn_btm, NULL);
+    lv_obj_add_style(btn_A, &btn_press, LV_STATE_PRESSED);
+
+    // Press event
+    lv_obj_add_event_cb(btn_A, display_event_cb, LV_EVENT_ALL, NULL);    
+    
+    // Assign to encoder
+    static lv_indev_drv_t drv_A;
+    lv_obj_update_layout(btn_A);
+    drv_A.type = LV_INDEV_TYPE_BUTTON;
+    drv_A.read_cb = virtual_A_cb;
+    indev_A = lv_indev_drv_register(&drv_A);
+    point_array_A[0] = (lv_point_t){-1, -1};
+    point_array_A[1] = (lv_point_t) {(btn_A->coords.x1 + btn_A->coords.x2) / 2, (btn_A->coords.y1 + btn_A->coords.y2) / 2};
+
+    lv_indev_set_button_points(indev_A, point_array_A);
 }
