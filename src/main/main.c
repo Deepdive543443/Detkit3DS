@@ -24,14 +24,20 @@ lv_obj_t *btn_A;
 lv_obj_t *btn_B;
 lv_obj_t *btn_X;
 lv_obj_t *btn_Y;
+lv_obj_t *btn_L;
+lv_obj_t *btn_R;
 lv_indev_t *indev_A;
 lv_indev_t *indev_B;
 lv_indev_t *indev_X;
 lv_indev_t *indev_Y; 
+lv_indev_t *indev_L; 
+lv_indev_t *indev_R; 
 lv_point_t point_array_A[2];
 lv_point_t point_array_B[2];
 lv_point_t point_array_X[2];
-lv_point_t point_array_Y[2];//Encoder 
+lv_point_t point_array_Y[2];
+lv_point_t point_array_L[2];
+lv_point_t point_array_R[2];//Encoder 
 
 bool ticker()
 {
