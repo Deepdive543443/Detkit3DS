@@ -41,8 +41,8 @@ typedef struct
     lv_point_t *point_array_R;
 } ui_LR_t;
 
-void list_item_add_cb(lv_event_t *e);
-void list_item_delete_cb(lv_event_t *e);
+
+void object_display_cb(lv_event_t *e);
 void display_event_cb(lv_event_t *e);
 lv_obj_t *create_box_list();
 ui_LR_t create_shoulder_button();

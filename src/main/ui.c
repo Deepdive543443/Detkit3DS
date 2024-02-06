@@ -488,7 +488,7 @@ void create_bottom_AB()
     point_array_B[1] = (lv_point_t) {(btn_B->coords.x1 + btn_B->coords.x2) / 2, (btn_B->coords.y1 + btn_B->coords.y2) / 2};
 
     lv_indev_set_button_points(indev_B, point_array_B);
-;
+
     lv_obj_update_layout(btn_A);
     drv_A.type = LV_INDEV_TYPE_BUTTON;
     drv_A.read_cb = virtual_A_cb;
