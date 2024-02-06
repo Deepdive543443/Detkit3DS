@@ -64,7 +64,6 @@ void hang_err(const char *message)
 // User input place holder
 static u32 kDown;
 static u32 kHeld;
-static circlePosition joy_stick;
 
 int main(int argc, char** argv)
 {
@@ -124,13 +123,9 @@ int main(int argc, char** argv)
     static lv_disp_drv_t disp_drv_btm;        /*Descriptor of a display driver*/
     lv_disp_t *disp_btm = display_init(GFX_BOTTOM, &draw_buf_btm, &buf1_btm, &disp_drv_btm);
 
-
     // Initial touch screen's display, ui, and control 
     lv_disp_set_default(disp_btm);
     lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE); // We don't want the screen to be scrollable
-    
-    
-    // lv_obj_t *btm_text = put_text_example("Hello\nLVGL 3DS");
 
     // BG
     LV_IMG_DECLARE(ncnn_bg_transprant);
@@ -140,16 +135,11 @@ int main(int argc, char** argv)
     // Detector, Detector objects and group of enconder containers
     det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");    
     g = lv_group_create();
-    // lv_obj_t *box_list;    // lv_obj_t *boxxes = create_box_list(g); // Dummy boxxes
 
     // Other UI widget
     lv_obj_t *model_list = create_model_list(&det);
     ui_LR_t ui_LR = create_shoulder_button();
-    // ui_LR_t btm_btn = create_bottom_btn();
     create_bottom_A();
-    // create_bottom_AB();
-
-
 
 
     // Input init
@@ -167,7 +157,7 @@ int main(int argc, char** argv)
     indev_drv_touch.read_cb = touch_cb_3ds;
     lv_indev_t *touch_indev = lv_indev_drv_register(&indev_drv_touch);
 
-
+    
     while(aptMainLoop())
     {
         clock_gettime(CLOCK_MONOTONIC, &start);
@@ -228,13 +218,10 @@ int main(int argc, char** argv)
             hidScanInput();
             kDown = hidKeysDown();
             kHeld = hidKeysHeld();
-            hidCircleRead(&joy_stick);
 
             // Quit App
             if(kHeld & KEY_START) break;
 
-            // TODO --
-            // Select and Key X operation is dangerous at this moment
             if(kDown & KEY_SELECT) 
             {
                 detecting = !detecting;
@@ -249,6 +236,7 @@ int main(int argc, char** argv)
         }
     }
 
+    lv_deinit();
     free(ui_LR.point_array_L);
     free(ui_LR.point_array_R);
     cleanup();
