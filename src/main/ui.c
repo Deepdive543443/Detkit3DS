@@ -10,6 +10,20 @@ extern BoxVec objects;
 extern bool detecting;
 extern void *cam_buf;
 
+static lv_style_t btn_btm;
+static lv_style_t btn_press;
+
+static void button_style_init(lv_style_t *btn)
+{
+    lv_style_init(btn);
+    lv_style_set_border_width(btn, 1);
+    lv_style_set_border_color(btn, lv_color_hex(0x999999));
+    lv_style_set_radius(btn, 0);
+    lv_style_set_pad_all(btn, 0);
+    lv_style_set_bg_opa(btn, LV_OPA_COVER);
+    lv_style_set_bg_grad_color(btn, lv_palette_main(LV_PALETTE_GREY));
+    lv_style_set_bg_grad_dir(btn, LV_GRAD_DIR_VER);
+}
 
 
 void object_display_cb(lv_event_t *e)
@@ -273,11 +287,18 @@ ui_LR_t create_bottom_btn()
     void (*functions[2])() = {virtual_B_cb, virtual_A_cb};
     static lv_indev_drv_t drv_list_BA[2];
 
+    button_style_init(&btn_btm);
+    lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
+
+    button_style_init(&btn_press);
+    lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
 
     int align[2] = {LV_ALIGN_BOTTOM_LEFT, LV_ALIGN_BOTTOM_RIGHT};
     for(int i=0; i < 2; i++)
     {
         btns[i] = lv_btn_create(lv_scr_act());
+        lv_obj_remove_style_all(btns[i]);
+        
         lv_obj_set_size(btns[i], lv_pct(50), 30);
 
         // Positions
@@ -287,15 +308,9 @@ ui_LR_t create_bottom_btn()
         lv_obj_align(btns[i], align[i], 0, 0);
 
         //Styles
-        // lv_obj_set_style_border_opa(btns[i], LV_OPA_TRANSP, NULL);
-        lv_obj_set_style_border_width(btns[i], 1, NULL);
-        lv_obj_set_style_border_color(btns[i], lv_color_hex(0x999999), NULL);
-        lv_obj_set_style_radius(btns[i], 0, NULL);
-        lv_obj_set_style_pad_all(btns[i], 0, NULL);
-        lv_obj_set_style_bg_color(btns[i], lv_palette_lighten(LV_PALETTE_GREY, 2), NULL);
-        lv_obj_set_style_bg_grad_color(btns[i], lv_palette_main(LV_PALETTE_GREY), NULL);
-        lv_obj_set_style_bg_grad_dir(btns[i], LV_GRAD_DIR_VER, NULL);
-        // lv_style_set_bg_grad_dir(&style_btn, LV_GRAD_DIR_VER);
+        lv_obj_add_style(btns[i], &btn_btm, NULL);
+        lv_obj_add_style(btns[i], &btn_press, LV_STATE_PRESSED);
+
 
         // Assign click button activities
         lv_obj_update_layout(btns[i]);
@@ -305,7 +320,6 @@ ui_LR_t create_bottom_btn()
         pts_arrays[i] = (lv_point_t *) malloc(sizeof(lv_point_t) * 2);
         pts_arrays[i][0] = (lv_point_t){-1, -1};
         pts_arrays[i][1] = (lv_point_t) {(btns[i]->coords.x1 + btns[i]->coords.x2) / 2, (btns[i]->coords.y1 + btns[i]->coords.y2) / 2};
-
 
         lv_indev_set_button_points(BA_indev, pts_arrays[i]);
     }
