@@ -397,7 +397,7 @@ void create_bottom_A()
 
 void create_bottom_AB()
 {
-    const *labels[] = {"B continue", "A Detect"};
+    const *labels[] = {" continue", "A Detect"};
     lv_indev_t *BA_indev[] = {&indev_B, &indev_A};
     void (*functions[2])() = { virtual_B_cb, virtual_A_cb};
     lv_point_t *pts_arrays[] = {&point_array_A, &point_array_B};
@@ -416,14 +416,29 @@ void create_bottom_AB()
 
     btn_B = lv_btn_create(lv_scr_act());
     lv_obj_remove_style_all(btn_B);
-    
+    // Positions
     lv_obj_set_size(btn_B, lv_pct(50), 30);
 
-    // Positions
+    lv_obj_t *icon_B = lv_obj_create(btn_B);
+    lv_obj_set_size(icon_B, 22, 22);
+    lv_obj_set_style_radius(icon_B, LV_RADIUS_CIRCLE, NULL);
+    lv_obj_set_style_clip_corner(icon_B, true, NULL);
+    lv_obj_set_scrollbar_mode(icon_B, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_style_bg_color(icon_B, lv_color_hex(0xe06666), NULL);
+    lv_obj_set_style_border_width(icon_B, 2, NULL);
+
+    label = lv_label_create(icon_B);
+    lv_label_set_text(label, "B");
+    lv_obj_set_style_text_color(label, lv_color_hex(0xffffff), NULL);
+    lv_obj_center(label);
+
     label = lv_label_create(btn_B);
     lv_label_set_text(label, labels[0]);
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+    
+    // Position 
     lv_obj_align(btn_B, align[0], 0, 0);
+    lv_obj_set_flex_flow(btn_B, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(btn_B,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
     //Styles
     lv_obj_add_style(btn_B, &btn_btm, NULL);
