@@ -354,11 +354,27 @@ void create_bottom_A()
 
     lv_obj_set_size(btn_A, lv_pct(100), 30);
 
+    lv_obj_t *label;
+    lv_obj_t *icon_A = lv_obj_create(btn_A);
+    lv_obj_set_size(icon_A, 22, 22);
+    lv_obj_set_style_radius(icon_A, LV_RADIUS_CIRCLE, NULL);
+    lv_obj_set_style_clip_corner(icon_A, true, NULL);
+    lv_obj_set_scrollbar_mode(icon_A, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_style_bg_color(icon_A, lv_color_hex(0xe06666), NULL);
+    lv_obj_set_style_border_width(icon_A, 2, NULL);
+
+    label = lv_label_create(icon_A);
+    lv_label_set_text(label, "A");
+    lv_obj_set_style_text_color(label, lv_color_hex(0xffffff), NULL);
+    lv_obj_center(label);
+
+    label = lv_label_create(btn_A);
+    lv_label_set_text(label, "  Detect");
+
     // Positions
-    lv_obj_t *label = lv_label_create(btn_A);
-    lv_label_set_text(label, "A Detect");
-    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
     lv_obj_align(btn_A, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_set_flex_flow(btn_A, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(btn_A,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
     //Styles
     lv_obj_add_style(btn_A, &btn_btm, NULL);
