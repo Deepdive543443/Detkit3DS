@@ -130,6 +130,7 @@ void display_event_cb(lv_event_t *e)
 
             box_list = create_box_list();
             lv_indev_enable(indev_A, false);
+            create_bottom_AB();
 
             break;
 
@@ -298,8 +299,8 @@ ui_LR_t create_bottom_btn()
     lv_obj_t *btns[2] = {btn_BA.L, btn_BA.R};
     lv_point_t *pts_arrays[2] = {btn_BA.point_array_L, btn_BA.point_array_R};
     
-    const *labels[] = {"B quit", "A continue"};
-    void (*functions[2])() = {virtual_B_cb, virtual_A_cb};
+    const *labels[] = {"A Detect", "B continue"};
+    void (*functions[2])() = {virtual_A_cb, virtual_B_cb};
     static lv_indev_drv_t drv_list_BA[2];
 
     button_style_init(&btn_btm);
@@ -376,4 +377,78 @@ void create_bottom_A()
     point_array_A[1] = (lv_point_t) {(btn_A->coords.x1 + btn_A->coords.x2) / 2, (btn_A->coords.y1 + btn_A->coords.y2) / 2};
 
     lv_indev_set_button_points(indev_A, point_array_A);
+}
+
+void create_bottom_AB()
+{
+    const *labels[] = {"B continue", "A Detect"};
+    lv_indev_t *BA_indev[] = {&indev_B, &indev_A};
+    void (*functions[2])() = { virtual_B_cb, virtual_A_cb};
+    lv_point_t *pts_arrays[] = {&point_array_A, &point_array_B};
+    lv_obj_t *btns[] = {&btn_B , &btn_A};
+    int align[2] = {LV_ALIGN_BOTTOM_LEFT, LV_ALIGN_BOTTOM_RIGHT};
+    static lv_indev_drv_t drv_B, drv_A;
+
+    button_style_init(&btn_btm);
+    lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
+
+    button_style_init(&btn_press);
+    lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
+
+
+    lv_obj_t *label;
+
+    btn_B = lv_btn_create(lv_scr_act());
+    lv_obj_remove_style_all(btn_B);
+    
+    lv_obj_set_size(btn_B, lv_pct(50), 30);
+
+    // Positions
+    label = lv_label_create(btn_B);
+    lv_label_set_text(label, labels[0]);
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_align(btn_B, align[0], 0, 0);
+
+    //Styles
+    lv_obj_add_style(btn_B, &btn_btm, NULL);
+    lv_obj_add_style(btn_B, &btn_press, LV_STATE_PRESSED);
+
+    
+    btn_A = lv_btn_create(lv_scr_act());
+    lv_obj_remove_style_all(btn_A);
+    
+    lv_obj_set_size(btn_A, lv_pct(50), 30);
+
+    // Positions
+    label = lv_label_create(btn_A);
+    lv_label_set_text(label, labels[1]);
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_align(btn_A, align[1], 0, 0);
+
+    //Styles
+    lv_obj_add_style(btn_A, &btn_btm, NULL);
+    lv_obj_add_style(btn_A, &btn_press, LV_STATE_PRESSED);
+
+
+    // Assign click button activities
+
+    lv_obj_update_layout(btn_B);
+    drv_B.type = LV_INDEV_TYPE_BUTTON;
+    drv_B.read_cb = virtual_B_cb;
+    indev_B = lv_indev_drv_register(&drv_B);
+    point_array_B[0] = (lv_point_t){-1, -1};
+    point_array_B[1] = (lv_point_t) {(btn_B->coords.x1 + btn_B->coords.x2) / 2, (btn_B->coords.y1 + btn_B->coords.y2) / 2};
+
+    lv_indev_set_button_points(indev_B, point_array_B);
+;
+    lv_obj_update_layout(btn_A);
+    drv_A.type = LV_INDEV_TYPE_BUTTON;
+    drv_A.read_cb = virtual_A_cb;
+    indev_A = lv_indev_drv_register(&drv_A);
+    point_array_A[0] = (lv_point_t){-1, -1};
+    point_array_A[1] = (lv_point_t) {(btn_A->coords.x1 + btn_A->coords.x2) / 2, (btn_A->coords.y1 + btn_A->coords.y2) / 2};
+
+    lv_indev_set_button_points(indev_A, point_array_A);
+
+
 }

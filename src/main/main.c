@@ -147,6 +147,7 @@ int main(int argc, char** argv)
     ui_LR_t ui_LR = create_shoulder_button();
     // ui_LR_t btm_btn = create_bottom_btn();
     create_bottom_A();
+    // create_bottom_AB();
 
 
 
@@ -244,6 +245,10 @@ int main(int argc, char** argv)
             {
                 if(detecting)
                 {
+                    // lv_obj_del_async(btn_A);
+                    lv_obj_del_async(btn_B);
+                    // lv_indev_enable(indev_A, false);
+                    lv_indev_enable(indev_B, false);
                     create_bottom_A();
                     lv_indev_enable(indev_A, true);
                     lv_obj_del(box_list);
