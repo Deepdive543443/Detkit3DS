@@ -244,6 +244,8 @@ int main(int argc, char** argv)
             {
                 if(detecting)
                 {
+                    create_bottom_A();
+                    lv_indev_enable(indev_A, true);
                     lv_obj_del(box_list);
                     detecting = false;        
                 }

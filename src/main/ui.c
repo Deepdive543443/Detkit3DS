@@ -103,6 +103,7 @@ void display_event_cb(lv_event_t *e)
                 lv_obj_del(box_list); 
             }
             detecting = true;
+            lv_obj_del_async(btn_A);
             BoxVec_free(&objects);
             pause_cam_capture(cam_buf);
 
@@ -128,6 +129,7 @@ void display_event_cb(lv_event_t *e)
             free(pixels);
 
             box_list = create_box_list();
+            lv_indev_enable(indev_A, false);
 
             break;
 
