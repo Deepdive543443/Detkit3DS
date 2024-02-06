@@ -38,6 +38,11 @@ static void button_style_init(lv_style_t *btn)
     lv_style_set_bg_grad_dir(btn, LV_GRAD_DIR_VER);
 }
 
+void quit_detect_cb(lv_event_t *e)
+{
+    
+}
+
 
 void object_display_cb(lv_event_t *e)
 {
