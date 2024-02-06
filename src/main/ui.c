@@ -180,9 +180,10 @@ lv_obj_t *create_box_list()
         int x1 = obj.x1;
         int x2 = obj.x2;
         int y1 = obj.y1;
-        int y2 = obj.y2;     
+        int y2 = obj.y2;
+        float prob = obj.prob * 100;
 
-        sprintf(list_item, "%10s [%3d,%3d,%3d,%3d]", class_names[label], x1, x2, y1, y2);
+        sprintf(list_item, "%15s %03.1f [%3d,%3d,%3d,%3d]", class_names[label], prob, x1, x2, y1, y2);
         btn = lv_list_add_btn(boxxes, LV_SYMBOL_GPS, list_item);
 
         lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, NULL);
