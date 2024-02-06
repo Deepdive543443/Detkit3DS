@@ -323,18 +323,20 @@ void create_bottom_A()
 
     lv_obj_t *label;
     lv_obj_t *icon_A = lv_obj_create(btn_A);
-    lv_obj_set_size(icon_A, 22, 22);
+    lv_obj_set_size(icon_A, 19, 19);
     lv_obj_set_style_radius(icon_A, LV_RADIUS_CIRCLE, NULL);
     lv_obj_set_style_clip_corner(icon_A, true, NULL);
     lv_obj_set_scrollbar_mode(icon_A, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_style_bg_opa(icon_A, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_border_width(icon_A, 2, NULL);
+    lv_obj_set_style_border_width(icon_A, 1, NULL);
     lv_obj_set_style_border_color(icon_A, lv_color_hex(0x353535), NULL);
+    lv_obj_set_style_pad_all(icon_A, 0, NULL);
 
 
     label = lv_label_create(icon_A);
     lv_label_set_text(label, "A");
     lv_obj_set_style_text_color(label, lv_color_hex(0x353535), NULL);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_12, NULL);
     lv_obj_center(label);
 
     label = lv_label_create(btn_A);
@@ -390,17 +392,19 @@ void create_bottom_AB()
     lv_obj_set_size(btn_B, lv_pct(50), 30);
 
     lv_obj_t *icon_B = lv_obj_create(btn_B);
-    lv_obj_set_size(icon_B, 22, 22);
+    lv_obj_set_size(icon_B, 19, 19);
     lv_obj_set_style_radius(icon_B, LV_RADIUS_CIRCLE, NULL);
     lv_obj_set_style_clip_corner(icon_B, true, NULL);
     lv_obj_set_scrollbar_mode(icon_B, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_style_bg_opa(icon_B, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_border_width(icon_B, 2, NULL);
+    lv_obj_set_style_border_width(icon_B, 1, NULL);
     lv_obj_set_style_border_color(icon_B, lv_color_hex(0x353535), NULL);
+    lv_obj_set_style_pad_all(icon_B, 0, NULL);
 
     label = lv_label_create(icon_B);
     lv_label_set_text(label, "B");
     lv_obj_set_style_text_color(label, lv_color_hex(0x353535), NULL);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_12, NULL);
     lv_obj_center(label);
 
     label = lv_label_create(btn_B);
@@ -426,17 +430,19 @@ void create_bottom_AB()
 
 
     lv_obj_t *icon_A = lv_obj_create(btn_A);
-    lv_obj_set_size(icon_A, 22, 22);
+    lv_obj_set_size(icon_A, 19, 19);
     lv_obj_set_style_radius(icon_A, LV_RADIUS_CIRCLE, NULL);
     lv_obj_set_style_clip_corner(icon_A, true, NULL);
     lv_obj_set_scrollbar_mode(icon_A, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_style_bg_opa(icon_A, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_border_width(icon_A, 2, NULL);
+    lv_obj_set_style_border_width(icon_A, 1, NULL);
     lv_obj_set_style_border_color(icon_A, lv_color_hex(0x353535), NULL);
+    lv_obj_set_style_pad_all(icon_A, 0, NULL);
 
     label = lv_label_create(icon_A);
     lv_label_set_text(label, "A");
     lv_obj_set_style_text_color(label, lv_color_hex(0x353535), NULL);
+    lv_obj_set_style_text_font(label, &lv_font_montserrat_12, NULL);
     lv_obj_center(label);
 
     label = lv_label_create(btn_A);
