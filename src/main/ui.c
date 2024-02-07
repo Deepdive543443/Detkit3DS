@@ -192,62 +192,6 @@ lv_obj_t *create_box_list()
     return boxxes;
 }
 
-ui_LR_t create_shoulder_button(Detector *det, void *cam_buf, bool *detecting, BoxVec *objects, lv_group_t *group, lv_obj_t *box_list)
-{
-    /** Create L, R button that aligned with top left and top right of screen
-     * Width: 90,  Height: 30
-     * */
-
-    lv_obj_t *btn_L = lv_btn_create(lv_scr_act());    /*Add a button the current screen*/                            /*Set its position*/
-    lv_obj_set_size(btn_L, 90, 30);
-    lv_obj_align(btn_L, LV_ALIGN_TOP_LEFT, -10, -5);
-    lv_obj_t *label_L = lv_label_create(btn_L);          /*Add a label to the button*/
-    lv_label_set_text(label_L, "L  " LV_SYMBOL_VIDEO);                     /*Set the labels text*/
-    lv_obj_align(label_L, LV_ALIGN_RIGHT_MID, 0, 0);
-
-    lv_obj_t *btn_R = lv_btn_create(lv_scr_act());     /*Add a button the current screen*/                            /*Set its position*/
-    lv_obj_set_size(btn_R, 90, 30);
-    lv_obj_align(btn_R, LV_ALIGN_TOP_RIGHT, 10, -5);
-    lv_obj_t *label_R = lv_label_create(btn_R);          /*Add a label to the button*/
-    lv_label_set_text(label_R, LV_SYMBOL_IMAGE "  R");                     /*Set the labels text*/
-    lv_obj_align(label_R, LV_ALIGN_LEFT_MID, 0, 0);
-    
-    lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, NULL); /*Display the press stage of two button*/
-
-    lv_obj_update_layout(btn_L);
-    lv_point_t *points_array_L = (lv_point_t *) malloc(sizeof(lv_point_t) * 2);
-    points_array_L[0] = (lv_point_t) {-1, -1};
-    points_array_L[1] = (lv_point_t) {(btn_L->coords.x1 + btn_L->coords.x2) / 2, (btn_L->coords.y1 + btn_L->coords.y2) / 2};
-
-    void (*functions[2])() = {virtual_L_cb, virtual_R_cb};
-    static lv_indev_drv_t drv_list_LR[2];
-    
-    drv_list_LR[0].type = LV_INDEV_TYPE_BUTTON;
-    drv_list_LR[0].read_cb = functions[0];
-    lv_indev_t *l_indev = lv_indev_drv_register(&drv_list_LR[0]);
-    lv_indev_set_button_points(l_indev, points_array_L);
-
-    lv_obj_update_layout(btn_R);
-    lv_point_t *points_array_R = (lv_point_t *) malloc(sizeof(lv_point_t) * 2);
-    points_array_R[0] = (lv_point_t) {-1, -1};
-    points_array_R[1] = (lv_point_t) {(btn_R->coords.x1 + btn_R->coords.x2) / 2, (btn_R->coords.y1 + btn_R->coords.y2) / 2};
-
-    drv_list_LR[1].type = LV_INDEV_TYPE_BUTTON;
-    drv_list_LR[1].read_cb = functions[1];
-    lv_indev_t *r_indev = lv_indev_drv_register(&drv_list_LR[1]);
-    lv_indev_set_button_points(r_indev, points_array_R);
-
-
-    ui_LR_t output;
-    output.L = btn_L;
-    output.R = btn_R;
-    output.point_array_L = points_array_L;
-    output.point_array_R = points_array_R;
-
-    return output;
-}
-
 lv_obj_t *put_text_example(const char *string)
 {
     static lv_style_t style;

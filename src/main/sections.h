@@ -33,20 +33,11 @@ void flush_cb_3ds(gfxScreen_t gfx_scr, lv_disp_drv_t *disp, const lv_area_t *are
 lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_color_t *buf1, lv_disp_drv_t *disp_drv);
 
 // ui.c
-typedef struct
-{
-    lv_obj_t *L;
-    lv_obj_t *R;
-    lv_point_t *point_array_L;
-    lv_point_t *point_array_R;
-} ui_LR_t;
-
 void button_style_init(lv_style_t *btn);
 void quit_detect_cb(lv_event_t *e);
 void object_display_cb(lv_event_t *e);
 void display_event_cb(lv_event_t *e);
 lv_obj_t *create_box_list();
-ui_LR_t create_shoulder_button();
 lv_obj_t *put_text_example(const char *string);
 void model_list_hanlder(lv_event_t *e);
 lv_obj_t *create_model_list(Detector *det);
