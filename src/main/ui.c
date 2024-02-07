@@ -56,10 +56,10 @@ void quit_detect_cb(lv_event_t *e)
     {
         if(detecting)
         {
-            lv_obj_del_async(btn_B);
+            lv_obj_clean(btm_btn_container);
             lv_indev_enable(indev_B, false);
-            create_bottom_A();
-            lv_indev_enable(indev_A, true);
+            lv_indev_enable(indev_A, false);
+            add_btm_btn(KEY_A, display_event_cb, lv_pct(100), " Detect");
             lv_obj_del(box_list);
             detecting = false;        
         }
@@ -125,7 +125,6 @@ void display_event_cb(lv_event_t *e)
             }
             detecting = true;
             lv_obj_clean(btm_btn_container);
-            // lv_obj_del_async(btn_A);
             lv_indev_enable(indev_A, false);
             BoxVec_free(&objects);
             pause_cam_capture(cam_buf);
@@ -153,7 +152,9 @@ void display_event_cb(lv_event_t *e)
 
             box_list = create_box_list();
             // lv_indev_enable(indev_A, false);
-            create_bottom_AB();
+            // create_bottom_AB();
+            add_btm_btn(KEY_B, quit_detect_cb, lv_pct(50), " Continue");
+            add_btm_btn(KEY_A, NULL, lv_pct(50), " Select");
 
             break;
 
@@ -456,7 +457,7 @@ void create_btm_btn_container()
 
     lv_obj_align(btm_btn_container, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_flex_flow(btm_btn_container, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(btm_btn_container,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_flex_align(btm_btn_container,  LV_FLEX_ALIGN_START,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 }
 
 void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
@@ -542,13 +543,13 @@ void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
     lv_obj_add_event_cb(btn_ptr, callback, LV_EVENT_ALL, NULL);
 
     lv_obj_update_layout(btn_ptr);
-    static lv_indev_drv_t drv_virbtn;
+    static lv_indev_drv_t drv_virbtn[4];
     switch(key)
     {
         case KEY_A:
-            drv_virbtn.type = LV_INDEV_TYPE_BUTTON;
-            drv_virbtn.read_cb = virtual_A_cb;
-            indev_A = lv_indev_drv_register(&drv_virbtn);
+            drv_virbtn[0].type = LV_INDEV_TYPE_BUTTON;
+            drv_virbtn[0].read_cb = virtual_A_cb;
+            indev_A = lv_indev_drv_register(&drv_virbtn[0]);
             point_array_A[0] = (lv_point_t){-1, -1};
             point_array_A[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_A, point_array_A);
@@ -556,9 +557,9 @@ void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
             break;
 
         case KEY_B:
-            drv_virbtn.type = LV_INDEV_TYPE_BUTTON;
-            drv_virbtn.read_cb = virtual_B_cb;
-            indev_B = lv_indev_drv_register(&drv_virbtn);
+            drv_virbtn[1].type = LV_INDEV_TYPE_BUTTON;
+            drv_virbtn[1].read_cb = virtual_B_cb;
+            indev_B = lv_indev_drv_register(&drv_virbtn[1]);
             point_array_B[0] = (lv_point_t){-1, -1};
             point_array_B[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_B, point_array_B);
@@ -566,9 +567,9 @@ void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
             break;
 
         case KEY_X:
-            drv_virbtn.type = LV_INDEV_TYPE_BUTTON;
-            drv_virbtn.read_cb = virtual_X_cb;
-            indev_X = lv_indev_drv_register(&drv_virbtn);
+            drv_virbtn[2].type = LV_INDEV_TYPE_BUTTON;
+            drv_virbtn[2].read_cb = virtual_X_cb;
+            indev_X = lv_indev_drv_register(&drv_virbtn[2]);
             point_array_X[0] = (lv_point_t){-1, -1};
             point_array_X[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_X, point_array_X);
@@ -576,9 +577,9 @@ void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
             break;
 
         case KEY_Y:
-            drv_virbtn.type = LV_INDEV_TYPE_BUTTON;
-            drv_virbtn.read_cb = virtual_Y_cb;
-            indev_Y = lv_indev_drv_register(&drv_virbtn);
+            drv_virbtn[3].type = LV_INDEV_TYPE_BUTTON;
+            drv_virbtn[3].read_cb = virtual_Y_cb;
+            indev_Y = lv_indev_drv_register(&drv_virbtn[3]);
             point_array_Y[0] = (lv_point_t){-1, -1};
             point_array_Y[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_Y, point_array_Y);

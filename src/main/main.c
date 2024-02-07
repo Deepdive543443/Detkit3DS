@@ -165,7 +165,7 @@ int main(int argc, char** argv)
     // create_bottom_A();
     btm_btn_container = lv_obj_create(lv_scr_act());
     create_btm_btn_container();
-    add_btm_btn(KEY_A, display_event_cb, lv_pct(100), "Detect");
+    add_btm_btn(KEY_A, display_event_cb, lv_pct(100), " Detect");
 
 
     // Input init
