@@ -149,7 +149,8 @@ int main(int argc, char** argv)
 
     // Other UI widget
     lv_obj_t *model_list = create_model_list(&det);
-    ui_LR_t ui_LR = create_shoulder_button();
+    // ui_LR_t ui_LR = create_shoulder_button();
+    create_LR();
     create_bottom_A();
 
 
@@ -250,8 +251,6 @@ int main(int argc, char** argv)
     }
 
     lv_deinit();
-    free(ui_LR.point_array_L);
-    free(ui_LR.point_array_R);
     cleanup();
     return 0;
 }

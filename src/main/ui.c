@@ -14,14 +14,20 @@ extern lv_obj_t *btn_A;
 extern lv_obj_t *btn_B;
 extern lv_obj_t *btn_X;
 extern lv_obj_t *btn_Y;
+extern lv_obj_t *btn_L;
+extern lv_obj_t *btn_R;
 extern lv_indev_t *indev_A;
 extern lv_indev_t *indev_B;
 extern lv_indev_t *indev_X;
 extern lv_indev_t *indev_Y;
+extern lv_indev_t *indev_L; 
+extern lv_indev_t *indev_R; 
 extern lv_point_t point_array_A[2];
 extern lv_point_t point_array_B[2];
 extern lv_point_t point_array_X[2];
-extern lv_point_t point_array_Y[2]; //Encoder 
+extern lv_point_t point_array_Y[2];
+extern lv_point_t point_array_L[2];
+extern lv_point_t point_array_R[2]; //Encoder 
 
 extern lv_style_t btn_btm;
 extern lv_style_t btn_press;
@@ -312,6 +318,50 @@ lv_obj_t *create_model_list(Detector *det)
 
 void create_LR()
 {
+    LV_IMG_DECLARE(Sprite_L);
+    LV_IMG_DECLARE(Sprite_R);
+
+    lv_obj_t *btn_L = lv_imgbtn_create(lv_scr_act());
+    lv_imgbtn_set_src(btn_L, LV_IMGBTN_STATE_RELEASED, NULL, NULL, &Sprite_L);
+    lv_obj_align(btn_L, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_obj_set_size(btn_L, 80, 30);
+
+    lv_obj_t *btn_R = lv_imgbtn_create(lv_scr_act());
+    lv_imgbtn_set_src(btn_R, LV_IMGBTN_STATE_RELEASED, &Sprite_R, NULL, NULL);
+    lv_obj_align(btn_R, LV_ALIGN_TOP_RIGHT, 0, 0);
+    lv_obj_set_size(btn_R, 80, 30);
+
+    lv_obj_add_style(btn_L, &btn_btm, NULL);
+    lv_obj_add_style(btn_L, &btn_press, LV_STATE_PRESSED);
+
+    lv_obj_add_style(btn_R, &btn_btm, NULL);
+    lv_obj_add_style(btn_R, &btn_press, LV_STATE_PRESSED);
+    
+
+
+    lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, NULL); /*Display the press stage of two button*/
+
+    lv_obj_update_layout(btn_L);
+    point_array_L[0] = (lv_point_t) {-1, -1};
+    point_array_L[1] = (lv_point_t) {(btn_L->coords.x1 + btn_L->coords.x2) / 2, (btn_L->coords.y1 + btn_L->coords.y2) / 2};
+
+    void (*functions[2])() = {virtual_L_cb, virtual_R_cb};
+    static lv_indev_drv_t drv_list_LR[2];
+    
+    drv_list_LR[0].type = LV_INDEV_TYPE_BUTTON;
+    drv_list_LR[0].read_cb = functions[0];
+    lv_indev_t *indev_L = lv_indev_drv_register(&drv_list_LR[0]);
+    lv_indev_set_button_points(indev_L, point_array_L);
+
+    lv_obj_update_layout(btn_R);
+    point_array_R[0] = (lv_point_t) {-1, -1};
+    point_array_R[1] = (lv_point_t) {(btn_R->coords.x1 + btn_R->coords.x2) / 2, (btn_R->coords.y1 + btn_R->coords.y2) / 2};
+
+    drv_list_LR[1].type = LV_INDEV_TYPE_BUTTON;
+    drv_list_LR[1].read_cb = functions[1];
+    lv_indev_t *indev_R = lv_indev_drv_register(&drv_list_LR[1]);
+    lv_indev_set_button_points(indev_R, point_array_R);
 
 }
 
