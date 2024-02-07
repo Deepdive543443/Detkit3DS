@@ -7,9 +7,12 @@
 #include "sections.h"
 
 
+
 static struct timespec start, end;
 
 // Glob
+jmp_buf exitJmp; //Debug
+
 lv_group_t *g;
 lv_obj_t *box_list;  // LVGL Objects
 
@@ -61,16 +64,18 @@ void cleanup()
 
 void hang_err(const char *message)
 {
+    gfxExit();
+    gfxInitDefault();
+    consoleInit(GFX_BOTTOM, NULL);
     printf("%s\nPress START to exit\n", message);
     while (aptMainLoop())
     {
         hidScanInput();
         u32 kDown = hidKeysDown();
 
-        if (kDown & KEY_START) break;
+        if (kDown & KEY_START) longjmp(exitJmp, 1);
     }
 }
-
 
 // User input place holder
 static u32 kDown;
@@ -78,6 +83,11 @@ static u32 kHeld;
 
 int main(int argc, char** argv)
 {
+    if(setjmp(exitJmp))
+    {
+		cleanup();
+		return 0;
+	}
 
     // Rom file system
     Result rc = romfsInit();
@@ -254,6 +264,8 @@ int main(int argc, char** argv)
             lv_tick_inc(TICK_S);   
         }
     }
+
+    hang_err("Testing hand error, just hand it by any means!");
 
     lv_deinit();
     cleanup();

@@ -3,6 +3,7 @@
 
 #include "stdio.h"
 #include "stdlib.h"
+#include "setjmp.h"
 
 #include "3ds.h"
 #include "lvgl-8.3.11/lvgl.h"
@@ -15,6 +16,9 @@
 #define WIDTH_TOP 400
 #define HEIGHT_TOP 240
 #define SCRSIZE_TOP WIDTH_TOP * HEIGHT_TOP
+
+//Debug
+void hang_err(const char *message);
 
 //cam.c
 #define WAIT_TIMEOUT 1000000000ULL
@@ -43,6 +47,9 @@ lv_obj_t *create_model_list(Detector *det);
 void create_LR();
 void create_bottom_A();
 void create_bottom_AB();
+void create_btm_btn_container();
+void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label);
+void clear_btm_btn_container();
 
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
