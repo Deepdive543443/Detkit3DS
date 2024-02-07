@@ -41,7 +41,7 @@ lv_point_t point_array_R[2];//Encoder
 
 lv_style_t btn_btm;
 lv_style_t btn_press;
-lv_style_t btn_darken;
+lv_style_t btn_shoulder_press;
 
 
 bool ticker()
@@ -173,6 +173,10 @@ int main(int argc, char** argv)
     button_style_init(&btn_press);
     lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
     lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
+    lv_style_init(&btn_shoulder_press);
+    lv_style_set_img_recolor_opa(&btn_shoulder_press, LV_OPA_30);
+    lv_style_set_img_recolor(&btn_shoulder_press, lv_color_black());
+    lv_style_set_translate_y(&btn_shoulder_press, 2);
     
     while(aptMainLoop())
     {

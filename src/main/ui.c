@@ -31,7 +31,7 @@ extern lv_point_t point_array_R[2]; //Encoder
 
 extern lv_style_t btn_btm;
 extern lv_style_t btn_press;
-extern lv_style_t btn_darken;
+extern lv_style_t btn_shoulder_press;
 
 void button_style_init(lv_style_t *btn)
 {
@@ -270,6 +270,9 @@ void create_LR()
     lv_imgbtn_set_src(btn_R, LV_IMGBTN_STATE_RELEASED, &cam_icon_flip, &Mid_fill, &iconR);
     lv_obj_align(btn_R, LV_ALIGN_TOP_RIGHT, 0, -10);
     lv_obj_set_size(btn_R, 77, 35);
+
+    lv_obj_add_style(btn_L, &btn_shoulder_press, LV_STATE_PRESSED);
+    lv_obj_add_style(btn_R, &btn_shoulder_press, LV_STATE_PRESSED);
 
     lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, NULL); /*Display the press stage of two button*/
