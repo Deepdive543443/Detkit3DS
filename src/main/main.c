@@ -172,6 +172,8 @@ int main(int argc, char** argv)
     // Style init
     button_style_init(&btn_btm);
     button_style_init(&btn_press);
+    lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
+    lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
     
     while(aptMainLoop())
     {
