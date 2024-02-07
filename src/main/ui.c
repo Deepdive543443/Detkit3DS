@@ -271,14 +271,6 @@ void create_LR()
     lv_obj_align(btn_R, LV_ALIGN_TOP_RIGHT, 0, -10);
     lv_obj_set_size(btn_R, 77, 35);
 
-    lv_obj_add_style(btn_L, &btn_btm, NULL);
-    lv_obj_add_style(btn_L, &btn_press, LV_STATE_PRESSED);
-
-    lv_obj_add_style(btn_R, &btn_btm, NULL);
-    lv_obj_add_style(btn_R, &btn_press, LV_STATE_PRESSED);
-    
-
-
     lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, NULL); /*Display the press stage of two button*/
 
