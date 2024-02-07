@@ -40,16 +40,13 @@ lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_co
 void button_style_init(lv_style_t *btn);
 void quit_detect_cb(lv_event_t *e);
 void object_display_cb(lv_event_t *e);
-void display_event_cb(lv_event_t *e);
+void detect_cb(lv_event_t *e);
 lv_obj_t *create_box_list();
 void model_list_hanlder(lv_event_t *e);
 lv_obj_t *create_model_list(Detector *det);
 void create_LR();
-void create_bottom_A();
-void create_bottom_AB();
 void create_btm_btn_container();
 void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label);
-void clear_btm_btn_container();
 
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);

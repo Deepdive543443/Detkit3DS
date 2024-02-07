@@ -42,7 +42,9 @@ lv_point_t point_array_B[2];
 lv_point_t point_array_X[2];
 lv_point_t point_array_Y[2];
 lv_point_t point_array_L[2];
-lv_point_t point_array_R[2];//Encoder 
+lv_point_t point_array_R[2];
+
+lv_indev_drv_t drv_virbtn[4];//Encoder 
 
 lv_style_t btn_btm;
 lv_style_t btn_press;
@@ -162,10 +164,10 @@ int main(int argc, char** argv)
     // Other UI widget
     lv_obj_t *model_list = create_model_list(&det);
     create_LR();
-    // create_bottom_A();
+
     btm_btn_container = lv_obj_create(lv_scr_act());
     create_btm_btn_container();
-    add_btm_btn(KEY_A, display_event_cb, lv_pct(100), " Detect");
+    add_btm_btn(KEY_A, detect_cb, lv_pct(100), " Detect");
 
 
     // Input init

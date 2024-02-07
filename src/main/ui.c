@@ -33,6 +33,8 @@ extern lv_point_t point_array_Y[2];
 extern lv_point_t point_array_L[2];
 extern lv_point_t point_array_R[2]; //Encoder 
 
+extern lv_indev_drv_t drv_virbtn[4];
+
 extern lv_style_t btn_btm;
 extern lv_style_t btn_press;
 extern lv_style_t btn_shoulder_press;
@@ -59,7 +61,7 @@ void quit_detect_cb(lv_event_t *e)
             lv_obj_clean(btm_btn_container);
             lv_indev_enable(indev_B, false);
             lv_indev_enable(indev_A, false);
-            add_btm_btn(KEY_A, display_event_cb, lv_pct(100), " Detect");
+            add_btm_btn(KEY_A, detect_cb, lv_pct(100), " Detect");
             lv_obj_del(box_list);
             detecting = false;        
         }
@@ -111,55 +113,48 @@ void object_display_cb(lv_event_t *e)
     }
 }
 
-void display_event_cb(lv_event_t *e)
+void detect_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
 
-    switch(code) 
+    if (code == LV_EVENT_CLICKED)
     {
-        case LV_EVENT_CLICKED:
-            // Hang up the video until inference finished
-            if(detecting)
-            {
-                lv_obj_del(box_list); 
-            }
-            detecting = true;
-            lv_obj_clean(btm_btn_container);
-            lv_indev_enable(indev_A, false);
-            BoxVec_free(&objects);
-            pause_cam_capture(cam_buf);
+        if(detecting)
+        {
+            lv_obj_del(box_list); 
+        }
+        detecting = true;
+        lv_obj_clean(btm_btn_container);
+        lv_indev_enable(indev_A, false);
+        BoxVec_free(&objects);
+        pause_cam_capture(cam_buf);
 
-            // Inference 
-            unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
-            writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
-            objects = det.detect(pixels, WIDTH_TOP, HEIGHT_TOP, &det);
+        // Inference 
+        unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
+        writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
+        objects = det.detect(pixels, WIDTH_TOP, HEIGHT_TOP, &det);
 
-            // Print inference outputs
-            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
-            writePixelsToFrameBuffer(
-                gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
-                pixels, 
-                0, 
-                0, 
-                WIDTH_TOP, 
-                HEIGHT_TOP);
+        // Print inference outputs
+        draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
+        writePixelsToFrameBuffer(
+            gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+            pixels, 
+            0, 
+            0, 
+            WIDTH_TOP, 
+            HEIGHT_TOP);
 
-            gfxFlushBuffers();
-            gfxScreenSwapBuffers(GFX_TOP, true);
-            gspWaitForVBlank();
+        gfxFlushBuffers();
+        gfxScreenSwapBuffers(GFX_TOP, true);
+        gspWaitForVBlank();
 
-            free(pixels);
+        free(pixels);
 
-            box_list = create_box_list();
-            // lv_indev_enable(indev_A, false);
-            // create_bottom_AB();
-            add_btm_btn(KEY_B, quit_detect_cb, lv_pct(50), " Continue");
-            add_btm_btn(KEY_A, NULL, lv_pct(50), " Select");
+        // Create box list and botton list for detecting page
+        box_list = create_box_list();
 
-            break;
-
-        default:
-            break;
+        add_btm_btn(KEY_B, quit_detect_cb, lv_pct(50), " Continue");
+        add_btm_btn(KEY_A, NULL, lv_pct(50), " Select");
 
     }
 }
@@ -257,8 +252,8 @@ void create_LR()
     lv_obj_add_style(btn_L, &btn_shoulder_press, LV_STATE_PRESSED);
     lv_obj_add_style(btn_R, &btn_shoulder_press, LV_STATE_PRESSED);
 
-    lv_obj_add_event_cb(btn_L, display_event_cb, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(btn_R, display_event_cb, LV_EVENT_ALL, NULL); /*Display the press stage of two button*/
+    lv_obj_add_event_cb(btn_L, detect_cb, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(btn_R, detect_cb, LV_EVENT_ALL, NULL); /*Display the press stage of two button*/
 
     lv_obj_update_layout(btn_L);
     point_array_L[0] = (lv_point_t) {-1, -1};
@@ -281,169 +276,6 @@ void create_LR()
     lv_indev_t *indev_R = lv_indev_drv_register(&drv_list_LR[1]);
     lv_indev_set_button_points(indev_R, point_array_R);
 
-}
-
-void create_bottom_A()
-{
-    btn_A = lv_btn_create(lv_scr_act());
-    lv_obj_remove_style_all(btn_A);
-
-    lv_obj_set_size(btn_A, lv_pct(100), 30);
-
-    lv_obj_t *label;
-    lv_obj_t *icon_A = lv_obj_create(btn_A);
-    lv_obj_set_size(icon_A, 19, 19);
-    lv_obj_set_style_radius(icon_A, LV_RADIUS_CIRCLE, NULL);
-    lv_obj_set_style_clip_corner(icon_A, true, NULL);
-    lv_obj_set_scrollbar_mode(icon_A, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_style_bg_opa(icon_A, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_border_width(icon_A, 1, NULL);
-    lv_obj_set_style_border_color(icon_A, lv_color_hex(0x353535), NULL);
-    lv_obj_set_style_pad_all(icon_A, 0, NULL);
-
-
-    label = lv_label_create(icon_A);
-    lv_label_set_text(label, "A");
-    lv_obj_set_style_text_color(label, lv_color_hex(0x353535), NULL);
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_12, NULL);
-    lv_obj_center(label);
-
-    label = lv_label_create(btn_A);
-    lv_label_set_text(label, "  Detect");
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_16, NULL);
-
-    // Positions
-    lv_obj_align(btn_A, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_flex_flow(btn_A, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(btn_A,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-
-    //Styles
-    lv_obj_add_style(btn_A, &btn_btm, NULL);
-    lv_obj_add_style(btn_A, &btn_press, LV_STATE_PRESSED);
-
-    // Press event
-    lv_obj_add_event_cb(btn_A, display_event_cb, LV_EVENT_ALL, NULL);    
-    
-    // Assign to encoder
-    static lv_indev_drv_t drv_A;
-    lv_obj_update_layout(btn_A);
-    drv_A.type = LV_INDEV_TYPE_BUTTON;
-    drv_A.read_cb = virtual_A_cb;
-    indev_A = lv_indev_drv_register(&drv_A);
-    point_array_A[0] = (lv_point_t){-1, -1};
-    point_array_A[1] = (lv_point_t) {(btn_A->coords.x1 + btn_A->coords.x2) / 2, (btn_A->coords.y1 + btn_A->coords.y2) / 2};
-
-    lv_indev_set_button_points(indev_A, point_array_A);
-}
-
-void create_bottom_AB()
-{
-    const *labels[] = {" Continue", " Detect"};
-    lv_indev_t *BA_indev[] = {&indev_B, &indev_A};
-    void (*functions[2])() = { virtual_B_cb, virtual_A_cb};
-    lv_point_t *pts_arrays[] = {&point_array_A, &point_array_B};
-    lv_obj_t *btns[] = {&btn_B , &btn_A};
-    int align[2] = {LV_ALIGN_BOTTOM_LEFT, LV_ALIGN_BOTTOM_RIGHT};
-    static lv_indev_drv_t drv_B, drv_A;
-
-    lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
-    lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
-
-
-    lv_obj_t *label;
-
-    btn_B = lv_btn_create(lv_scr_act());
-    lv_obj_remove_style_all(btn_B);
-    // Positions
-    lv_obj_set_size(btn_B, lv_pct(50), 30);
-
-    lv_obj_t *icon_B = lv_obj_create(btn_B);
-    lv_obj_set_size(icon_B, 19, 19);
-    lv_obj_set_style_radius(icon_B, LV_RADIUS_CIRCLE, NULL);
-    lv_obj_set_style_clip_corner(icon_B, true, NULL);
-    lv_obj_set_scrollbar_mode(icon_B, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_style_bg_opa(icon_B, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_border_width(icon_B, 1, NULL);
-    lv_obj_set_style_border_color(icon_B, lv_color_hex(0x353535), NULL);
-    lv_obj_set_style_pad_all(icon_B, 0, NULL);
-
-    label = lv_label_create(icon_B);
-    lv_label_set_text(label, "B");
-    lv_obj_set_style_text_color(label, lv_color_hex(0x353535), NULL);
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_12, NULL);
-    lv_obj_center(label);
-
-    label = lv_label_create(btn_B);
-    lv_label_set_text(label, labels[0]);
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_16, NULL);
-    
-    // Position 
-    lv_obj_align(btn_B, align[0], 0, 0);
-    lv_obj_set_flex_flow(btn_B, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(btn_B,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-
-    //Styles
-    lv_obj_add_style(btn_B, &btn_btm, NULL);
-    lv_obj_add_style(btn_B, &btn_press, LV_STATE_PRESSED);
-
-    lv_obj_add_event_cb(btn_B, quit_detect_cb, LV_EVENT_ALL, NULL);  
-    
-    btn_A = lv_btn_create(lv_scr_act());
-    lv_obj_remove_style_all(btn_A);
-    
-    lv_obj_set_size(btn_A, lv_pct(50), 30);
-
-
-
-    lv_obj_t *icon_A = lv_obj_create(btn_A);
-    lv_obj_set_size(icon_A, 19, 19);
-    lv_obj_set_style_radius(icon_A, LV_RADIUS_CIRCLE, NULL);
-    lv_obj_set_style_clip_corner(icon_A, true, NULL);
-    lv_obj_set_scrollbar_mode(icon_A, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_style_bg_opa(icon_A, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_border_width(icon_A, 1, NULL);
-    lv_obj_set_style_border_color(icon_A, lv_color_hex(0x353535), NULL);
-    lv_obj_set_style_pad_all(icon_A, 0, NULL);
-
-    label = lv_label_create(icon_A);
-    lv_label_set_text(label, "A");
-    lv_obj_set_style_text_color(label, lv_color_hex(0x353535), NULL);
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_12, NULL);
-    lv_obj_center(label);
-
-    label = lv_label_create(btn_A);
-    lv_label_set_text(label, labels[1]);
-    lv_obj_set_style_text_font(label, &lv_font_montserrat_16, NULL);
-
-    // Positions
-    lv_obj_align(btn_A, align[1], 0, 0);
-    lv_obj_set_flex_flow(btn_A, LV_FLEX_FLOW_ROW);
-    lv_obj_set_flex_align(btn_A,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-
-    //Styles
-    lv_obj_add_style(btn_A, &btn_btm, NULL);
-    lv_obj_add_style(btn_A, &btn_press, LV_STATE_PRESSED);
-
-
-    // Assign click button activities
-
-    lv_obj_update_layout(btn_B);
-    drv_B.type = LV_INDEV_TYPE_BUTTON;
-    drv_B.read_cb = virtual_B_cb;
-    indev_B = lv_indev_drv_register(&drv_B);
-    point_array_B[0] = (lv_point_t){-1, -1};
-    point_array_B[1] = (lv_point_t) {(btn_B->coords.x1 + btn_B->coords.x2) / 2, (btn_B->coords.y1 + btn_B->coords.y2) / 2};
-
-    lv_indev_set_button_points(indev_B, point_array_B);
-
-    lv_obj_update_layout(btn_A);
-    drv_A.type = LV_INDEV_TYPE_BUTTON;
-    drv_A.read_cb = virtual_A_cb;
-    indev_A = lv_indev_drv_register(&drv_A);
-    point_array_A[0] = (lv_point_t){-1, -1};
-    point_array_A[1] = (lv_point_t) {(btn_A->coords.x1 + btn_A->coords.x2) / 2, (btn_A->coords.y1 + btn_A->coords.y2) / 2};
-
-    lv_indev_set_button_points(indev_A, point_array_A);
 }
 
 void create_btm_btn_container()
@@ -504,11 +336,7 @@ void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
             break;
     }
 
-    // char err[48];
-    // sprintf(err, "A:%p btn: %p", btn_A, btn_ptr);
-    // hang_err(err);
-
-    // btn_ptr = lv_btn_create(btm_btn_container);
+    // Style
     lv_obj_remove_style_all(btn_ptr);
     lv_obj_set_size(btn_ptr, width, 30);
     lv_obj_add_style(btn_ptr, &btn_btm, NULL);
@@ -536,6 +364,7 @@ void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
     lv_label_set_text(label_btn, label);
     lv_obj_set_style_text_font(label_btn, &lv_font_montserrat_16, NULL);
 
+    // Layout: Flex
     lv_obj_set_flex_flow(btn_ptr, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(btn_ptr,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
@@ -543,7 +372,6 @@ void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
     lv_obj_add_event_cb(btn_ptr, callback, LV_EVENT_ALL, NULL);
 
     lv_obj_update_layout(btn_ptr);
-    static lv_indev_drv_t drv_virbtn[4];
     switch(key)
     {
         case KEY_A:
@@ -589,9 +417,4 @@ void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
             hang_err("Fail to register virtual button");
             break;
     }
-}
-
-void clear_btm_btn_container()
-{
-
 }
