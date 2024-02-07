@@ -29,6 +29,8 @@ lv_obj_t *btn_X;
 lv_obj_t *btn_Y;
 lv_obj_t *btn_L;
 lv_obj_t *btn_R;
+lv_obj_t *btm_btn_container;
+
 lv_indev_t *indev_A;
 lv_indev_t *indev_B;
 lv_indev_t *indev_X;
@@ -160,7 +162,10 @@ int main(int argc, char** argv)
     // Other UI widget
     lv_obj_t *model_list = create_model_list(&det);
     create_LR();
-    create_bottom_A();
+    // create_bottom_A();
+    btm_btn_container = lv_obj_create(lv_scr_act());
+    create_btm_btn_container();
+    add_btm_btn(KEY_A, display_event_cb, lv_pct(100), "Detect");
 
 
     // Input init

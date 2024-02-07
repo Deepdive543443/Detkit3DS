@@ -3,6 +3,8 @@
 #define CANVAS_WIDTH 80
 #define CANVAS_HEIGHT 80
 
+extern jmp_buf exitJmp;
+
 extern lv_group_t *g;
 extern lv_obj_t *box_list; 
 extern Detector det;
@@ -16,6 +18,8 @@ extern lv_obj_t *btn_X;
 extern lv_obj_t *btn_Y;
 extern lv_obj_t *btn_L;
 extern lv_obj_t *btn_R;
+extern lv_obj_t *btm_btn_container;
+
 extern lv_indev_t *indev_A;
 extern lv_indev_t *indev_B;
 extern lv_indev_t *indev_X;
@@ -120,7 +124,9 @@ void display_event_cb(lv_event_t *e)
                 lv_obj_del(box_list); 
             }
             detecting = true;
-            lv_obj_del_async(btn_A);
+            lv_obj_clean(btm_btn_container);
+            // lv_obj_del_async(btn_A);
+            lv_indev_enable(indev_A, false);
             BoxVec_free(&objects);
             pause_cam_capture(cam_buf);
 
@@ -146,7 +152,7 @@ void display_event_cb(lv_event_t *e)
             free(pixels);
 
             box_list = create_box_list();
-            lv_indev_enable(indev_A, false);
+            // lv_indev_enable(indev_A, false);
             create_bottom_AB();
 
             break;
@@ -437,6 +443,154 @@ void create_bottom_AB()
     point_array_A[1] = (lv_point_t) {(btn_A->coords.x1 + btn_A->coords.x2) / 2, (btn_A->coords.y1 + btn_A->coords.y2) / 2};
 
     lv_indev_set_button_points(indev_A, point_array_A);
+}
 
+void create_btm_btn_container()
+{
+    lv_obj_clean(btm_btn_container);
+    lv_obj_remove_style_all(btm_btn_container);
+    lv_obj_set_size(btm_btn_container, lv_pct(100), 30);
+
+    lv_obj_set_style_radius(btm_btn_container, 0, NULL);
+    lv_obj_set_style_pad_all(btm_btn_container, 0, NULL);
+
+    lv_obj_align(btm_btn_container, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_set_flex_flow(btm_btn_container, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(btm_btn_container,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+}
+
+void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
+{
+    lv_obj_t *btn_ptr;
+    lv_obj_t *icon;
+    lv_obj_t *label_btn;
+    lv_obj_t *label_icon;
+
+    char icon_label[2] = {'\0'};
+
+    switch(key)
+    {
+        case KEY_A:
+
+            btn_A = lv_btn_create(btm_btn_container);
+            btn_ptr = btn_A;
+            icon_label[0] = 'A';
+            break;
+
+        case KEY_B:
+
+            btn_B = lv_btn_create(btm_btn_container);
+            btn_ptr = btn_B;
+            icon_label[0] = 'B';
+            break;
+
+        case KEY_X:
+
+            btn_X = lv_btn_create(btm_btn_container);
+            btn_ptr = btn_X;
+            icon_label[0] = 'X';
+            break;
+
+        case KEY_Y:
+
+            btn_Y = lv_btn_create(btm_btn_container);
+            btn_ptr = btn_Y;
+            icon_label[0] = 'Y';
+            break;
+
+        default:
+            hang_err("Fail to create button");
+            break;
+    }
+
+    // char err[48];
+    // sprintf(err, "A:%p btn: %p", btn_A, btn_ptr);
+    // hang_err(err);
+
+    // btn_ptr = lv_btn_create(btm_btn_container);
+    lv_obj_remove_style_all(btn_ptr);
+    lv_obj_set_size(btn_ptr, width, 30);
+    lv_obj_add_style(btn_ptr, &btn_btm, NULL);
+    lv_obj_add_style(btn_ptr, &btn_press, LV_STATE_PRESSED);
+
+    //Icon
+    icon = lv_obj_create(btn_ptr);
+    label_icon = lv_label_create(icon);
+    lv_label_set_text(label_icon, icon_label);
+    lv_obj_set_style_text_color(label_icon, lv_color_hex(0x353535), NULL);
+    lv_obj_set_style_text_font(label_icon, &lv_font_montserrat_12, NULL);
+    lv_obj_center(label_icon);
+
+    lv_obj_set_size(icon, 19, 19);
+    lv_obj_set_style_radius(icon, LV_RADIUS_CIRCLE, NULL);
+    lv_obj_set_style_clip_corner(icon, true, NULL);
+    lv_obj_set_scrollbar_mode(icon, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_style_bg_opa(icon, LV_OPA_TRANSP, NULL);
+    lv_obj_set_style_border_width(icon, 1, NULL);
+    lv_obj_set_style_border_color(icon, lv_color_hex(0x353535), NULL);
+    lv_obj_set_style_pad_all(icon, 0, NULL);
+
+    //Label
+    label_btn = lv_label_create(btn_ptr);
+    lv_label_set_text(label_btn, label);
+    lv_obj_set_style_text_font(label_btn, &lv_font_montserrat_16, NULL);
+
+    lv_obj_set_flex_flow(btn_ptr, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(btn_ptr,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+
+    // Callback
+    lv_obj_add_event_cb(btn_ptr, callback, LV_EVENT_ALL, NULL);
+
+    lv_obj_update_layout(btn_ptr);
+    static lv_indev_drv_t drv_virbtn;
+    switch(key)
+    {
+        case KEY_A:
+            drv_virbtn.type = LV_INDEV_TYPE_BUTTON;
+            drv_virbtn.read_cb = virtual_A_cb;
+            indev_A = lv_indev_drv_register(&drv_virbtn);
+            point_array_A[0] = (lv_point_t){-1, -1};
+            point_array_A[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            lv_indev_set_button_points(indev_A, point_array_A);
+
+            break;
+
+        case KEY_B:
+            drv_virbtn.type = LV_INDEV_TYPE_BUTTON;
+            drv_virbtn.read_cb = virtual_B_cb;
+            indev_B = lv_indev_drv_register(&drv_virbtn);
+            point_array_B[0] = (lv_point_t){-1, -1};
+            point_array_B[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            lv_indev_set_button_points(indev_B, point_array_B);
+
+            break;
+
+        case KEY_X:
+            drv_virbtn.type = LV_INDEV_TYPE_BUTTON;
+            drv_virbtn.read_cb = virtual_X_cb;
+            indev_X = lv_indev_drv_register(&drv_virbtn);
+            point_array_X[0] = (lv_point_t){-1, -1};
+            point_array_X[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            lv_indev_set_button_points(indev_X, point_array_X);
+
+            break;
+
+        case KEY_Y:
+            drv_virbtn.type = LV_INDEV_TYPE_BUTTON;
+            drv_virbtn.read_cb = virtual_Y_cb;
+            indev_Y = lv_indev_drv_register(&drv_virbtn);
+            point_array_Y[0] = (lv_point_t){-1, -1};
+            point_array_Y[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            lv_indev_set_button_points(indev_Y, point_array_Y);
+            break;
+
+        default:
+            hang_err("Fail to register virtual button");
+            break;
+    }
+}
+
+void clear_btm_btn_container()
+{
 
 }
