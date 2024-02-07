@@ -311,18 +311,21 @@ lv_obj_t *create_model_list(Detector *det)
 
 void create_LR()
 {
-    LV_IMG_DECLARE(Sprite_L);
-    LV_IMG_DECLARE(Sprite_R);
+    LV_IMG_DECLARE(cam_icon);
+    LV_IMG_DECLARE(cam_icon_flip);
+    LV_IMG_DECLARE(iconL);
+    LV_IMG_DECLARE(iconR);
+    LV_IMG_DECLARE(Mid_fill);
 
     lv_obj_t *btn_L = lv_imgbtn_create(lv_scr_act());
-    lv_imgbtn_set_src(btn_L, LV_IMGBTN_STATE_RELEASED, NULL, NULL, &Sprite_L);
-    lv_obj_align(btn_L, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_obj_set_size(btn_L, 80, 30);
+    lv_imgbtn_set_src(btn_L, LV_IMGBTN_STATE_RELEASED, &iconL, &Mid_fill, &cam_icon);
+    lv_obj_align(btn_L, LV_ALIGN_TOP_LEFT, 0, -10);
+    lv_obj_set_size(btn_L, 77, 35);
 
     lv_obj_t *btn_R = lv_imgbtn_create(lv_scr_act());
-    lv_imgbtn_set_src(btn_R, LV_IMGBTN_STATE_RELEASED, &Sprite_R, NULL, NULL);
-    lv_obj_align(btn_R, LV_ALIGN_TOP_RIGHT, 0, 0);
-    lv_obj_set_size(btn_R, 80, 30);
+    lv_imgbtn_set_src(btn_R, LV_IMGBTN_STATE_RELEASED, &cam_icon_flip, &Mid_fill, &iconR);
+    lv_obj_align(btn_R, LV_ALIGN_TOP_RIGHT, 0, -10);
+    lv_obj_set_size(btn_R, 77, 35);
 
     lv_obj_add_style(btn_L, &btn_btm, NULL);
     lv_obj_add_style(btn_L, &btn_press, LV_STATE_PRESSED);
