@@ -192,30 +192,6 @@ lv_obj_t *create_box_list()
     return boxxes;
 }
 
-lv_obj_t *put_text_example(const char *string)
-{
-    static lv_style_t style;
-    lv_style_init(&style);
-    lv_style_set_radius(&style, 5);
-
-    /*Make a gradient*/
-    lv_style_set_width(&style, 150);
-    lv_style_set_height(&style, LV_SIZE_CONTENT); /* This enable a flexible width and height that change 
-                                                   * during inputing*/
-    lv_style_set_pad_ver(&style, 20);
-    lv_style_set_pad_left(&style, 5);
-
-    /*Create an object with the new style*/
-    lv_obj_t *obj = lv_obj_create(lv_scr_act());
-    lv_obj_add_style(obj, &style, 0);
-    lv_obj_align(obj, LV_ALIGN_CENTER, 0, 90);
-
-    lv_obj_t *label = lv_label_create(obj);
-    lv_label_set_text(label, string);
-
-    return label;
-}
-
 void model_list_hanlder(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);

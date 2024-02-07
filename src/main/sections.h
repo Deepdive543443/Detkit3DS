@@ -38,7 +38,6 @@ void quit_detect_cb(lv_event_t *e);
 void object_display_cb(lv_event_t *e);
 void display_event_cb(lv_event_t *e);
 lv_obj_t *create_box_list();
-lv_obj_t *put_text_example(const char *string);
 void model_list_hanlder(lv_event_t *e);
 lv_obj_t *create_model_list(Detector *det);
 void create_LR();
