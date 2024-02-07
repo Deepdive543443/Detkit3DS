@@ -240,12 +240,12 @@ void create_LR()
     lv_obj_t *btn_L = lv_imgbtn_create(lv_scr_act());
     lv_imgbtn_set_src(btn_L, LV_IMGBTN_STATE_RELEASED, &iconL, &Mid_fill, &cam_icon);
     lv_obj_align(btn_L, LV_ALIGN_TOP_LEFT, 0, -10);
-    lv_obj_set_size(btn_L, 77, 35);
+    lv_obj_set_size(btn_L, 70, 35);
 
     lv_obj_t *btn_R = lv_imgbtn_create(lv_scr_act());
     lv_imgbtn_set_src(btn_R, LV_IMGBTN_STATE_RELEASED, &cam_icon_flip, &Mid_fill, &iconR);
     lv_obj_align(btn_R, LV_ALIGN_TOP_RIGHT, 0, -10);
-    lv_obj_set_size(btn_R, 77, 35);
+    lv_obj_set_size(btn_R, 70, 35);
 
     lv_obj_add_style(btn_L, &btn_shoulder_press, LV_STATE_PRESSED);
     lv_obj_add_style(btn_R, &btn_shoulder_press, LV_STATE_PRESSED);
