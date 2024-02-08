@@ -199,7 +199,7 @@ lv_obj_t *create_box_list()
     lv_obj_t *btn;
     lv_list_add_text(boxxes, "Press B to continue");
     char detected[40];
-    sprintf(detected, "Founded %d items", objects.num_item);
+    sprintf(detected, "Found %d items", objects.num_item);
     btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, detected);
     lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, NULL);
     lv_group_add_obj(g, btn);
