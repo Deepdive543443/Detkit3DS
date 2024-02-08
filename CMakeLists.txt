@@ -9,7 +9,10 @@ project(${project_title}.elf)
 set(APP_TITLE DetKit_UI)
 set(APP_DESCRIPTION "DetKitNCNN with UI backend")
 set(APP_AUTHOR Deepdive543443)
-set(APP_ICON 48_ncnn.png)
+set(APP_ICON rom/48_ncnn.png)
+set(RSF rom/homebrew.rsf)
+set(banner rom/banner.png)
+set(audio rom/audio.wav)
 set(ROMFS romfs)
 
 # Note that you must copy the cmake folder and the DevkitArm3DS.cmake file in this directory
@@ -39,3 +42,5 @@ add_3dsx_target(${project_title}.elf
     ${APP_ICON}
     ${ROMFS}
 ) # Generate the .3dsx and .smdh from the hello_world target
+
+add_cia_target(${project_title}.elf ${RSF} ${banner} ${audio})
