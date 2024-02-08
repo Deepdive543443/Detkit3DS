@@ -39,6 +39,9 @@ extern lv_style_t btn_btm;
 extern lv_style_t btn_press;
 extern lv_style_t btn_shoulder_press;
 
+extern lv_obj_t *tab_bg;
+extern lv_obj_t *tab_view;// pop up tab view
+
 void button_style_init(lv_style_t *btn)
 {
     lv_style_init(btn);
@@ -417,4 +420,14 @@ void add_btm_btn(lv_obj_t *cont ,u32 key, void *callback, lv_coord_t width, cons
             hang_err("Fail to register virtual button");
             break;
     }
+}
+
+void tab_add_icon_description(lv_obj_t *parent, lv_img_dsc_t *img, const char *description)
+{
+    
+}
+
+void tab_Ac_Li()
+{
+
 }

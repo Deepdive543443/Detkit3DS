@@ -47,7 +47,8 @@ lv_obj_t *create_model_list(Detector *det);
 void create_LR();
 void create_btm_btn_container();
 void add_btm_btn(lv_obj_t *cont ,u32 key, void *callback, lv_coord_t width, const char *label);
-
+void tab_add_icon_description(lv_obj_t *parent, lv_img_dsc_t *img, const char *description);
+void tab_Ac_Li();
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
 void virtual_B_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);

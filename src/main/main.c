@@ -51,6 +51,9 @@ lv_style_t btn_press;
 lv_style_t btn_shoulder_press;
 
 
+lv_obj_t *tab_bg;
+lv_obj_t *tab_view;// pop up tab view
+
 bool ticker()
 {
     /* Hands the main loop until it reach the tick time*/
