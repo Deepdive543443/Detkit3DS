@@ -2,7 +2,7 @@
 #include "stdio.h"
 
 #include "3ds.h" 
-#include "lvgl-8.3.11/lvgl.h"
+#include "lvgl/lvgl.h"
 
 #include "sections.h"
 
