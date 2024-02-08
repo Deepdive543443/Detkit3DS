@@ -54,6 +54,16 @@ void button_style_init(lv_style_t *btn)
     lv_style_set_bg_grad_dir(btn, LV_GRAD_DIR_VER);
 }
 
+void pop_up_tabview_cb(lv_event_t *e)
+{
+
+}
+
+void close_tabview_cb(lv_event_t *e)
+{
+    
+}
+
 void quit_detect_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -424,7 +434,7 @@ void add_btm_btn(lv_obj_t *cont ,u32 key, void *callback, lv_coord_t width, cons
 
 void tab_add_icon_description(lv_obj_t *parent, lv_img_dsc_t *img, const char *description)
 {
-    
+
 }
 
 void tab_Ac_Li()

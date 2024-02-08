@@ -38,6 +38,8 @@ lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_co
 
 // ui.c
 void button_style_init(lv_style_t *btn);
+void pop_up_tabview_cb(lv_event_t *e);
+void close_tabview_cb(lv_event_t *e);
 void quit_detect_cb(lv_event_t *e);
 void object_display_cb(lv_event_t *e);
 void detect_cb(lv_event_t *e);
