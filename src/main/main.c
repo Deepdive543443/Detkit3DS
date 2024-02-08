@@ -49,6 +49,7 @@ lv_indev_drv_t drv_virbtn[4];//Encoder
 lv_style_t btn_btm;
 lv_style_t btn_press;
 lv_style_t btn_shoulder_press;
+lv_style_t btn_tabview;
 
 
 lv_obj_t *tab_bg;
@@ -92,9 +93,9 @@ int main(int argc, char** argv)
 {
     if(setjmp(exitJmp))
     {
-		cleanup();
-		return 0;
-	}
+        cleanup();
+        return 0;
+    }
 
     // Rom file system
     Result rc = romfsInit();
@@ -145,6 +146,23 @@ int main(int argc, char** argv)
     // IVGL init
     lv_init();
 
+    // Style init
+    button_style_init(&btn_btm);
+    button_style_init(&btn_press);
+    lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
+    lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
+    lv_style_init(&btn_shoulder_press);
+    lv_style_set_img_recolor_opa(&btn_shoulder_press, LV_OPA_30);
+    lv_style_set_img_recolor(&btn_shoulder_press, lv_color_black());
+    lv_style_set_translate_y(&btn_shoulder_press, 2);
+
+    lv_style_init(&btn_tabview);
+    lv_style_set_align(&btn_tabview, LV_ALIGN_RIGHT_MID);
+    lv_style_set_translate_x(&btn_tabview, 4);
+    lv_style_set_height(&btn_tabview, lv_pct(30));
+    lv_style_set_text_color(&btn_tabview, lv_color_hex(0x000000));
+    lv_style_set_bg_color(&btn_tabview, lv_color_hex(0x5b5b5b));
+
     // Display init
     static lv_disp_draw_buf_t draw_buf_btm;
     static lv_color_t buf1_btm[WIDTH_BTM * HEIGHT_BTM];
@@ -163,6 +181,14 @@ int main(int argc, char** argv)
     lv_obj_t *hint_msg = lv_label_create(lv_scr_act());
     lv_label_set_text(hint_msg, "Press L, R, or A to detect");
     lv_obj_center(hint_msg);
+
+    lv_obj_t *tab_btn = lv_btn_create(lv_scr_act());
+    lv_obj_add_style(tab_btn, &btn_tabview, NULL);
+    lv_obj_t *label = lv_label_create(tab_btn);
+    lv_label_set_text(label, LV_SYMBOL_LEFT);
+    lv_obj_center(label);
+
+    lv_obj_add_event_cb(tab_btn, pop_up_tabview_cb, LV_EVENT_CLICKED, NULL);
 
     // Detector, Detector objects and group of enconder containers
     det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");    
@@ -192,15 +218,6 @@ int main(int argc, char** argv)
     indev_drv_touch.read_cb = touch_cb_3ds;
     lv_indev_t *touch_indev = lv_indev_drv_register(&indev_drv_touch);
 
-    // Style init
-    button_style_init(&btn_btm);
-    button_style_init(&btn_press);
-    lv_style_set_bg_color(&btn_btm, lv_palette_lighten(LV_PALETTE_GREY, 2));
-    lv_style_set_bg_color(&btn_press, lv_palette_darken(LV_PALETTE_GREY, 2));
-    lv_style_init(&btn_shoulder_press);
-    lv_style_set_img_recolor_opa(&btn_shoulder_press, LV_OPA_30);
-    lv_style_set_img_recolor(&btn_shoulder_press, lv_color_black());
-    lv_style_set_translate_y(&btn_shoulder_press, 2);
     
     while(aptMainLoop())
     {

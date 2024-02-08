@@ -38,6 +38,7 @@ extern lv_indev_drv_t drv_virbtn[4];
 extern lv_style_t btn_btm;
 extern lv_style_t btn_press;
 extern lv_style_t btn_shoulder_press;
+extern lv_style_t btn_tabview;
 
 extern lv_obj_t *tab_bg;
 extern lv_obj_t *tab_view;// pop up tab view
@@ -59,8 +60,12 @@ void pop_up_tabview_cb(lv_event_t *e)
     lv_event_code_t code = lv_event_get_code(e);
     if (code == LV_EVENT_CLICKED)
     {
-        detecting = true;
-        pause_cam_capture(cam_buf);
+        if(!detecting)
+        {
+            detecting = true;
+            pause_cam_capture(cam_buf);
+        }
+
         tab_Ac_Li();
     }
 }
@@ -72,7 +77,6 @@ void close_tabview_cb(lv_event_t *e)
     {
         detecting = false;
         pause_cam_capture(cam_buf);
-        lv_indev_enable(indev_Y, false);
         lv_obj_del_async(tab_bg);
     }
 }
@@ -475,13 +479,14 @@ void tab_Ac_Li()
     // Create the background
     tab_bg = lv_obj_create(lv_scr_act());
     lv_obj_set_size(tab_bg, WIDTH_BTM, HEIGHT_BTM);
+    lv_obj_center(tab_bg);
     lv_obj_set_style_bg_color(tab_bg, lv_color_hex(0x999999), NULL);
     lv_obj_set_style_bg_opa(tab_bg, LV_OPA_70, NULL);
     lv_obj_set_style_border_opa(tab_bg, LV_OPA_TRANSP, NULL);
 
     // Create the container
     lv_obj_t *cont = lv_obj_create(tab_bg);
-    lv_obj_set_size(cont, 280, 200);
+    lv_obj_set_size(cont, 280, 160);
     lv_obj_center(cont);
     lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, NULL);
     lv_obj_set_style_pad_all(cont, 0, NULL);
@@ -530,5 +535,11 @@ void tab_Ac_Li()
     lv_label_set_long_mode(licences, LV_LABEL_LONG_WRAP);
     lv_obj_set_width(licences, 250);
 
-    add_btm_btn(cont, KEY_Y, close_tabview_cb, lv_pct(100), " Close");
+    lv_obj_t *tab_btn = lv_btn_create(tab_bg);
+    lv_obj_add_style(tab_btn, &btn_tabview, NULL);
+    lv_obj_t *label = lv_label_create(tab_btn);
+    lv_label_set_text(label, LV_SYMBOL_RIGHT);
+    lv_obj_center(label);
+
+    lv_obj_add_event_cb(tab_btn, close_tabview_cb, LV_EVENT_ALL, NULL);
 }
