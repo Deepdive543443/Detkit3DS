@@ -256,13 +256,13 @@ int main(int argc, char** argv)
             kHeld = hidKeysHeld();
 
             // Quit App
-            if(kHeld & KEY_START) break;
+            if(kHeld & KEY_START)   hang_err("Testing hand error, just hand it by any means!");;
 
-            if(kDown & KEY_SELECT) 
-            {
-                detecting = !detecting;
-                pause_cam_capture(cam_buf); 
-            }
+            // if(kDown & KEY_SELECT) 
+            // {
+            //     detecting = !detecting;
+            //     pause_cam_capture(cam_buf); 
+            // }
 
             lv_timer_handler();
             while (ticker());
@@ -271,8 +271,6 @@ int main(int argc, char** argv)
             lv_tick_inc(TICK_S);   
         }
     }
-
-    hang_err("Testing hand error, just hand it by any means!");
 
     lv_deinit();
     cleanup();
