@@ -170,7 +170,8 @@ int main(int argc, char** argv)
 
     btm_btn_container = lv_obj_create(lv_scr_act());
     create_btm_btn_container();
-    add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(100), " Detect");
+    add_btm_btn(btm_btn_container, KEY_X, NULL, lv_pct(50), " About");
+    add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(50), " Detect");
 
 
     // Input init
