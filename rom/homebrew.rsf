@@ -10,7 +10,7 @@ RomFs:
   RootPath                : "romfs"
   
 TitleInfo:
-  UniqueId                : 0x1BF52 # Cia Builder Example Unique ID, you need to set your own one
+  UniqueId                : 0xF0C3C05
   Category                : Application
   
 CardInfo:
