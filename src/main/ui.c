@@ -515,9 +515,6 @@ void tab_Ac_Li()
     tab_add_icon_description(tab1, &devkitpro, " DevkitPRO");
     tab_add_icon_description(tab1, &ftpd_icon, " FTPD PRO");
     tab_add_icon_description(tab1, &citra_logo, " Citra Emulator");
-    description = lv_label_create(tab1);
-    lv_obj_set_width(description, 250);
-    lv_label_set_text(description, "All the people that support me mentally and physically during my journey\n\nAnd you");
 
     // Licences
     lv_obj_t *tab2 = lv_tabview_add_tab(tap_view, "About");
