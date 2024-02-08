@@ -187,7 +187,6 @@ int main(int argc, char** argv)
     lv_obj_t *label = lv_label_create(tab_btn);
     lv_label_set_text(label, LV_SYMBOL_LEFT);
     lv_obj_center(label);
-
     lv_obj_add_event_cb(tab_btn, pop_up_tabview_cb, LV_EVENT_CLICKED, NULL);
 
     // Detector, Detector objects and group of enconder containers
@@ -280,13 +279,7 @@ int main(int argc, char** argv)
             kHeld = hidKeysHeld();
 
             // Quit App
-            if(kHeld & KEY_START)   hang_err("Testing hand error, just hand it by any means!");;
-
-            // if(kDown & KEY_SELECT) 
-            // {
-            //     detecting = !detecting;
-            //     pause_cam_capture(cam_buf); 
-            // }
+            if(kHeld & KEY_START)   hang_err("Testing hand error, just hand it by any means!");
 
             lv_timer_handler();
             while (ticker());
