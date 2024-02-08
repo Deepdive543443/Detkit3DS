@@ -46,7 +46,7 @@ void model_list_hanlder(lv_event_t *e);
 lv_obj_t *create_model_list(Detector *det);
 void create_LR();
 void create_btm_btn_container();
-void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label);
+void add_btm_btn(lv_obj_t *cont ,u32 key, void *callback, lv_coord_t width, const char *label);
 
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);

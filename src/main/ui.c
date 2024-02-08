@@ -61,7 +61,7 @@ void quit_detect_cb(lv_event_t *e)
             lv_obj_clean(btm_btn_container);
             lv_indev_enable(indev_B, false);
             lv_indev_enable(indev_A, false);
-            add_btm_btn(KEY_A, detect_cb, lv_pct(100), " Detect");
+            add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(100), " Detect");
             lv_obj_del(box_list);
             detecting = false;        
         }
@@ -153,8 +153,8 @@ void detect_cb(lv_event_t *e)
         // Create box list and botton list for detecting page
         box_list = create_box_list();
 
-        add_btm_btn(KEY_B, quit_detect_cb, lv_pct(50), " Continue");
-        add_btm_btn(KEY_A, NULL, lv_pct(50), " Select");
+        add_btm_btn(btm_btn_container, KEY_B, quit_detect_cb, lv_pct(50), " Continue");
+        add_btm_btn(btm_btn_container, KEY_A, NULL, lv_pct(50), " Select");
 
     }
 }
@@ -292,7 +292,7 @@ void create_btm_btn_container()
     lv_obj_set_flex_align(btm_btn_container,  LV_FLEX_ALIGN_START,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 }
 
-void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
+void add_btm_btn(lv_obj_t *cont ,u32 key, void *callback, lv_coord_t width, const char *label)
 {
     lv_obj_t *btn_ptr;
     lv_obj_t *icon;
@@ -305,28 +305,28 @@ void add_btm_btn(u32 key, void *callback, lv_coord_t width, const char *label)
     {
         case KEY_A:
 
-            btn_A = lv_btn_create(btm_btn_container);
+            btn_A = lv_btn_create(cont);
             btn_ptr = btn_A;
             icon_label[0] = 'A';
             break;
 
         case KEY_B:
 
-            btn_B = lv_btn_create(btm_btn_container);
+            btn_B = lv_btn_create(cont);
             btn_ptr = btn_B;
             icon_label[0] = 'B';
             break;
 
         case KEY_X:
 
-            btn_X = lv_btn_create(btm_btn_container);
+            btn_X = lv_btn_create(cont);
             btn_ptr = btn_X;
             icon_label[0] = 'X';
             break;
 
         case KEY_Y:
 
-            btn_Y = lv_btn_create(btm_btn_container);
+            btn_Y = lv_btn_create(cont);
             btn_ptr = btn_Y;
             icon_label[0] = 'Y';
             break;
