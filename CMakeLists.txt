@@ -43,4 +43,6 @@ add_3dsx_target(${project_title}.elf
     ${ROMFS}
 ) # Generate the .3dsx and .smdh from the hello_world target
 
+if(BUILD_CIA)
 add_cia_target(${project_title}.elf ${RSF} ${banner} ${audio})
+endif()
