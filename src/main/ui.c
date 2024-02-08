@@ -87,7 +87,8 @@ void quit_detect_cb(lv_event_t *e)
             lv_obj_clean(btm_btn_container);
             lv_indev_enable(indev_B, false);
             lv_indev_enable(indev_A, false);
-            add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(100), " Detect");
+            add_btm_btn(btm_btn_container, KEY_X, pop_up_tabview_cb, lv_pct(50), " About");
+            add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(50), " Detect");
             lv_obj_del(box_list);
             detecting = false;        
         }
