@@ -160,6 +160,10 @@ int main(int argc, char** argv)
     lv_obj_t *bg = lv_img_create(lv_scr_act());
     lv_img_set_src(bg, &ncnn_bg_transprant);
 
+    lv_obj_t *hint_msg = lv_label_create(lv_scr_act());
+    lv_label_set_text(hint_msg, "Press L, R, or A to detect");
+    lv_obj_center(hint_msg);
+
     // Detector, Detector objects and group of enconder containers
     det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");    
     g = lv_group_create();
@@ -170,8 +174,7 @@ int main(int argc, char** argv)
 
     btm_btn_container = lv_obj_create(lv_scr_act());
     create_btm_btn_container();
-    add_btm_btn(btm_btn_container, KEY_X, pop_up_tabview_cb, lv_pct(50), " About");
-    add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(50), " Detect");
+    add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(100), " Detect");
 
 
     // Input init
