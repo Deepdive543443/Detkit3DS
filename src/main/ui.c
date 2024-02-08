@@ -486,7 +486,7 @@ void tab_Ac_Li()
 
     // Create the container
     lv_obj_t *cont = lv_obj_create(tab_bg);
-    lv_obj_set_size(cont, 280, 160);
+    lv_obj_set_size(cont, 290, 160);
     lv_obj_center(cont);
     lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, NULL);
     lv_obj_set_style_pad_all(cont, 0, NULL);
@@ -498,9 +498,9 @@ void tab_Ac_Li()
     lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t *tap_view = lv_tabview_create(cont, LV_DIR_TOP, 40);
-    lv_obj_set_size(tap_view, 280, 160);
+    lv_obj_set_size(tap_view, lv_pct(100), 160);
 
-    lv_obj_t *tab1 = lv_tabview_add_tab(tap_view, "Acknowledge");
+    lv_obj_t *tab1 = lv_tabview_add_tab(tap_view, "Acknowledgement");
     lv_obj_set_width(tab1, 280);
     lv_obj_set_style_radius(tab1, 8, NULL);
     // lv_obj_set_style_pad_all(tab1, 0, NULL);
