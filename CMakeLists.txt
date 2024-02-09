@@ -8,7 +8,7 @@ set(APP_AUTHOR Deepdive543443)
 set(APP_ICON rom/48_ncnn.png)
 set(RSF rom/homebrew.rsf)
 set(banner rom/banner.png)
-set(audio rom/audio.wav)
+set(audio rom/sonar.wav)
 set(ROMFS romfs)
 
 
