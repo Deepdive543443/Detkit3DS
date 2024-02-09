@@ -45,7 +45,7 @@ void object_display_cb(lv_event_t *e);
 void detect_cb(lv_event_t *e);
 lv_obj_t *create_box_list();
 void model_list_hanlder(lv_event_t *e);
-lv_obj_t *create_model_list(Detector *det);
+void create_model_list(Detector *det);
 void create_LR();
 void create_btm_btn_container();
 void add_btm_btn(lv_obj_t *cont ,u32 key, void *callback, lv_coord_t width, const char *label);

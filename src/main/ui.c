@@ -250,7 +250,7 @@ void model_list_hanlder(lv_event_t *e)
 }
 
 
-lv_obj_t *create_model_list(Detector *det)
+void create_model_list(Detector *det)
 {
     lv_obj_t *models = lv_dropdown_create(lv_scr_act());
     lv_dropdown_set_options(models, "NanoDet-plus\n"

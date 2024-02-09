@@ -194,7 +194,7 @@ int main(int argc, char** argv)
     g = lv_group_create();
 
     // Other UI widget
-    lv_obj_t *model_list = create_model_list(&det);
+    create_model_list(&det);
     create_LR();
 
     btm_btn_container = lv_obj_create(lv_scr_act());
