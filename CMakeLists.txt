@@ -21,7 +21,7 @@ find_package(CTRULIB REQUIRED) # Look for ctrulib
 # Build sub modules
 set(ncnn_DIR ../../../../cpp_libs/ncnn_master_3ds/lib/cmake/ncnn) # Link ncnn
 add_subdirectory(src/detector)
-add_subdirectory(src/lvgl)
+add_subdirectory(src/lvgl-8.3.11)
 
 # Create executable
 file(GLOB SOURCES src/main/*)
