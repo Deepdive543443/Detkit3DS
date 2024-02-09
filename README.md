@@ -1,6 +1,5 @@
 # Detkit3DS
 
-## Intro
 Detkit3DS is a tiny object detection app for Nintendo 3DS.
 It was build for my purpose to understand the usage and porting for a few C/C++ libraries (NCNN, LVGL, etc).
 
