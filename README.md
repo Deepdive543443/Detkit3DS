@@ -1,5 +1,4 @@
-# Detkit3DS
-![oie_ZdhWfXJBkgpw](https://github.com/Deepdive543443/Detkit_UI/assets/83911295/52e38bcd-5320-4c89-adb0-6b3fc3005633)
+# ![icon_detkit](https://github.com/Deepdive543443/Detkit_UI/assets/83911295/6b4f854c-e74b-4065-a4ce-83fce7fa3662) Detkit3DS
 
 
 Detkit3DS is a tiny object detection app for Nintendo 3DS built upon NCNN and LVGL.
@@ -34,4 +33,5 @@ The virtual button driver sometimes cannot be deallocated which lead to some une
 - [3DS-cmake](https://github.com/Xtansia/3ds-cmake): Toolchain files to build CMake project for 3DS
 - [FTPD-Pro](https://github.com/mtheall/ftpd): FTP Server for 3DS/Switch/Linux.
 - [Citra](https://github.com/citra-emu/citra): 3DS emulator for Windows, Linux, and MacOS
+- All the legendary works from GBATemp and other hacking communities
 
