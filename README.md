@@ -1,6 +1,7 @@
 # ![icon_detkit](https://github.com/Deepdive543443/Detkit_UI/assets/83911295/6b4f854c-e74b-4065-a4ce-83fce7fa3662) Detkit3DS
 
 
+![thumbnail_MVIMG_20240212_121922](https://github.com/Deepdive543443/Detkit_UI/assets/83911295/02861ab6-6e30-43fc-86aa-dec3a41be0d4)
 Detkit3DS is a tiny object detection app for Nintendo 3DS.
 
 ## Features 
