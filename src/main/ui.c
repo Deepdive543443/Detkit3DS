@@ -3,45 +3,49 @@
 #define CANVAS_WIDTH 80
 #define CANVAS_HEIGHT 80
 
-extern jmp_buf exitJmp;
+// Glob
+jmp_buf exitJmp; //Debug
 
-extern lv_group_t *g;
-extern lv_obj_t *box_list; 
-extern Detector det;
-extern BoxVec objects; 
-extern bool detecting;
-extern void *cam_buf;
+lv_group_t *g;
+lv_obj_t *box_list;  // LVGL Objects
 
-extern lv_obj_t *btn_A;
-extern lv_obj_t *btn_B;
-extern lv_obj_t *btn_X;
-extern lv_obj_t *btn_Y;
-extern lv_obj_t *btn_L;
-extern lv_obj_t *btn_R;
-extern lv_obj_t *btm_btn_container;
+Detector det;
+BoxVec objects; // Containers 
+void *cam_buf;
 
-extern lv_indev_t *indev_A;
-extern lv_indev_t *indev_B;
-extern lv_indev_t *indev_X;
-extern lv_indev_t *indev_Y;
-extern lv_indev_t *indev_L; 
-extern lv_indev_t *indev_R; 
-extern lv_point_t point_array_A[2];
-extern lv_point_t point_array_B[2];
-extern lv_point_t point_array_X[2];
-extern lv_point_t point_array_Y[2];
-extern lv_point_t point_array_L[2];
-extern lv_point_t point_array_R[2]; //Encoder 
+bool detecting; // Stage marker
 
-extern lv_indev_drv_t drv_virbtn[4];
+lv_obj_t *btn_A;
+lv_obj_t *btn_B;
+lv_obj_t *btn_X;
+lv_obj_t *btn_Y;
+lv_obj_t *btn_L;
+lv_obj_t *btn_R;
+lv_obj_t *btm_btn_container;
 
-extern lv_style_t btn_btm;
-extern lv_style_t btn_press;
-extern lv_style_t btn_shoulder_press;
-extern lv_style_t btn_tabview;
+lv_indev_t *indev_A;
+lv_indev_t *indev_B;
+lv_indev_t *indev_X;
+lv_indev_t *indev_Y; 
+lv_indev_t *indev_L; 
+lv_indev_t *indev_R; 
+lv_point_t point_array_A[2];
+lv_point_t point_array_B[2];
+lv_point_t point_array_X[2];
+lv_point_t point_array_Y[2];
+lv_point_t point_array_L[2];
+lv_point_t point_array_R[2];
 
-extern lv_obj_t *tab_bg;
-extern lv_obj_t *tab_view;// pop up tab view
+lv_indev_drv_t drv_virbtn[4];//Encoder 
+
+lv_style_t btn_btm;
+lv_style_t btn_press;
+lv_style_t btn_shoulder_press;
+lv_style_t btn_tabview;
+
+
+lv_obj_t *tab_bg;
+lv_obj_t *tab_view;// pop up tab view
 
 void button_style_init(lv_style_t *btn)
 {

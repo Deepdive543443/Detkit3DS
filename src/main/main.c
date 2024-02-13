@@ -7,53 +7,7 @@
 #include "sections.h"
 
 
-
 static struct timespec start, end;
-
-// Glob
-jmp_buf exitJmp; //Debug
-
-lv_group_t *g;
-lv_obj_t *box_list;  // LVGL Objects
-
-Detector det;
-BoxVec objects; // Containers 
-void *cam_buf;
-
-bool detecting; // Stage marker
-
-
-lv_obj_t *btn_A;
-lv_obj_t *btn_B;
-lv_obj_t *btn_X;
-lv_obj_t *btn_Y;
-lv_obj_t *btn_L;
-lv_obj_t *btn_R;
-lv_obj_t *btm_btn_container;
-
-lv_indev_t *indev_A;
-lv_indev_t *indev_B;
-lv_indev_t *indev_X;
-lv_indev_t *indev_Y; 
-lv_indev_t *indev_L; 
-lv_indev_t *indev_R; 
-lv_point_t point_array_A[2];
-lv_point_t point_array_B[2];
-lv_point_t point_array_X[2];
-lv_point_t point_array_Y[2];
-lv_point_t point_array_L[2];
-lv_point_t point_array_R[2];
-
-lv_indev_drv_t drv_virbtn[4];//Encoder 
-
-lv_style_t btn_btm;
-lv_style_t btn_press;
-lv_style_t btn_shoulder_press;
-lv_style_t btn_tabview;
-
-
-lv_obj_t *tab_bg;
-lv_obj_t *tab_view;// pop up tab view
 
 bool ticker()
 {
