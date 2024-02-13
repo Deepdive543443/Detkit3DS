@@ -195,7 +195,7 @@ Detector create_nanodet(int input_size, const char* param, const char* bin);
 BoxVec nanodet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *self_ptr);
 
 /**
- * Todo -- FastestDet's modules
+ * -- FastestDet's modules
  */
 
 Detector create_fastestdet(int input_size, const char* param, const char* bin);
