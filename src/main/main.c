@@ -47,6 +47,7 @@ int main(int argc, char** argv)
 {
     if(setjmp(exitJmp))
     {
+        lv_deinit();
         cleanup();
         return 0;
     }
@@ -172,7 +173,6 @@ int main(int argc, char** argv)
         }
     }
 
-    lv_deinit();
     cleanup();
     return 0;
 }
