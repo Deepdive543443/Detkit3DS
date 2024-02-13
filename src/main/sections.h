@@ -84,6 +84,7 @@ void close_tabview_cb(lv_event_t *e);
 void quit_detect_cb(lv_event_t *e);
 void object_display_cb(lv_event_t *e);
 void detect_cb(lv_event_t *e);
+void HALinit();
 lv_obj_t *create_box_list();
 void model_list_hanlder(lv_event_t *e);
 void create_model_list(Detector *det);
