@@ -26,7 +26,7 @@ BoxInfo BoxVec_getItem(size_t index, void *self_ptr)
     }
     else
     {
-        printf("Index:%ld out of range\n", index);
+        printf("Index:%d out of range\n", index);
         return boxVec->data[boxVec->num_item - 1];
     }
 
@@ -72,14 +72,13 @@ BoxInfo BoxVec_remove(size_t index, void *self_ptr)
     {
         return boxVec->pop(self_ptr);
     }
-    printf("Index:%ld out of range\n", index);
+    printf("Index:%d out of range\n", index);
     return empty;
 }
 
 void BoxVec_push_back(BoxInfo item, void *self_ptr)
 {
     BoxVec *boxVec = (BoxVec *) self_ptr;
-    size_t num_item = boxVec->num_item;
     if (boxVec->capacity == boxVec->num_item)
     {
         void *data_ptr = realloc(boxVec->data, sizeof(BoxInfo) * (boxVec->capacity + 20));

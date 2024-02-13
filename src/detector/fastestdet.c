@@ -1,9 +1,6 @@
 #include "detector.h"
 
-// void print_mat(ncnn_mat_t mat)
-// {
-//     printf("w: %d\nh: %d\nc: %d\nelesize: %ld\ncstep: %ld\n", ncnn_mat_get_w(mat), ncnn_mat_get_h(mat), ncnn_mat_get_c(mat), ncnn_mat_get_elemsize(mat), ncnn_mat_get_cstep(mat));
-// }
+
 
 Detector create_fastestdet(int input_size, const char* param, const char* bin)
 {
@@ -48,13 +45,10 @@ BoxVec fastestdet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *
     int c_step = ncnn_mat_get_cstep(out_mat);
     int out_h = ncnn_mat_get_h(out_mat);
     int out_w = ncnn_mat_get_w(out_mat);
-    int out_c = ncnn_mat_get_c(out_mat);
     float *data_ptr = (float *) ncnn_mat_get_data(out_mat);
 
     BoxVec proposals;
     create_box_vector(&proposals, 50);
-
-    float obj_score;
 
     for(int h = 0; h < out_h; h++)
     {
@@ -109,11 +103,6 @@ BoxVec fastestdet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *
 
     BoxVec objects;
     create_box_vector(&objects, num_picked);
-
-    for (int i=0; i < num_picked; i++)
-    {
-        BoxInfo box = proposals.getItem(picked_box_idx[i], &proposals);
-    }
 
     for (int i=0; i < num_picked; i++)
     {
