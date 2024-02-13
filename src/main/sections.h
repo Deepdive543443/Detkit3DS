@@ -33,7 +33,6 @@ void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x0, u16 y0, u
 void writePic2FrameBuf565(void *fb, lv_color_t * color, u16 x, u16 y, u16 w, u16 h);
 void flush_cb_3ds_btm(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
 void flush_cb_3ds_top(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
-void flush_cb_3ds(gfxScreen_t gfx_scr, lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
 lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_color_t *buf1, lv_disp_drv_t *disp_drv);
 
 // ui.c
@@ -59,7 +58,6 @@ void virtual_X_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
 void virtual_Y_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
 void virtual_L_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
 void virtual_R_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
-void virtual_press_cb(u32 key, lv_indev_drv_t *drv, lv_indev_data_t *data);
 void touch_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data);
 void encoder_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data);
 

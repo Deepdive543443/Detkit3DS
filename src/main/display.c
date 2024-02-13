@@ -1,6 +1,28 @@
 #include "sections.h" 
 
 
+static void flush_cb_3ds(gfxScreen_t gfx_scr, lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
+{
+    /* Update and swap frame buffer
+     * TODO -- figure out a more efficient solution.
+     * */
+    writePic2FrameBuf565(
+        gfxGetFramebuffer(gfx_scr, GFX_LEFT, NULL, NULL),
+        color_p,
+        0,
+        0,
+        disp->hor_res,
+        disp->ver_res
+    );
+
+    // These three lines swap and display new buffer on screen
+    gfxFlushBuffers();
+    gfxScreenSwapBuffers(gfx_scr, true);
+    gspWaitForVBlank();
+
+    lv_disp_flush_ready(disp);
+}
+
 void writePic2FrameBuf565(void *fb, lv_color_t * color, u16 x, u16 y, u16 w, u16 h)
 {
     /* Display the LVGL buffer on 3DS screen 
@@ -37,28 +59,6 @@ void flush_cb_3ds_btm(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *co
 void flush_cb_3ds_top(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
 {
     flush_cb_3ds(GFX_TOP, disp, area, color_p);
-}
-
-void flush_cb_3ds(gfxScreen_t gfx_scr, lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
-{
-    /* Update and swap frame buffer
-     * TODO -- figure out a more efficient solution.
-     * */
-    writePic2FrameBuf565(
-        gfxGetFramebuffer(gfx_scr, GFX_LEFT, NULL, NULL),
-        color_p,
-        0,
-        0,
-        disp->hor_res,
-        disp->ver_res
-    );
-
-    // These three lines swap and display new buffer on screen
-    gfxFlushBuffers();
-    gfxScreenSwapBuffers(gfx_scr, true);
-    gspWaitForVBlank();
-
-    lv_disp_flush_ready(disp);
 }
 
 lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_color_t *buf1, lv_disp_drv_t *disp_drv)
