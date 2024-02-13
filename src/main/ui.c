@@ -1,8 +1,5 @@
 #include "sections.h"
 
-#define CANVAS_WIDTH 80
-#define CANVAS_HEIGHT 80
-
 // Glob
 jmp_buf exitJmp; //Debug
 
