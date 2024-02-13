@@ -137,7 +137,7 @@ BoxInfo BoxVec_pop(void *self_ptr)
     
     if(boxVec->num_item > 0)
     {
-        BoxInfo empty_box = boxVec->data[boxVec->num_item - 1];
+        empty_box = boxVec->data[boxVec->num_item - 1];
         boxVec->num_item--;
         return empty_box;
     }
@@ -151,12 +151,12 @@ BoxInfo BoxVec_pop(void *self_ptr)
 BoxInfo BoxVec_remove(size_t index, void *self_ptr)
 {
     BoxVec *boxVec = (BoxVec *) self_ptr;
-    BoxInfo empty;
+    BoxInfo empty = {-1, -1, -1, -1, -1, -1};
 
     if (index < boxVec->num_item - 1 && index >= 0)
     {
         int num_to_copy = boxVec->num_item - index + 1;
-        BoxInfo empty = boxVec->data[index];
+        empty = boxVec->data[index];
         BoxInfo temp[num_to_copy];
 
         memcpy(&temp, &boxVec->data[index + 1], sizeof(BoxInfo) * num_to_copy);
