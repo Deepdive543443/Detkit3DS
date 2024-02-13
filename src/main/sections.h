@@ -78,21 +78,12 @@ void flush_cb_3ds_top(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *co
 lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_color_t *buf1, lv_disp_drv_t *disp_drv);
 
 // ui.c
-// void button_style_init(lv_style_t *btn);
 void pop_up_tabview_cb(lv_event_t *e);
 void close_tabview_cb(lv_event_t *e);
 void quit_detect_cb(lv_event_t *e);
 void object_display_cb(lv_event_t *e);
 void detect_cb(lv_event_t *e);
 void HALinit();
-// lv_obj_t *create_box_list();
-// void model_list_hanlder(lv_event_t *e);
-// void create_model_list(Detector *det);
-// void create_LR();
-// void create_btm_btn_container();
-// void add_btm_btn(lv_obj_t *cont ,u32 key, void *callback, lv_coord_t width, const char *label);
-// void tab_add_icon_description(lv_obj_t *parent, lv_img_dsc_t *img, const char *description);
-// void tab_Ac_Li();
 
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
