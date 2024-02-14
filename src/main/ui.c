@@ -33,7 +33,7 @@ lv_point_t point_array_Y[2];
 lv_point_t point_array_L[2];
 lv_point_t point_array_R[2];
 
-lv_indev_drv_t drv_virbtn[4];//Encoder 
+lv_indev_drv_t drv_virbtn[4]; //Encoder A, B, X, Y
 
 lv_style_t btn_btm;
 lv_style_t btn_press;
@@ -58,7 +58,29 @@ static void button_style_init(lv_style_t *btn)
 
 static void virtual_button_driver_init()
 {
-    
+    drv_virbtn[0].type = LV_INDEV_TYPE_BUTTON;
+    drv_virbtn[0].read_cb = virtual_A_cb;
+    indev_A = lv_indev_drv_register(&drv_virbtn[0]);
+    point_array_A[0] = point_array_A[1] = (lv_point_t){-1, -1};
+    lv_indev_set_button_points(indev_A, point_array_A);
+
+    drv_virbtn[1].type = LV_INDEV_TYPE_BUTTON;
+    drv_virbtn[1].read_cb = virtual_B_cb;
+    indev_B = lv_indev_drv_register(&drv_virbtn[1]);
+    point_array_B[0] = point_array_B[1] = (lv_point_t){-1, -1};
+    lv_indev_set_button_points(indev_B, point_array_B);
+
+    drv_virbtn[2].type = LV_INDEV_TYPE_BUTTON;
+    drv_virbtn[2].read_cb = virtual_X_cb;
+    indev_X = lv_indev_drv_register(&drv_virbtn[2]);
+    point_array_X[0] = point_array_X[1] = (lv_point_t){-1, -1};
+    lv_indev_set_button_points(indev_X, point_array_Y);
+
+    drv_virbtn[3].type = LV_INDEV_TYPE_BUTTON;
+    drv_virbtn[3].read_cb = virtual_Y_cb;
+    indev_Y = lv_indev_drv_register(&drv_virbtn[3]);
+    point_array_Y[0] = point_array_Y[1] = (lv_point_t){-1, -1};
+    lv_indev_set_button_points(indev_Y, point_array_Y);
 }
 
 static lv_obj_t *create_box_list()
