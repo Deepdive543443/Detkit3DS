@@ -1,5 +1,9 @@
 #include "sections.h"
 
+static u32 bufSize;
+static Handle camReceiveEvent[2] = {0};
+static bool captureInterrupted;
+static s32 index_handler = 0;
 
 void pause_cam_capture(void *cam_buf)
 {
@@ -110,10 +114,74 @@ void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x, u16 y, u16
 
 void camSetup()
 {
+    camInit();
+    CAMU_SetSize(SELECT_OUT1, SIZE_CTR_TOP_LCD, CONTEXT_A);
+    CAMU_SetOutputFormat(SELECT_OUT1, OUTPUT_RGB_565, CONTEXT_A);
+    CAMU_SetFrameRate(SELECT_OUT1, FRAME_RATE_15);
+    CAMU_SetNoiseFilter(SELECT_OUT1, true);
+    CAMU_SetAutoExposure(SELECT_OUT1, true);
+    CAMU_SetAutoWhiteBalance(SELECT_OUT1, true);
+    CAMU_SetTrimming(PORT_CAM1, false);
+
+    CAMU_GetMaxBytes(&bufSize, WIDTH_TOP, HEIGHT_TOP);
+    CAMU_SetTransferBytes(PORT_CAM1, bufSize, WIDTH_TOP, HEIGHT_TOP);
+    CAMU_Activate(SELECT_OUT1);
+
+    CAMU_GetBufferErrorInterruptEvent(&camReceiveEvent[0], PORT_CAM1);
+    CAMU_ClearBuffer(PORT_CAM1);
+    CAMU_StartCapture(PORT_CAM1);
+    CAMU_PlayShutterSound(SHUTTER_SOUND_TYPE_MOVIE);
 
 }
 
 bool camUpdate()
 {
-    
+    if (camReceiveEvent[1] == 0) 
+    {
+        CAMU_SetReceiving(&camReceiveEvent[1], cam_buf, PORT_CAM1, SCRSIZE_TOP * 2, (s16) bufSize);
+    }
+
+    if (captureInterrupted) 
+    {
+        CAMU_StartCapture(PORT_CAM1);
+        captureInterrupted = false;
+    }
+
+    svcWaitSynchronizationN(&index_handler, camReceiveEvent, 2, false, WAIT_TIMEOUT);
+    switch (index_handler)
+    {
+        case 0:
+            svcCloseHandle(camReceiveEvent[1]);
+            camReceiveEvent[1] = 0;
+            captureInterrupted = true;
+
+            return captureInterrupted;
+            break;
+
+        case 1:
+            svcCloseHandle(camReceiveEvent[1]);
+            camReceiveEvent[1] = 0;
+
+            break;
+
+        default:
+            break;
+
+    }
+
+    writeCamToFramebufferRGB565(
+        gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 
+        cam_buf,
+        0,
+        0,
+        WIDTH_TOP,
+        HEIGHT_TOP
+    );
+
+    // Flush and swap framebuffers
+    gfxFlushBuffers();
+    gfxScreenSwapBuffers(GFX_TOP, true);
+    gspWaitForVBlank();   
+
+    return captureInterrupted;
 }
