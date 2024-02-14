@@ -19,6 +19,7 @@ bool ticker()
 
 void cleanup() 
 {
+    lv_deinit();
     camExit();
     gfxExit();
     acExit();
@@ -47,7 +48,6 @@ int main(int argc, char** argv)
 {
     if(setjmp(exitJmp))
     {
-        lv_deinit();
         cleanup();
         return 0;
     }
@@ -80,6 +80,8 @@ int main(int argc, char** argv)
     // IVGL init
     lv_init();
     HALinit();
+
+    // Cam init
     camSetup();
     
     while(aptMainLoop())
