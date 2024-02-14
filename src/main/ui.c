@@ -56,6 +56,11 @@ static void button_style_init(lv_style_t *btn)
     lv_style_set_bg_grad_dir(btn, LV_GRAD_DIR_VER);
 }
 
+static void virtual_button_driver_init()
+{
+    
+}
+
 static lv_obj_t *create_box_list()
 {
 
