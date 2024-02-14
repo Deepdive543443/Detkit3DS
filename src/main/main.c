@@ -62,12 +62,13 @@ int main(int argc, char** argv)
         printf("romfs Init Successful!\n");
     }
 
+    // Screen init
     gfxInitDefault();
     gfxSetDoubleBuffering(GFX_TOP, true);
     gfxSetDoubleBuffering(GFX_BOTTOM, true);
     gfxSet3D(false);
 
-    // Camera framebuffer, state, hanlder init
+    // Camera framebuffer init
     cam_buf = malloc(SCRSIZE_TOP * 2); // RBG565 frame buffer
     if(!cam_buf)
     {
