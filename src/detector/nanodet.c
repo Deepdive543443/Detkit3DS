@@ -1,10 +1,6 @@
 #include "detector.h"
 
 
-// void print_mat(ncnn_mat_t mat)
-// {
-//     printf("w: %d\nh: %d\nc: %d\nelesize: %ld\ncstep: %ld\n", ncnn_mat_get_w(mat), ncnn_mat_get_h(mat), ncnn_mat_get_c(mat), ncnn_mat_get_elemsize(mat), ncnn_mat_get_cstep(mat));
-// }
 
 static void generate_proposals(ncnn_mat_t dis_pred, ncnn_mat_t cls_pred, int stride, float prob_thresh, BoxVec *objects)
 {
