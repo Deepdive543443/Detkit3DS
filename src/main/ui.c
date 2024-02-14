@@ -216,7 +216,7 @@ static void create_btm_btn_container()
     lv_obj_set_flex_align(btm_btn_container,  LV_FLEX_ALIGN_START,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 }
 
-static void add_btm_btn(lv_obj_t *cont ,u32 key, void *callback, lv_coord_t width, const char *label)
+static void add_btm_btn(lv_obj_t *cont ,u32 key , void *callback, lv_coord_t width, const char *label)
 {
     lv_obj_t *btn_ptr;
     lv_obj_t *icon;
@@ -299,46 +299,63 @@ static void add_btm_btn(lv_obj_t *cont ,u32 key, void *callback, lv_coord_t widt
     switch(key)
     {
         case KEY_A:
-            drv_virbtn[0].type = LV_INDEV_TYPE_BUTTON;
-            drv_virbtn[0].read_cb = virtual_A_cb;
-            indev_A = lv_indev_drv_register(&drv_virbtn[0]);
-            point_array_A[0] = (lv_point_t){-1, -1};
             point_array_A[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_A, point_array_A);
 
             break;
 
         case KEY_B:
-            drv_virbtn[1].type = LV_INDEV_TYPE_BUTTON;
-            drv_virbtn[1].read_cb = virtual_B_cb;
-            indev_B = lv_indev_drv_register(&drv_virbtn[1]);
-            point_array_B[0] = (lv_point_t){-1, -1};
             point_array_B[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_B, point_array_B);
 
             break;
 
         case KEY_X:
-            drv_virbtn[2].type = LV_INDEV_TYPE_BUTTON;
-            drv_virbtn[2].read_cb = virtual_X_cb;
-            indev_X = lv_indev_drv_register(&drv_virbtn[2]);
-            point_array_X[0] = (lv_point_t){-1, -1};
             point_array_X[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_X, point_array_X);
 
             break;
 
         case KEY_Y:
-            drv_virbtn[3].type = LV_INDEV_TYPE_BUTTON;
-            drv_virbtn[3].read_cb = virtual_Y_cb;
-            indev_Y = lv_indev_drv_register(&drv_virbtn[3]);
-            point_array_Y[0] = (lv_point_t){-1, -1};
             point_array_Y[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_Y, point_array_Y);
             break;
 
         default:
             hang_err("Fail to register virtual button");
+            break;
+    }
+}
+
+static void remove_virtual_btn(u32 key)
+{
+    switch(key)
+    {
+        case KEY_A:
+            point_array_A[1] = (lv_point_t) {-1, -1};
+            lv_indev_set_button_points(indev_A, point_array_A);
+
+            break;
+
+        case KEY_B:
+            point_array_B[1] = (lv_point_t) {-1, -1};
+            lv_indev_set_button_points(indev_B, point_array_B);
+
+            break;
+
+        case KEY_X:
+            point_array_X[1] = (lv_point_t) {-1, -1};
+            lv_indev_set_button_points(indev_X, point_array_X);
+
+            break;
+
+        case KEY_Y:
+            point_array_Y[1] = (lv_point_t) {-1, -1};
+            lv_indev_set_button_points(indev_Y, point_array_Y);
+            break;
+
+        default:
+            hang_err("Invalid virtual btn input");
             break;
     }
 }
@@ -469,8 +486,8 @@ void quit_detect_cb(lv_event_t *e)
         if(detecting)
         {
             lv_obj_clean(btm_btn_container);
-            lv_indev_enable(indev_B, false);
-            lv_indev_enable(indev_A, false);
+            remove_virtual_btn(KEY_B);
+            remove_virtual_btn(KEY_A);
             add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(100), " Detect");
             lv_obj_del(box_list);
             detecting = false;        
@@ -535,7 +552,7 @@ void detect_cb(lv_event_t *e)
         }
         detecting = true;
         lv_obj_clean(btm_btn_container);
-        lv_indev_enable(indev_A, false);
+        remove_virtual_btn(KEY_A);
         BoxVec_free(&objects);
         pause_cam_capture(cam_buf);
 
@@ -618,6 +635,9 @@ void HALinit()
     // Detector, Detector objects and group of enconder containers
     det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");    
     g = lv_group_create();
+
+    // Virtual ABXY initial
+    virtual_button_driver_init();
 
     // Other UI widget
     create_model_list(&det);
