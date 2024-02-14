@@ -107,3 +107,13 @@ void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x, u16 y, u16
         }
     }
 }
+
+void camSetup()
+{
+
+}
+
+bool camUpdate()
+{
+    
+}
