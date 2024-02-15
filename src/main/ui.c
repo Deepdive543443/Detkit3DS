@@ -106,7 +106,7 @@ static lv_obj_t *create_box_list()
     char detected[40];
     sprintf(detected, "Found %d items", objects.num_item);
     btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, detected);
-    lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, 0);
     lv_group_add_obj(g, btn);
 
     for(size_t i=0; i < objects.num_item; i++)
@@ -123,7 +123,7 @@ static lv_obj_t *create_box_list()
         sprintf(list_item, "%15s %03.1f [%3d,%3d,%3d,%3d]", class_names[label], prob, x1, x2, y1, y2);
         btn = lv_list_add_btn(boxxes, LV_SYMBOL_GPS, list_item);
 
-        lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, NULL);
+        lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, 0);
         lv_group_add_obj(g, btn);
     }
     return boxxes;
@@ -181,8 +181,8 @@ static void create_LR()
     lv_obj_add_style(btn_L, &btn_shoulder_press, LV_STATE_PRESSED);
     lv_obj_add_style(btn_R, &btn_shoulder_press, LV_STATE_PRESSED);
 
-    lv_obj_add_event_cb(btn_L, detect_cb, LV_EVENT_ALL, NULL);
-    lv_obj_add_event_cb(btn_R, detect_cb, LV_EVENT_ALL, NULL); /*Display the press stage of two button*/
+    lv_obj_add_event_cb(btn_L, detect_cb, LV_EVENT_ALL, 0);
+    lv_obj_add_event_cb(btn_R, detect_cb, LV_EVENT_ALL, 0); /*Display the press stage of two button*/
 
     lv_obj_update_layout(btn_L);
     point_array_L[0] = (lv_point_t) {(btn_L->coords.x1 + btn_L->coords.x2) / 2, (btn_L->coords.y1 + btn_L->coords.y2) / 2};
@@ -211,8 +211,8 @@ static void create_btm_btn_container()
     lv_obj_remove_style_all(btm_btn_container);
     lv_obj_set_size(btm_btn_container, lv_pct(100), 30);
 
-    lv_obj_set_style_radius(btm_btn_container, 0, NULL);
-    lv_obj_set_style_pad_all(btm_btn_container, 0, NULL);
+    lv_obj_set_style_radius(btm_btn_container, 0, 0);
+    lv_obj_set_style_pad_all(btm_btn_container, 0, 0);
 
     lv_obj_align(btm_btn_container, LV_ALIGN_BOTTOM_MID, 0, 0);
     lv_obj_set_flex_flow(btm_btn_container, LV_FLEX_FLOW_ROW);
@@ -266,37 +266,37 @@ static void add_btm_btn(lv_obj_t *cont ,u32 key , void *callback, lv_coord_t wid
     // Style
     lv_obj_remove_style_all(btn_ptr);
     lv_obj_set_size(btn_ptr, width, 30);
-    lv_obj_add_style(btn_ptr, &btn_btm, NULL);
+    lv_obj_add_style(btn_ptr, &btn_btm, 0);
     lv_obj_add_style(btn_ptr, &btn_press, LV_STATE_PRESSED);
 
     //Icon
     icon = lv_obj_create(btn_ptr);
     label_icon = lv_label_create(icon);
     lv_label_set_text(label_icon, icon_label);
-    lv_obj_set_style_text_color(label_icon, lv_color_hex(0x353535), NULL);
-    lv_obj_set_style_text_font(label_icon, &lv_font_montserrat_12, NULL);
+    lv_obj_set_style_text_color(label_icon, lv_color_hex(0x353535), 0);
+    lv_obj_set_style_text_font(label_icon, &lv_font_montserrat_12, 0);
     lv_obj_center(label_icon);
 
     lv_obj_set_size(icon, 19, 19);
-    lv_obj_set_style_radius(icon, LV_RADIUS_CIRCLE, NULL);
-    lv_obj_set_style_clip_corner(icon, true, NULL);
+    lv_obj_set_style_radius(icon, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_clip_corner(icon, true, 0);
     lv_obj_set_scrollbar_mode(icon, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_set_style_bg_opa(icon, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_border_width(icon, 1, NULL);
-    lv_obj_set_style_border_color(icon, lv_color_hex(0x353535), NULL);
-    lv_obj_set_style_pad_all(icon, 0, NULL);
+    lv_obj_set_style_bg_opa(icon, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(icon, 1, 0);
+    lv_obj_set_style_border_color(icon, lv_color_hex(0x353535), 0);
+    lv_obj_set_style_pad_all(icon, 0, 0);
 
     //Label
     label_btn = lv_label_create(btn_ptr);
     lv_label_set_text(label_btn, label);
-    lv_obj_set_style_text_font(label_btn, &lv_font_montserrat_16, NULL);
+    lv_obj_set_style_text_font(label_btn, &lv_font_montserrat_16, 0);
 
     // Layout: Flex
     lv_obj_set_flex_flow(btn_ptr, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(btn_ptr,  LV_FLEX_ALIGN_CENTER,  LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
     // Callback
-    lv_obj_add_event_cb(btn_ptr, callback, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(btn_ptr, callback, LV_EVENT_ALL, 0);
 
     lv_obj_update_layout(btn_ptr);
     switch(key)
@@ -367,9 +367,9 @@ static void tab_add_icon_description(lv_obj_t *parent, lv_img_dsc_t *img, const 
 {
     lv_obj_t *icon_slider = lv_obj_create(parent);
     lv_obj_set_size(icon_slider, LV_SIZE_CONTENT, 50);
-    lv_obj_set_style_pad_all(icon_slider, 0, NULL);
-    lv_obj_set_style_bg_opa(icon_slider, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_border_opa(icon_slider, LV_OPA_TRANSP, NULL);
+    lv_obj_set_style_pad_all(icon_slider, 0, 0);
+    lv_obj_set_style_bg_opa(icon_slider, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_opa(icon_slider, LV_OPA_TRANSP, 0);
 
     lv_obj_clear_flag(icon_slider, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_flex_flow(icon_slider, LV_FLEX_FLOW_ROW);
@@ -377,7 +377,7 @@ static void tab_add_icon_description(lv_obj_t *parent, lv_img_dsc_t *img, const 
 
     lv_obj_t *icon = lv_img_create(icon_slider);
     lv_img_set_src(icon, img);
-    lv_obj_set_style_max_height(icon, 48, NULL);
+    lv_obj_set_style_max_height(icon, 48, 0);
 
     lv_obj_t *label = lv_label_create(icon_slider);
     lv_label_set_text(label, description);
@@ -389,19 +389,19 @@ static void tab_Ac_Li()
     tab_bg = lv_obj_create(lv_scr_act());
     lv_obj_set_size(tab_bg, WIDTH_BTM, HEIGHT_BTM);
     lv_obj_center(tab_bg);
-    lv_obj_set_style_bg_color(tab_bg, lv_color_hex(0x999999), NULL);
-    lv_obj_set_style_bg_opa(tab_bg, LV_OPA_70, NULL);
-    lv_obj_set_style_border_opa(tab_bg, LV_OPA_TRANSP, NULL);
+    lv_obj_set_style_bg_color(tab_bg, lv_color_hex(0x999999), 0);
+    lv_obj_set_style_bg_opa(tab_bg, LV_OPA_70, 0);
+    lv_obj_set_style_border_opa(tab_bg, LV_OPA_TRANSP, 0);
 
     // Create the container
     lv_obj_t *cont = lv_obj_create(tab_bg);
     lv_obj_set_size(cont, 290, 160);
     lv_obj_center(cont);
-    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, NULL);
-    lv_obj_set_style_pad_all(cont, 0, NULL);
-    lv_obj_set_style_radius(cont, 0, NULL);
-    lv_obj_set_style_border_color(cont, lv_color_hex(0xeeeeee), NULL);
-    lv_obj_set_style_border_width(cont, 0, NULL);
+    lv_obj_set_style_bg_opa(cont, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_pad_all(cont, 0, 0);
+    lv_obj_set_style_radius(cont, 0, 0);
+    lv_obj_set_style_border_color(cont, lv_color_hex(0xeeeeee), 0);
+    lv_obj_set_style_border_width(cont, 0, 0);
     lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
     lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);
@@ -411,8 +411,7 @@ static void tab_Ac_Li()
 
     lv_obj_t *tab1 = lv_tabview_add_tab(tap_view, "Acknowledgement");
     lv_obj_set_width(tab1, 280);
-    lv_obj_set_style_radius(tab1, 8, NULL);
-    // lv_obj_set_style_pad_all(tab1, 0, NULL);
+    lv_obj_set_style_radius(tab1, 8, 0);
     lv_obj_set_flex_flow(tab1, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(tab1, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
 
@@ -428,7 +427,6 @@ static void tab_Ac_Li()
     // Licences
     lv_obj_t *tab2 = lv_tabview_add_tab(tap_view, "About");
     lv_obj_set_width(tab2, 280);
-    // lv_obj_set_style_pad_all(tab2, 0, NULL);
     lv_obj_t *licences = lv_label_create(tab2);
     lv_label_set_text(licences, "This software is provided 'as-is', without any express or implied warranty."
     "In no event will the authors be held liable for any damages arising from the use of this software. "
@@ -442,7 +440,7 @@ static void tab_Ac_Li()
     lv_obj_set_width(licences, 250);
 
     lv_obj_t *tab_btn = lv_btn_create(tab_bg);
-    lv_obj_add_style(tab_btn, &btn_tabview, NULL);
+    lv_obj_add_style(tab_btn, &btn_tabview, 0);
     lv_obj_t *label = lv_label_create(tab_btn);
     lv_label_set_text(label, LV_SYMBOL_RIGHT);
     lv_obj_center(label);
@@ -624,7 +622,7 @@ void HALinit()
     lv_obj_center(hint_msg);
 
     lv_obj_t *tab_btn = lv_btn_create(lv_scr_act());
-    lv_obj_add_style(tab_btn, &btn_tabview, NULL);
+    lv_obj_add_style(tab_btn, &btn_tabview, 0);
     lv_obj_t *label = lv_label_create(tab_btn);
     lv_label_set_text(label, LV_SYMBOL_LEFT);
     lv_obj_center(label);
