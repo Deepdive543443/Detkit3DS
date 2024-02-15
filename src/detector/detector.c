@@ -105,14 +105,6 @@ void create_box_vector(BoxVec *box_vector, size_t capacity)
     box_vector->capacity = capacity;
     box_vector->num_item = 0;
     box_vector->data = (BoxInfo *) malloc(sizeof(BoxInfo) * capacity);
-
-    box_vector->getItem = &BoxVec_getItem;
-    box_vector->pop = &BoxVec_pop;
-    box_vector->remove = &BoxVec_remove;
-    box_vector->push_back = &BoxVec_push_back;
-    box_vector->insert = &BoxVec_insert;
-    box_vector->fit = &BoxVec_fit_size;
-    box_vector->free = &BoxVec_free;
 }
 
 BoxInfo BoxVec_getItem(size_t index, void *self_ptr)

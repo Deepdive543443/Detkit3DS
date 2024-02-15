@@ -104,7 +104,7 @@ BoxVec fastestdet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *
 
     for (int i=0; i < num_picked; i++)
     {
-        BoxInfo box = proposals.getItem(picked_box_idx[i], &proposals);
+        BoxInfo box = BoxVec_getItem(picked_box_idx[i], &proposals);
 
         box.x1 = fmaxf(fminf(box.x1, (float)(pixel_w - 1)), 0.f);
         box.y1 = fmaxf(fminf(box.y1, (float)(pixel_h - 1)), 0.f);

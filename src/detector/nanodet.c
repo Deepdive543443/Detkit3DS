@@ -173,7 +173,8 @@ BoxVec nanodet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *sel
     
     for (int i=0; i < num_picked; i++)
     {
-        BoxInfo box = proposals.getItem(picked_box_idx[i], &proposals);
+        BoxInfo box = BoxVec_getItem(picked_box_idx[i], &proposals);
+
         box.x1 = (box.x1 - (wpad / 2)) / scale;
         box.x2 = (box.x2 - (wpad / 2)) / scale;
         box.y1 = (box.y1 - (hpad / 2)) / scale;

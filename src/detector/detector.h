@@ -27,27 +27,12 @@ typedef struct
     int label;
 } BoxInfo;
 
-typedef BoxInfo (*getItem_func_ptr) (size_t index, void *self_ptr);
-typedef BoxInfo (*pop_func_ptr) (void *self_ptr);
-typedef BoxInfo (*remove_func_ptr) (size_t index, void *self_ptr);
-typedef void (*push_back_func_ptr) (BoxInfo item, void *self_ptr);
-typedef void (*insert_func_ptr) (BoxInfo item, size_t index, void *self_ptr);
-typedef void (*fit_func_ptr) (void *self_ptr);
-typedef void (*free_func_ptr) (void *self_ptr);
-
 typedef struct
 {
     void *self;
     BoxInfo *data;
     size_t capacity;
     size_t num_item;
-    getItem_func_ptr getItem;
-    pop_func_ptr pop;
-    remove_func_ptr remove;
-    push_back_func_ptr push_back;
-    insert_func_ptr insert;
-    fit_func_ptr fit;
-    free_func_ptr free;
 } BoxVec;
 
 void create_box_vector(BoxVec *box_vector, size_t capacity);

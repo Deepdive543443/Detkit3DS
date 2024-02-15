@@ -100,7 +100,7 @@ static lv_obj_t *create_box_list()
 
     for(size_t i=0; i < objects.num_item; i++)
     {
-        BoxInfo obj = objects.getItem(i, &objects);
+        BoxInfo obj = BoxVec_getItem(i, &objects);
         char list_item[40];
         int label = obj.label;
         int x1 = obj.x1;
@@ -513,7 +513,7 @@ void object_display_cb(lv_event_t *e)
         }
         else
         {
-            BoxInfo obj = BoxVec_getItem(idx, &objects);//objects.getItem(idx);
+            BoxInfo obj = BoxVec_getItem(idx, &objects);
 
             BoxVec box_Vec_temp;
             create_box_vector(&box_Vec_temp, 1);
