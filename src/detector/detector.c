@@ -303,14 +303,14 @@ void qsort_descent_inplace(BoxVec *objects, int left, int right)
     int i = left;
     int j = right;
 
-    float p = objects->getItem((int) (left + right) / 2, objects).prob;
+    float p = BoxVec_getItem((int) (left + right) / 2, objects).prob;
 
     while (i <= j)
     {
-        while (objects->getItem(i, objects).prob > p)
+        while(BoxVec_getItem(i, objects).prob > p)
             i++;
 
-        while (objects->getItem(j, objects).prob < p)
+        while(BoxVec_getItem(j, objects).prob < p)
             j--;
 
         if (i <= j)
