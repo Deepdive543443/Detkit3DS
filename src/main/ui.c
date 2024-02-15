@@ -606,7 +606,7 @@ void HALinit()
     static lv_disp_draw_buf_t draw_buf_btm;
     static lv_color_t buf1_btm[WIDTH_BTM * HEIGHT_BTM];
     static lv_disp_drv_t disp_drv_btm;        /*Descriptor of a display driver*/
-    lv_disp_t *disp_btm = display_init(GFX_BOTTOM, &draw_buf_btm, &buf1_btm, &disp_drv_btm);
+    lv_disp_t *disp_btm = display_init(GFX_BOTTOM, &draw_buf_btm, &*buf1_btm, &disp_drv_btm);
 
     // Initial touch screen's display, ui, and control 
     lv_disp_set_default(disp_btm);
