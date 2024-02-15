@@ -44,6 +44,17 @@ lv_style_t btn_tabview;
 lv_obj_t *tab_bg;
 lv_obj_t *tab_view;// pop up tab view
 
+LV_IMG_DECLARE(cam_icon);
+LV_IMG_DECLARE(cam_icon_flip);
+LV_IMG_DECLARE(iconL);
+LV_IMG_DECLARE(iconR);
+LV_IMG_DECLARE(Mid_fill);
+LV_IMG_DECLARE(_ncnn);
+LV_IMG_DECLARE(logo_lvgl);
+LV_IMG_DECLARE(devkitpro);
+LV_IMG_DECLARE(ftpd_icon);
+LV_IMG_DECLARE(citra_logo);
+
 static void button_style_init(lv_style_t *btn)
 {
     lv_style_init(btn);
@@ -157,12 +168,6 @@ static void create_model_list(Detector *det)
 
 static void create_LR()
 {
-    LV_IMG_DECLARE(cam_icon);
-    LV_IMG_DECLARE(cam_icon_flip);
-    LV_IMG_DECLARE(iconL);
-    LV_IMG_DECLARE(iconR);
-    LV_IMG_DECLARE(Mid_fill);
-
     lv_obj_t *btn_L = lv_imgbtn_create(lv_scr_act());
     lv_imgbtn_set_src(btn_L, LV_IMGBTN_STATE_RELEASED, &iconL, &Mid_fill, &cam_icon);
     lv_obj_align(btn_L, LV_ALIGN_TOP_LEFT, 0, -10);
@@ -380,11 +385,6 @@ static void tab_add_icon_description(lv_obj_t *parent, lv_img_dsc_t *img, const 
 
 static void tab_Ac_Li()
 {
-    LV_IMG_DECLARE(_ncnn);
-    LV_IMG_DECLARE(logo_lvgl);
-    LV_IMG_DECLARE(devkitpro);
-    LV_IMG_DECLARE(ftpd_icon);
-    LV_IMG_DECLARE(citra_logo);
     // Create the background
     tab_bg = lv_obj_create(lv_scr_act());
     lv_obj_set_size(tab_bg, WIDTH_BTM, HEIGHT_BTM);
