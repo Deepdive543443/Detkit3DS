@@ -657,5 +657,5 @@ void HALinit()
     lv_indev_drv_init(&indev_drv_touch);      /*Basic initialization*/
     indev_drv_touch.type = LV_INDEV_TYPE_POINTER;
     indev_drv_touch.read_cb = touch_cb_3ds;
-    lv_indev_t *touch_indev = lv_indev_drv_register(&indev_drv_touch);
+    lv_indev_drv_register(&indev_drv_touch); // lv_indev_t *touch_indev
 }
