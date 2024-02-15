@@ -3,7 +3,6 @@
 
 static void virtual_press_cb(u32 key, lv_indev_drv_t *drv, lv_indev_data_t *data)
 {
-    u32 kDown = hidKeysDown();
     u32 kHeld = hidKeysHeld();
     
     if (kHeld & key)
@@ -65,7 +64,6 @@ void touch_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data)
 
 void encoder_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data)
 {
-    u32 kDown = hidKeysDown();
     u32 kHeld = hidKeysHeld();
 
     // Enter (A)
