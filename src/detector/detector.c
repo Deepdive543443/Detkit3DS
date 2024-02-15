@@ -168,7 +168,7 @@ BoxInfo BoxVec_remove(size_t index, void *self_ptr)
     }
     else if (index == boxVec->num_item - 1)
     {
-        return boxVec->pop(self_ptr);
+        return BoxVec_pop(self_ptr);
     }
     printf("Index:%d out of range\n", index);
     return empty;
@@ -204,7 +204,7 @@ void BoxVec_insert(BoxInfo item, size_t index, void *self_ptr)
     BoxVec *boxVec = (BoxVec *) self_ptr;
     if (index == boxVec->num_item)
     {
-        boxVec->push_back(item, self_ptr);
+        BoxVec_push_back(item, self_ptr);
         return;
     }
 
@@ -307,7 +307,7 @@ void qsort_descent_inplace(BoxVec *objects, int left, int right)
 
     while (i <= j)
     {
-        while (objects->getItem(i, objects).prob > p)//(objects[i].prob > p)
+        while (objects->getItem(i, objects).prob > p)
             i++;
 
         while (objects->getItem(j, objects).prob < p)
@@ -316,7 +316,7 @@ void qsort_descent_inplace(BoxVec *objects, int left, int right)
         if (i <= j)
         {
             // swap
-            BoxInfo temp = objects->getItem(i, objects);
+            BoxInfo temp = BoxVec_getItem(i, objects);
             memcpy(&objects->data[i], &objects->data[j], sizeof(BoxInfo));
             objects->data[j] = temp;
 
@@ -353,14 +353,11 @@ int nms(BoxVec *objects, int *picked_box_idx, float thresh)
     int num_picked = 0;
     float areas[objects->num_item];
 
-
-    // printf("%ld objects->num_item\n", objects->num_item);
     for (int i = 0; i < objects->num_item; i++)
     {
-        BoxInfo box = objects->getItem(i, objects);
+        BoxInfo box = BoxVec_getItem(i, objects);
         areas[i] = (box.x2 - box.x1) * (box.y2 - box.y1);
     }
-    // printf("%ld objects->num_item\n", objects->num_item);
 
     for (int i = 0; i < objects->num_item; i++)
     {
@@ -402,7 +399,7 @@ void draw_boxxes(unsigned char *pixels, int pixel_w, int pixel_h, BoxVec *object
     } color;
     for (size_t i =0; i < objects->num_item; i++)
     {
-        BoxInfo box = objects->getItem(i, objects);
+        BoxInfo box = BoxVec_getItem(i, objects);
         color.r = color_list[i][0];
         color.g = color_list[i][1];
         color.b = color_list[i][2];
