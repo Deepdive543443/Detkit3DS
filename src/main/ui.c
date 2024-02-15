@@ -180,8 +180,8 @@ static void create_LR()
     lv_obj_add_event_cb(btn_R, detect_cb, LV_EVENT_ALL, NULL); /*Display the press stage of two button*/
 
     lv_obj_update_layout(btn_L);
-    point_array_L[0] = (lv_point_t) {-1, -1};
-    point_array_L[1] = (lv_point_t) {(btn_L->coords.x1 + btn_L->coords.x2) / 2, (btn_L->coords.y1 + btn_L->coords.y2) / 2};
+    // point_array_L[0] = (lv_point_t) {-1, -1};
+    point_array_L[0] = (lv_point_t) {(btn_L->coords.x1 + btn_L->coords.x2) / 2, (btn_L->coords.y1 + btn_L->coords.y2) / 2};
 
     void (*functions[2])() = {virtual_L_cb, virtual_R_cb};
     static lv_indev_drv_t drv_list_LR[2];
@@ -192,8 +192,8 @@ static void create_LR()
     lv_indev_set_button_points(indev_L, point_array_L);
 
     lv_obj_update_layout(btn_R);
-    point_array_R[0] = (lv_point_t) {-1, -1};
-    point_array_R[1] = (lv_point_t) {(btn_R->coords.x1 + btn_R->coords.x2) / 2, (btn_R->coords.y1 + btn_R->coords.y2) / 2};
+    // point_array_R[0] = (lv_point_t) {-1, -1};
+    point_array_R[0] = (lv_point_t) {(btn_R->coords.x1 + btn_R->coords.x2) / 2, (btn_R->coords.y1 + btn_R->coords.y2) / 2};
 
     drv_list_LR[1].type = LV_INDEV_TYPE_BUTTON;
     drv_list_LR[1].read_cb = functions[1];
@@ -299,25 +299,25 @@ static void add_btm_btn(lv_obj_t *cont ,u32 key , void *callback, lv_coord_t wid
     switch(key)
     {
         case KEY_A:
-            point_array_A[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            point_array_A[0] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_A, point_array_A);
 
             break;
 
         case KEY_B:
-            point_array_B[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            point_array_B[0] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_B, point_array_B);
 
             break;
 
         case KEY_X:
-            point_array_X[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            point_array_X[0] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_X, point_array_X);
 
             break;
 
         case KEY_Y:
-            point_array_Y[1] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            point_array_Y[0] = (lv_point_t) {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
             lv_indev_set_button_points(indev_Y, point_array_Y);
             break;
 
@@ -332,25 +332,25 @@ static void remove_virtual_btn(u32 key)
     switch(key)
     {
         case KEY_A:
-            point_array_A[1] = (lv_point_t) {-1, -1};
+            point_array_A[0] = (lv_point_t) {-1, -1};
             lv_indev_set_button_points(indev_A, point_array_A);
 
             break;
 
         case KEY_B:
-            point_array_B[1] = (lv_point_t) {-1, -1};
+            point_array_B[0] = (lv_point_t) {-1, -1};
             lv_indev_set_button_points(indev_B, point_array_B);
 
             break;
 
         case KEY_X:
-            point_array_X[1] = (lv_point_t) {-1, -1};
+            point_array_X[0] = (lv_point_t) {-1, -1};
             lv_indev_set_button_points(indev_X, point_array_X);
 
             break;
 
         case KEY_Y:
-            point_array_Y[1] = (lv_point_t) {-1, -1};
+            point_array_Y[0] = (lv_point_t) {-1, -1};
             lv_indev_set_button_points(indev_Y, point_array_Y);
             break;
 

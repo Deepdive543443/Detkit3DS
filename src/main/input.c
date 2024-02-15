@@ -8,7 +8,7 @@ static void virtual_press_cb(u32 key, lv_indev_drv_t *drv, lv_indev_data_t *data
     
     if (kHeld & key)
     {
-        data->btn_id = 1;
+        data->btn_id = 0;
         data->state = LV_INDEV_STATE_PRESSED;
     }
     else
