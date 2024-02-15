@@ -1,7 +1,6 @@
 #include "detector.h"
 
 
-
 static void generate_proposals(ncnn_mat_t dis_pred, ncnn_mat_t cls_pred, int stride, float prob_thresh, BoxVec *objects)
 {
     const int num_grid_x = ncnn_mat_get_w(cls_pred);
@@ -61,7 +60,7 @@ static void generate_proposals(ncnn_mat_t dis_pred, ncnn_mat_t cls_pred, int str
                 obj.prob = max_score;
                 obj.label = max_label;
 
-                objects->push_back(obj, objects);
+                BoxVec_push_back(obj, objects);
             }
         }
     }
@@ -71,7 +70,6 @@ static void generate_proposals(ncnn_mat_t dis_pred, ncnn_mat_t cls_pred, int str
 Detector create_nanodet(int input_size, const char* param, const char* bin)
 {
     Detector nanodet;
-    // nanodet.self = &nanodet;
 
     nanodet.net = ncnn_net_create();
     ncnn_net_load_param(nanodet.net, param);
@@ -157,7 +155,7 @@ BoxVec nanodet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *sel
      * Sort, non-max supression
      */
 
-    proposals.fit(&proposals);
+    BoxVec_fit_size(&proposals);
     if (proposals.num_item > 2)
     {
         qsort_descent_inplace(&proposals, 0, proposals.num_item - 1);
@@ -186,11 +184,11 @@ BoxVec nanodet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *sel
         box.x2 = fmaxf(fminf(box.x2, (float)(pixel_w - 1)), 0.f);
         box.y2 = fmaxf(fminf(box.y2, (float)(pixel_h - 1)), 0.f);
 
-        objects.push_back(box, &objects);
+        BoxVec_push_back(box, &objects);
     }
 
     // Clean up
-    proposals.free(&proposals);
+    BoxVec_free(&proposals);
     ncnn_allocator_destroy(allocator);
     ncnn_option_destroy(opt);
     ncnn_extractor_destroy(ex);

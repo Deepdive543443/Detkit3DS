@@ -1,11 +1,9 @@
 #include "detector.h"
 
 
-
 Detector create_fastestdet(int input_size, const char* param, const char* bin)
 {
     Detector fastestdet;
-    // nanodet.self = &nanodet;
 
     fastestdet.net = ncnn_net_create();
     ncnn_net_load_param(fastestdet.net, param);
@@ -86,13 +84,13 @@ BoxVec fastestdet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *
                 info.label = max_cls_idx;
                 info.prob = obj_score;
 
-                proposals.push_back(info, &proposals);    
+                BoxVec_push_back(info, &proposals);  
             }
             w_ptr++;
         }
     }
 
-    proposals.fit(&proposals);
+    BoxVec_fit_size(&proposals);
     if (proposals.num_item > 2)
     {
         qsort_descent_inplace(&proposals, 0, proposals.num_item - 1);
@@ -113,13 +111,12 @@ BoxVec fastestdet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *
         box.x2 = fmaxf(fminf(box.x2, (float)(pixel_w - 1)), 0.f);
         box.y2 = fmaxf(fminf(box.y2, (float)(pixel_h - 1)), 0.f);
 
-        objects.push_back(box, &objects);
-        // printf("%f %f %f %f %f %f\n", box.x1, box.y1, box.x2, box.y2, box.label, box.prob);
+        BoxVec_push_back(box, &objects); 
     }
 
 
     // Clean up
-    proposals.free(&proposals);
+    BoxVec_free(&proposals);
     ncnn_allocator_destroy(allocator); 
     ncnn_mat_destroy(out_mat);
 
