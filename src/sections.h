@@ -41,12 +41,12 @@ extern lv_indev_t *indev_X;
 extern lv_indev_t *indev_Y;
 extern lv_indev_t *indev_L; 
 extern lv_indev_t *indev_R; 
-extern lv_point_t point_array_A[2];
-extern lv_point_t point_array_B[2];
-extern lv_point_t point_array_X[2];
-extern lv_point_t point_array_Y[2];
-extern lv_point_t point_array_L[2];
-extern lv_point_t point_array_R[2]; //Encoder 
+extern lv_point_t point_array_A[1];
+extern lv_point_t point_array_B[1];
+extern lv_point_t point_array_X[1];
+extern lv_point_t point_array_Y[1];
+extern lv_point_t point_array_L[1];
+extern lv_point_t point_array_R[1]; //Encoder 
 
 extern lv_indev_drv_t drv_virbtn[4];
 
