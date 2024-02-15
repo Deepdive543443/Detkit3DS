@@ -363,7 +363,7 @@ static void remove_virtual_btn(u32 key)
     }
 }
 
-static void tab_add_icon_description(lv_obj_t *parent, lv_img_dsc_t *img, const char *description)
+static void tab_add_icon_description(lv_obj_t *parent, const lv_img_dsc_t *img, const char *description)
 {
     lv_obj_t *icon_slider = lv_obj_create(parent);
     lv_obj_set_size(icon_slider, LV_SIZE_CONTENT, 50);
