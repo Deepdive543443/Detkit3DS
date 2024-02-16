@@ -100,8 +100,6 @@ const int color_list[80][3] =
 
 void create_box_vector(BoxVec *box_vector, size_t capacity)
 {
-    // BoxVec box_vector;
-    box_vector->self = &box_vector;
     box_vector->capacity = capacity;
     box_vector->num_item = 0;
     box_vector->data = (BoxInfo *) malloc(sizeof(BoxInfo) * capacity);

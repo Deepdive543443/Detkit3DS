@@ -29,7 +29,6 @@ typedef struct
 
 typedef struct
 {
-    void *self;
     BoxInfo *data;
     size_t capacity;
     size_t num_item;
@@ -52,7 +51,6 @@ typedef BoxVec (*detect_func_ptr) (unsigned char *pixels, int pixel_w, int pixel
 
 typedef struct
 {
-    // void *self;
     ncnn_net_t net;
     int input_size;
     float mean_vals[3];
