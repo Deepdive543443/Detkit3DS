@@ -17,5 +17,11 @@ foreach(case ${TEST})
     target_link_libraries(${test_we}.elf detkit)
     target_link_libraries(${test_we}.elf lvgl)
 
-    add_3dsx_target(${test_we}.elf)
+    add_3dsx_target(${test_we}.elf
+        ${APP_TITLE}
+        ${APP_DESCRIPTION}
+        ${APP_AUTHOR}
+        ${APP_ICON}
+        ${ROMFS}
+    )
 endforeach()

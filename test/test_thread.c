@@ -29,8 +29,10 @@ int main(int argc, char **argv)
 
 	//Initialize console on top screen. Using NULL as the second argument tells the console library to use the internal console structure as current one
 	consoleInit(GFX_TOP, NULL);
-    
-    // Rom file system pattern
+
+    APT_SetAppCpuTimeLimit(80);
+
+    // Rom file system
     Result rc = romfsInit();
     if (rc)
         printf("romfsInit: %08lX\n", rc);
@@ -40,55 +42,45 @@ int main(int argc, char **argv)
         printf("romfs Init Successful!\n");
     }
 
-    // Load image from romfs
-    int width, height, n;
-    const char *file = "romfs:2.jpg";
-    unsigned char *pixels = stbi_load(file, &width, &height, &n, 0);
-    printf("%d %d %d\n", width, height, n);
 
+#if 1 // Testing
 
-#if 0 // Testing
-
-   int test_times = 2;
+    int test_times = 2;
     while(test_times > 0)
     {
-        printf("\ntest_times: %ld\n", test_times);
+        printf("\ntest_times: %d\n", test_times);
         test_times--;
         {
             clock_gettime(CLOCK_MONOTONIC, &start);
-            unsigned char *pixels_cpy = (unsigned char *) malloc(sizeof(unsigned char) * width * height * n);
-            memcpy(pixels_cpy, pixels, sizeof(unsigned char) * width * height * n);
+            unsigned char *pixels_cpy = (unsigned char *) malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
+            memset(pixels_cpy, 0.5f, sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
             Detector nanodet = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
-            BoxVec objects = nanodet.detect(pixels_cpy, width, height, &nanodet);
-            printf("(Nanodet) Detected %ld items, (%ldms): \n", objects.num_item, ticker());
+            BoxVec objects = nanodet.detect(pixels_cpy, WIDTH_TOP, HEIGHT_TOP, &nanodet);
+            printf("(Nanodet) Detected %d items, (%lldms): \n", objects.num_item, ticker());
 
-            draw_boxxes(pixels_cpy, width, height, &objects);
-            stbi_write_png("test_output.png", width, height, 3, pixels_cpy, width * 3);
             free(pixels_cpy);
 
             destroy_detector(&nanodet);
-            objects.free(&objects);
+            BoxVec_free(&objects);
 
         }
 
-        /**
-         * Create FastestDet
-         * 
-         */
+    /**
+     * Create FastestDet
+     * 
+     */
         {
             clock_gettime(CLOCK_MONOTONIC, &start);
-            unsigned char *pixels_cpy = (unsigned char *) malloc(sizeof(unsigned char) * width * height * n);
-            memcpy(pixels_cpy, pixels, sizeof(unsigned char) * width * height * n);
+            unsigned char *pixels_cpy = (unsigned char *) malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
+            memset(pixels_cpy, 0.5f, sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
             Detector fastestdet = create_fastestdet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
-            BoxVec objects = fastestdet.detect(pixels_cpy, width, height, &fastestdet);
-            printf("(FastestDet) Detected %ld items, (%ldms): \n", objects.num_item, ticker());
+            BoxVec objects = fastestdet.detect(pixels_cpy, WIDTH_TOP, HEIGHT_TOP, &fastestdet);
+            printf("(FastestDet) Detected %d items, (%lldms): \n", objects.num_item, ticker());
 
-            draw_boxxes(pixels_cpy, width, height, &objects);
-            stbi_write_png("test_output_fastest.png", width, height, 3, pixels_cpy, width * 3);
-            free(pixels_cpy);
+            free(pixels_cpy);   
 
             destroy_detector(&fastestdet);
-            objects.free(&objects);
+            BoxVec_free(&objects);
         }
     }
     printf("Pass all testing successfully!\n");
