@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 
 #if 1 // Testing
 
-    int test_times = 2;
+    int test_times = 100;
     while(test_times > 0)
     {
         printf("\ntest_times: %d\n", test_times);
@@ -88,8 +88,6 @@ int main(int argc, char **argv)
 
 #endif // Testing
 
- 
-    printf("\x1b[16;20HHello World!");
 	printf("\x1b[30;16HPress Start to exit.");
 
 	// Main loop
