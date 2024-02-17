@@ -585,6 +585,12 @@ void detect_cb(lv_event_t *e)
 
 void HALinit()
 {
+    // Screen init
+    gfxInitDefault();
+    gfxSetDoubleBuffering(GFX_TOP, true);
+    gfxSetDoubleBuffering(GFX_BOTTOM, true);
+    gfxSet3D(false);
+
     // Style init
     button_style_init(&btn_btm);
     button_style_init(&btn_press);
