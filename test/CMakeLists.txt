@@ -9,7 +9,7 @@ set(ROMFS ../romfs)
 file(GLOB TEST *.c)
 foreach(case ${TEST})
     get_filename_component(test_we ${case} NAME_WE)
-    add_executable(${test_we}.elf ${case})
+    add_executable(${test_we}.elf ${case} ${SECTIONS} ${ASSET})
     target_include_directories(${test_we}.elf PRIVATE ../../../cpp_libs/stb-master)
     target_include_directories(${test_we}.elf PRIVATE ../src)
 
