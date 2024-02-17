@@ -5,11 +5,17 @@ project(lvgl VERSION 0.1.0 LANGUAGES C CXX)
 
 set(APP_ICON ../rom/icon_detkit.png)
 set(ROMFS ../romfs)
+set(banner ../rom/banner_detkit.png)
+set(audio ../rom/sonar.wav)
+set(RSF test.rsf)
 
 file(GLOB TEST *.c)
 foreach(case ${TEST})
     get_filename_component(test_we ${case} NAME_WE)
+
     set(APP_TITLE ${test_we})
+    set(APP_DESCRIPTION "testing ${test_we}...")
+    
     add_executable(${test_we}.elf ${case} ${SECTIONS} ${ASSET})
     target_include_directories(${test_we}.elf PRIVATE ../../../cpp_libs/stb-master)
     target_include_directories(${test_we}.elf PRIVATE ../src)
@@ -25,4 +31,9 @@ foreach(case ${TEST})
         ${APP_ICON}
         ${ROMFS}
     )
+
+    if(BUILD_CIA)
+        add_cia_target(${test_we}.elf ${RSF} ${banner} ${audio})
+    endif()
+
 endforeach()
