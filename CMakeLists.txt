@@ -39,7 +39,7 @@ add_3dsx_target(${project_title}.elf
     ${APP_AUTHOR}
     ${APP_ICON}
     ${ROMFS}
-) # Generate the .3dsx and .smdh from the hello_world target
+)
 
 if(BUILD_CIA)
     add_cia_target(${project_title}.elf ${RSF} ${banner} ${audio})
@@ -56,12 +56,5 @@ if(BUILD_TEST)
     target_link_libraries(${test}.elf detkit)
     target_link_libraries(${test}.elf lvgl)
 
-    add_3dsx_target(${test}.elf 
-    ${APP_TITLE}
-    ${APP_DESCRIPTION}
-    ${APP_AUTHOR}
-    ${APP_ICON}
-    ${ROMFS}
-) # Generate the .3dsx and .smdh from the hello_world target
-
+    add_3dsx_target(${test}.elf)
 endif()
