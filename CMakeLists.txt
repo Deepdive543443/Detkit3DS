@@ -1,5 +1,5 @@
 set(CMAKE_TOOLCHAIN_FILE cmake/DevkitArm3DS.cmake)
-set(project_title DetKit2)
+set(project_title DetKit3DS)
 cmake_minimum_required(VERSION 3.14)
 
 set(APP_TITLE ${project_title})
