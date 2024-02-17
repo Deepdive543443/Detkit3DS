@@ -26,8 +26,7 @@ BoxVec fastestdet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *
     Detector *self = (Detector *) self_ptr;
     
     // Resize
-    ncnn_allocator_t allocator = ncnn_allocator_create_pool_allocator();
-    ncnn_mat_t mat = ncnn_mat_from_pixels_resize(pixels, NCNN_MAT_PIXEL_BGR, pixel_w, pixel_h, pixel_w * 3, self->input_size, self->input_size, allocator);
+    ncnn_mat_t mat = ncnn_mat_from_pixels_resize(pixels, NCNN_MAT_PIXEL_BGR, pixel_w, pixel_h, pixel_w * 3, self->input_size, self->input_size, NULL);
 
     // Create extractor
     ncnn_mat_substract_mean_normalize(mat, self->mean_vals, self->norm_vals);
@@ -117,7 +116,6 @@ BoxVec fastestdet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *
 
     // Clean up
     BoxVec_free(&proposals);
-    ncnn_allocator_destroy(allocator); 
     ncnn_mat_destroy(out_mat);
 
     return objects;

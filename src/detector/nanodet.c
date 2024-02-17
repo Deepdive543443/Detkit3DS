@@ -114,9 +114,7 @@ BoxVec nanodet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *sel
      * Create the NCNN matirx using pixels data
      */
 
-    ncnn_allocator_t allocator = ncnn_allocator_create_pool_allocator();
-
-    ncnn_mat_t mat = ncnn_mat_from_pixels_resize(pixels, NCNN_MAT_PIXEL_BGR, pixel_w, pixel_h, pixel_w * 3, w, h, allocator);
+    ncnn_mat_t mat = ncnn_mat_from_pixels_resize(pixels, NCNN_MAT_PIXEL_BGR, pixel_w, pixel_h, pixel_w * 3, w, h, NULL);
 
     ncnn_mat_t mat_pad = ncnn_mat_create();
     ncnn_option_t opt = ncnn_option_create();
@@ -190,9 +188,7 @@ BoxVec nanodet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *sel
 
     // Clean up
     BoxVec_free(&proposals);
-    ncnn_allocator_destroy(allocator);
     ncnn_option_destroy(opt);
     ncnn_extractor_destroy(ex);
-
     return objects;
 }
