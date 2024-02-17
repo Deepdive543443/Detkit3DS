@@ -44,3 +44,24 @@ add_3dsx_target(${project_title}.elf
 if(BUILD_CIA)
     add_cia_target(${project_title}.elf ${RSF} ${banner} ${audio})
 endif()
+
+if(BUILD_TEST)
+    file(GLOB TEST test/*)
+    set(test test)
+    add_executable(${test}.elf ${TEST})
+    target_include_directories(${test}.elf PRIVATE ../../cpp_libs/stb-master)
+    target_include_directories(${test}.elf PRIVATE src)
+
+    target_link_libraries(${test}.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !
+    target_link_libraries(${test}.elf detkit)
+    target_link_libraries(${test}.elf lvgl)
+
+    add_3dsx_target(${test}.elf 
+    ${APP_TITLE}
+    ${APP_DESCRIPTION}
+    ${APP_AUTHOR}
+    ${APP_ICON}
+    ${ROMFS}
+) # Generate the .3dsx and .smdh from the hello_world target
+
+endif()

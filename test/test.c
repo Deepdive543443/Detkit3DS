@@ -2,9 +2,9 @@
 #include "stdio.h"
 #include "sys/time.h"
 
-#include "detector/detector.h"
+#include "sections.h"
 
-#include "lvgl-8.3.11/lvgl.h"
+#include "lvgl/lvgl.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
 
 #if 0 // Testing
 
-   int test_times = 10;
+   int test_times = 2;
     while(test_times > 0)
     {
         printf("\ntest_times: %ld\n", test_times);
@@ -61,11 +61,6 @@ int main(int argc, char **argv)
             Detector nanodet = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
             BoxVec objects = nanodet.detect(pixels_cpy, width, height, &nanodet);
             printf("(Nanodet) Detected %ld items, (%ldms): \n", objects.num_item, ticker());
-            // for (int i=0; i < objects.num_item; i++)
-            // {
-            //     BoxInfo box = objects.getItem(i, &objects);
-            //     printf("%f %f %f %f %f %d\n", box.x1, box.x2, box.y1, box.y2, box.prob, box.label);
-            // }
 
             draw_boxxes(pixels_cpy, width, height, &objects);
             stbi_write_png("test_output.png", width, height, 3, pixels_cpy, width * 3);
@@ -87,11 +82,6 @@ int main(int argc, char **argv)
             Detector fastestdet = create_fastestdet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
             BoxVec objects = fastestdet.detect(pixels_cpy, width, height, &fastestdet);
             printf("(FastestDet) Detected %ld items, (%ldms): \n", objects.num_item, ticker());
-            // for (int i=0; i < objects.num_item; i++)
-            // {
-            //     BoxInfo box = objects.getItem(i, &objects);
-            //     printf("%f %f %f %f %f %d\n", box.x1, box.x2, box.y1, box.y2, box.prob, box.label);
-            // }
 
             draw_boxxes(pixels_cpy, width, height, &objects);
             stbi_write_png("test_output_fastest.png", width, height, 3, pixels_cpy, width * 3);
