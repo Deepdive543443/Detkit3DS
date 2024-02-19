@@ -14,7 +14,7 @@ bool ticker()
     /* Hands the main loop until it reach the tick time*/
     clock_gettime(CLOCK_MONOTONIC, &end);
     uint64_t delta_us = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_nsec - start.tv_nsec) / 1000;
-    return delta_us < TICK_MS;
+    return delta_us < TICK_US;
 }
 
 void cleanup() 
@@ -79,6 +79,7 @@ int main(int argc, char** argv)
     
     while(aptMainLoop())
     {
+        lv_timer_handler();
         clock_gettime(CLOCK_MONOTONIC, &start);
         if (!detecting)
         {
@@ -92,11 +93,10 @@ int main(int argc, char** argv)
         // Quit App
         if(kHeld & KEY_START)   hang_err("Testing hand error, just hand it by any means!");
 
-        lv_timer_handler();
         while (ticker());
 
         // Display joystick    
-        lv_tick_inc(TICK_S);   
+        lv_tick_inc(TICK_MS);   
     }
 
     cleanup();

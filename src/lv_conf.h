@@ -17,14 +17,6 @@
 #ifndef LV_CONF_H
 #define LV_CONF_H
 
-/*====================
-   TICK SETTINGS
- *====================*/
-
-#define TICK_MS 10000
-#define TICK_S TICK_MS / 1000
-
-
 
 /*====================
    COLOR SETTINGS

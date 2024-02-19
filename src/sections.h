@@ -17,6 +17,9 @@
 #define HEIGHT_TOP 240
 #define SCRSIZE_TOP WIDTH_TOP * HEIGHT_TOP
 
+#define TICK_US 10000 // Microsec a tick
+#define TICK_MS TICK_US / 1000 // Millisec a tickS
+
 // Glob
 extern jmp_buf exitJmp;
 
