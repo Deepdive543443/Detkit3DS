@@ -41,7 +41,6 @@ void hang_err(const char *message)
 }
 
 // User input place holder
-static u32 kDown;
 static u32 kHeld;
 
 int main(int argc, char** argv)
@@ -88,7 +87,6 @@ int main(int argc, char** argv)
 
         // User input
         hidScanInput();
-        kDown = hidKeysDown();
         kHeld = hidKeysHeld();
 
         // Quit App
