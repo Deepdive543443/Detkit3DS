@@ -6,11 +6,24 @@
 
 #include "lvgl/lvgl.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#define DURATION_MILLION_SEC 1000000
+#define MILLION_SEC 1000
+#define STACKSIZE (4 * 1024)
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+static int timer = 0;
+static bool ticking = false;
+static Thread timer_thread;
+
+void timer_thread_func()
+{
+    while(ticking)
+    {
+        printf("Timer: %d\n", timer);
+        timer++;
+        svcSleepThread((u64) MILLION_SEC * DURATION_MILLION_SEC);
+    }
+}
+
 
 
 static struct timespec start, end;
@@ -31,6 +44,12 @@ int main(int argc, char **argv)
 	consoleInit(GFX_TOP, NULL);
 
     APT_SetAppCpuTimeLimit(80);
+    s32 prio = 0;
+    svcGetThreadPriority(&prio, CUR_THREAD_HANDLE);
+    printf("Main thread prio: 0x%lx\n", prio);
+    
+    ticking = true;
+    timer_thread = threadCreate(timer_thread_func, NULL, STACKSIZE, prio-1, 1, false);
 
     // Rom file system
     Result rc = romfsInit();
@@ -42,9 +61,11 @@ int main(int argc, char **argv)
         printf("romfs Init Successful!\n");
     }
 
+# if 1
+
     Detector det;
 
-    int test_times = 100;
+    int test_times = 1;
     while(test_times > 0)
     {
         printf("\ntest_times: %d\n", test_times);
@@ -84,8 +105,11 @@ int main(int argc, char **argv)
     }
     printf("Pass all testing successfully!\n");
 
-	printf("\x1b[30;16HPress Start to exit.");
+# endif 
 
+	
+    consoleSelect(consoleInit(GFX_BOTTOM, NULL));
+    printf("\x1b[10;10HPress Start to exit.\n");
 	// Main loop
 	while (aptMainLoop())
 	{
@@ -104,6 +128,10 @@ int main(int argc, char **argv)
 		//Wait for VBlank
 		gspWaitForVBlank();
 	}
+
+    ticking = false;
+    threadJoin(timer_thread, U64_MAX);
+    threadFree(timer_thread);
 
 	gfxExit();
 	return 0;
