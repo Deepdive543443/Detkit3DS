@@ -6,6 +6,9 @@
 
 #include "lvgl/lvgl.h"
 
+#define TEST_THREAD 1
+#define TEST_INFERENCE 1
+
 #define DURATION_MILLION_SEC 1000000
 #define MILLION_SEC 1000
 #define STACKSIZE (4 * 1024)
@@ -47,9 +50,13 @@ int main(int argc, char **argv)
     s32 prio = 0;
     svcGetThreadPriority(&prio, CUR_THREAD_HANDLE);
     printf("Main thread prio: 0x%lx\n", prio);
-    
+
+#if TEST_THREAD
+
     ticking = true;
     timer_thread = threadCreate(timer_thread_func, NULL, STACKSIZE, prio-1, 1, false);
+
+#endif
 
     // Rom file system
     Result rc = romfsInit();
@@ -61,7 +68,7 @@ int main(int argc, char **argv)
         printf("romfs Init Successful!\n");
     }
 
-# if 1
+# if TEST_INFERENCE
 
     Detector det;
 
