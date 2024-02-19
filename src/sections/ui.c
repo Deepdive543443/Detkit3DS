@@ -1,48 +1,39 @@
 #include "sections.h"
 
-// Glob
-jmp_buf exitJmp; //Debug
+static lv_group_t *g;
+static lv_obj_t *box_list;  // LVGL Objects
 
-lv_group_t *g;
-lv_obj_t *box_list;  // LVGL Objects
+static lv_obj_t *btn_A;
+static lv_obj_t *btn_B;
+static lv_obj_t *btn_X;
+static lv_obj_t *btn_Y;
+static lv_obj_t *btn_L;
+static lv_obj_t *btn_R;
+static lv_obj_t *btm_btn_container;
 
-Detector det;
-BoxVec objects; // Containers 
-void *cam_buf;
+static lv_indev_t *indev_A;
+static lv_indev_t *indev_B;
+static lv_indev_t *indev_X;
+static lv_indev_t *indev_Y; 
+static lv_indev_t *indev_L; 
+static lv_indev_t *indev_R; 
+static lv_point_t point_array_A[1];
+static lv_point_t point_array_B[1];
+static lv_point_t point_array_X[1];
+static lv_point_t point_array_Y[1];
+static lv_point_t point_array_L[1];
+static lv_point_t point_array_R[1];
 
-bool detecting; // Stage marker
+static lv_indev_drv_t drv_virbtn[4]; //Encoder A, B, X, Y
 
-lv_obj_t *btn_A;
-lv_obj_t *btn_B;
-lv_obj_t *btn_X;
-lv_obj_t *btn_Y;
-lv_obj_t *btn_L;
-lv_obj_t *btn_R;
-lv_obj_t *btm_btn_container;
-
-lv_indev_t *indev_A;
-lv_indev_t *indev_B;
-lv_indev_t *indev_X;
-lv_indev_t *indev_Y; 
-lv_indev_t *indev_L; 
-lv_indev_t *indev_R; 
-lv_point_t point_array_A[1];
-lv_point_t point_array_B[1];
-lv_point_t point_array_X[1];
-lv_point_t point_array_Y[1];
-lv_point_t point_array_L[1];
-lv_point_t point_array_R[1];
-
-lv_indev_drv_t drv_virbtn[4]; //Encoder A, B, X, Y
-
-lv_style_t btn_btm;
-lv_style_t btn_press;
-lv_style_t btn_shoulder_press;
-lv_style_t btn_tabview;
+static lv_style_t btn_btm;
+static lv_style_t btn_press;
+static lv_style_t btn_shoulder_press;
+static lv_style_t btn_tabview;
 
 
-lv_obj_t *tab_bg;
-lv_obj_t *tab_view;// pop up tab view
+static lv_obj_t *tab_bg;
+static lv_obj_t *tab_view;// pop up tab view
 
 LV_IMG_DECLARE(cam_icon);
 LV_IMG_DECLARE(cam_icon_flip);
@@ -54,6 +45,16 @@ LV_IMG_DECLARE(logo_lvgl);
 LV_IMG_DECLARE(devkitpro);
 LV_IMG_DECLARE(ftpd_icon);
 LV_IMG_DECLARE(citra_logo);
+
+// Glob
+jmp_buf exitJmp; //Debug
+
+Detector det;
+BoxVec objects; // Containers 
+void *cam_buf;
+
+bool detecting; // Stage marker
+
 
 static void button_style_init(lv_style_t *btn)
 {
@@ -168,12 +169,12 @@ static void create_model_list(Detector *det)
 
 static void create_LR()
 {
-    lv_obj_t *btn_L = lv_imgbtn_create(lv_scr_act());
+    btn_L = lv_imgbtn_create(lv_scr_act());
     lv_imgbtn_set_src(btn_L, LV_IMGBTN_STATE_RELEASED, &iconL, &Mid_fill, &cam_icon);
     lv_obj_align(btn_L, LV_ALIGN_TOP_LEFT, 0, -10);
     lv_obj_set_size(btn_L, 70, 35);
 
-    lv_obj_t *btn_R = lv_imgbtn_create(lv_scr_act());
+    btn_R = lv_imgbtn_create(lv_scr_act());
     lv_imgbtn_set_src(btn_R, LV_IMGBTN_STATE_RELEASED, &cam_icon_flip, &Mid_fill, &iconR);
     lv_obj_align(btn_R, LV_ALIGN_TOP_RIGHT, 0, -10);
     lv_obj_set_size(btn_R, 70, 35);
@@ -192,7 +193,7 @@ static void create_LR()
     
     drv_list_LR[0].type = LV_INDEV_TYPE_BUTTON;
     drv_list_LR[0].read_cb = functions[0];
-    lv_indev_t *indev_L = lv_indev_drv_register(&drv_list_LR[0]);
+    indev_L = lv_indev_drv_register(&drv_list_LR[0]);
     lv_indev_set_button_points(indev_L, point_array_L);
 
     lv_obj_update_layout(btn_R);
@@ -200,7 +201,7 @@ static void create_LR()
 
     drv_list_LR[1].type = LV_INDEV_TYPE_BUTTON;
     drv_list_LR[1].read_cb = functions[1];
-    lv_indev_t *indev_R = lv_indev_drv_register(&drv_list_LR[1]);
+    indev_R = lv_indev_drv_register(&drv_list_LR[1]);
     lv_indev_set_button_points(indev_R, point_array_R);
 
 }
@@ -406,10 +407,10 @@ static void tab_Ac_Li()
     lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
     lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);
 
-    lv_obj_t *tap_view = lv_tabview_create(cont, LV_DIR_TOP, 40);
-    lv_obj_set_size(tap_view, lv_pct(100), 160);
+    tab_view = lv_tabview_create(cont, LV_DIR_TOP, 40);
+    lv_obj_set_size(tab_view, lv_pct(100), 160);
 
-    lv_obj_t *tab1 = lv_tabview_add_tab(tap_view, "Acknowledgement");
+    lv_obj_t *tab1 = lv_tabview_add_tab(tab_view, "Acknowledgement");
     lv_obj_set_width(tab1, 280);
     lv_obj_set_style_radius(tab1, 8, 0);
     lv_obj_set_flex_flow(tab1, LV_FLEX_FLOW_COLUMN);
@@ -425,7 +426,7 @@ static void tab_Ac_Li()
     tab_add_icon_description(tab1, &citra_logo, " Citra Emulator");
 
     // Licences
-    lv_obj_t *tab2 = lv_tabview_add_tab(tap_view, "About");
+    lv_obj_t *tab2 = lv_tabview_add_tab(tab_view, "About");
     lv_obj_set_width(tab2, 280);
     lv_obj_t *licences = lv_label_create(tab2);
     lv_label_set_text(licences, "This software is provided 'as-is', without any express or implied warranty."

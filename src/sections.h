@@ -20,43 +20,10 @@
 // Glob
 extern jmp_buf exitJmp;
 
-extern lv_group_t *g;
-extern lv_obj_t *box_list; 
 extern Detector det;
 extern BoxVec objects; 
 extern bool detecting;
 extern void *cam_buf;
-
-extern lv_obj_t *btn_A;
-extern lv_obj_t *btn_B;
-extern lv_obj_t *btn_X;
-extern lv_obj_t *btn_Y;
-extern lv_obj_t *btn_L;
-extern lv_obj_t *btn_R;
-extern lv_obj_t *btm_btn_container;
-
-extern lv_indev_t *indev_A;
-extern lv_indev_t *indev_B;
-extern lv_indev_t *indev_X;
-extern lv_indev_t *indev_Y;
-extern lv_indev_t *indev_L; 
-extern lv_indev_t *indev_R; 
-extern lv_point_t point_array_A[1];
-extern lv_point_t point_array_B[1];
-extern lv_point_t point_array_X[1];
-extern lv_point_t point_array_Y[1];
-extern lv_point_t point_array_L[1];
-extern lv_point_t point_array_R[1]; //Encoder 
-
-extern lv_indev_drv_t drv_virbtn[4];
-
-extern lv_style_t btn_btm;
-extern lv_style_t btn_press;
-extern lv_style_t btn_shoulder_press;
-extern lv_style_t btn_tabview;
-
-extern lv_obj_t *tab_bg;
-extern lv_obj_t *tab_view;// pop up tab view
 
 
 //Debug
