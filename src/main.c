@@ -9,7 +9,7 @@
 
 static struct timespec start, end;
 
-bool ticker()
+static bool main_loop_locker()
 {
     /* Hands the main loop until it reach the tick time*/
     clock_gettime(CLOCK_MONOTONIC, &end);
@@ -17,8 +17,9 @@ bool ticker()
     return delta_us < TICK_US;
 }
 
-void cleanup() 
+static void cleanup() 
 {
+    HAL_cleanup();
     lv_deinit();
     camExit();
     gfxExit();
@@ -91,12 +92,9 @@ int main(int argc, char** argv)
         kHeld = hidKeysHeld();
 
         // Quit App
-        if(kHeld & KEY_START)   hang_err("Testing hand error, just hand it by any means!");
+        if(kHeld & KEY_START)   break;
 
-        while (ticker());
-
-        // Display joystick    
-        lv_tick_inc(TICK_MS);   
+        while (main_loop_locker());
     }
 
     cleanup();

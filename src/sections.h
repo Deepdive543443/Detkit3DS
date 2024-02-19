@@ -17,6 +17,8 @@
 #define HEIGHT_TOP 240
 #define SCRSIZE_TOP WIDTH_TOP * HEIGHT_TOP
 
+#define STACKSIZE (4 * 1024)
+#define DURATION_MICRO_SEC 1000
 #define TICK_US 10000 // Microsec a tick
 #define TICK_MS TICK_US / 1000 // Millisec a tickS
 
@@ -27,6 +29,8 @@ extern Detector det;
 extern BoxVec objects; 
 extern bool detecting;
 extern void *cam_buf;
+
+extern bool thread_ticking;
 
 
 //Debug
@@ -56,6 +60,7 @@ void quit_detect_cb(lv_event_t *e);
 void object_display_cb(lv_event_t *e);
 void detect_cb(lv_event_t *e);
 void HALinit();
+void HAL_cleanup();
 
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);

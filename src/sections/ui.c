@@ -35,6 +35,8 @@ static lv_style_t btn_tabview;
 static lv_obj_t *tab_bg;
 static lv_obj_t *tab_view;// pop up tab view
 
+static Thread tick_thread; //Thread
+
 LV_IMG_DECLARE(cam_icon);
 LV_IMG_DECLARE(cam_icon_flip);
 LV_IMG_DECLARE(iconL);
@@ -51,9 +53,18 @@ jmp_buf exitJmp; //Debug
 
 Detector det;
 BoxVec objects; // Containers 
-void *cam_buf;
-
 bool detecting; // Stage marker
+void *cam_buf;
+bool thread_ticking;
+
+static void lvgl_tick_thread()
+{
+    while(thread_ticking)
+    {
+        svcSleepThread((u64) TICK_US * DURATION_MICRO_SEC);
+        lv_tick_inc(TICK_MS);
+    }
+}
 
 
 static void button_style_init(lv_style_t *btn)
@@ -665,4 +676,17 @@ void HALinit()
     indev_drv_touch.type = LV_INDEV_TYPE_POINTER;
     indev_drv_touch.read_cb = touch_cb_3ds;
     lv_indev_drv_register(&indev_drv_touch); // lv_indev_t *touch_indev
+    
+    // Tick thread init
+    thread_ticking = true;
+    s32 prio = 0;
+    svcGetThreadPriority(&prio, CUR_THREAD_HANDLE);
+    tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio-1, -2, false);
+}
+
+void HAL_cleanup()
+{
+    thread_ticking = false;
+    threadJoin(tick_thread, U64_MAX);
+    threadFree(tick_thread);
 }
