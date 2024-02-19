@@ -36,7 +36,7 @@ uint64_t ticker()
     /* Hands the main loop until it reach the tick time*/
     clock_gettime(CLOCK_MONOTONIC, &end);
     uint64_t delta_us = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_nsec - start.tv_nsec) / 1000;
-    return delta_us;
+    return delta_us / 1000;
 }
 
 int main(int argc, char **argv)
