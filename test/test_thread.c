@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 
     Detector det;
 
-    int test_times = 1;
+    int test_times = 2;
     while(test_times > 0)
     {
         printf("\ntest_times: %d\n", test_times);
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 		//Wait for VBlank
 		gspWaitForVBlank();
 	}
-
+    printf("Wating for all thread to terminated...\n");
     ticking = false;
     threadJoin(timer_thread, U64_MAX);
     threadFree(timer_thread);
