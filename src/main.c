@@ -55,11 +55,10 @@ int main(int argc, char** argv)
     // Rom file system
     Result rc = romfsInit();
     if (rc)
-        printf("romfsInit: %08lX\n", rc);
-
-    else
     {
-        printf("romfs Init Successful!\n");
+        char err[40];
+        sprintf(err, "romfs init failed: %08lX\n", rc);
+        hang_err(err);
     }
 
     // Camera framebuffer init
