@@ -19,7 +19,7 @@
 
 #define STACKSIZE (4 * 1024)
 #define DURATION_MICRO_SEC 1000
-#define TICK_US 10000 // Microsec a tick
+#define TICK_US 1000 // Microsec a tick
 #define TICK_MS TICK_US / 1000 // Millisec a tickS
 
 // Glob
