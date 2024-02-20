@@ -34,14 +34,27 @@ static void scr_init()
     static lv_disp_drv_t disp_drv_top;        /*Descriptor of a display driver*/
 	disp_top = display_init(GFX_TOP, &draw_buf_top, &*buf1_top, &disp_drv_top);
 
+	// Top screen scroll init 
+	lv_group_t *g = lv_group_create();
+    static lv_indev_drv_t indev_drv_cross;
+    lv_indev_drv_init(&indev_drv_cross);
+    indev_drv_cross.type = LV_INDEV_TYPE_ENCODER;
+    indev_drv_cross.read_cb = encoder_cb_3ds;
+    lv_indev_t *enc_indev = lv_indev_drv_register(&indev_drv_cross);
+    lv_indev_set_group(enc_indev, g);
+	lv_group_add_obj(g, lv_disp_get_scr_act(disp_top));
 
-	lv_obj_set_style_bg_color(lv_disp_get_scr_act(disp_top), lv_color_hex(0xf4cccc), 0);
-	lv_obj_t *label = lv_label_create(lv_disp_get_scr_act(disp_top));
+
+	lv_obj_set_style_bg_color(lv_scr_act(), lv_color_hex(0xf4cccc), 0);
+	lv_obj_t *label = lv_label_create(lv_scr_act());
 	lv_obj_center(label);
 	lv_label_set_text(label, "Hello LVGL!");
 
+	lv_disp_set_default(disp_top);
+	lv_obj_set_style_bg_color(lv_scr_act(), lv_color_hex(0xf7e4c6), 0);
+
 	lv_obj_set_flex_flow(lv_scr_act(), LV_FLEX_FLOW_COLUMN);
-	for(int i =0; i < 3; i++)
+	for(int i =0; i < 5; i++)
 	{
 		label = lv_label_create(lv_scr_act());
 		lv_label_set_text(label, "Hello LVGL!");		
