@@ -46,10 +46,35 @@ static void scr_init()
 		label = lv_label_create(lv_scr_act());
 		lv_label_set_text(label, "Hello LVGL!");		
 	}
-
-
 }
 
+static void load_img()
+{
+    int width, height, n;
+    const char *file = "romfs:/button/cam_icon.png";
+    uint8_t *pixels = (uint8_t *) stbi_load(file, &width, &height, &n, 0);
+
+	lv_obj_t *label = lv_label_create(lv_scr_act());
+	lv_label_set_text_fmt(label, "Width: %d Height: %d Channels: %d", width, height, n);
+
+	lv_obj_t *img = lv_img_create(lv_scr_act());
+	lv_img_set_src(img, LV_SYMBOL_IMAGE);
+
+	const lv_img_dsc_t loaded_img = {
+		.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+		.header.always_zero = 0,
+		.header.reserved = 0,
+		.header.w = width,
+		.header.h = height,
+		.data_size = width * height * n,
+		.data = pixels,
+	};
+
+	img = lv_img_create(lv_scr_act());
+	lv_img_set_src(img, &loaded_img);
+
+	stbi_image_free(pixels);
+}
 
 int main(int argc, char **argv)
 {
@@ -62,6 +87,7 @@ int main(int argc, char **argv)
     }
 	
 	scr_init();
+	load_img();
 
 	// Main loop
 	while (aptMainLoop())
