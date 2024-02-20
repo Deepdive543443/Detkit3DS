@@ -61,7 +61,7 @@ static void load_img()
 	lv_obj_t *img = lv_img_create(lv_scr_act());
 	lv_img_set_src(img, LV_SYMBOL_IMAGE);
 
-	uint8_t lvgl_datas[width * height * 3]; 
+	uint8_t *lvgl_datas = malloc(sizeof(uint8_t) * width * height * 3); 
 	uint8_t *pixels_ptr = pixels;
 	uint8_t *lvgl_data_ptr = lvgl_datas;
 
@@ -97,15 +97,14 @@ static void load_img()
 	img = lv_img_create(lv_scr_act());
 	lv_img_set_src(img, &loaded_img);
 
-
 	label = lv_label_create(lv_scr_act());
 	lv_label_set_text(label, "Top compare: ");
 
 	img = lv_img_create(lv_scr_act());
-	LV_IMG_DECLARE(cam_icon_flip);
-	lv_img_set_src(img, &cam_icon_flip);
+	LV_IMG_DECLARE(cam_icon);
+	lv_img_set_src(img, &cam_icon);
 
-
+	// free(lvgl_datas);
 	stbi_image_free(pixels);
 }
 
