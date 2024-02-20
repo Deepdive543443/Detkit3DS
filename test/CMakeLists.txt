@@ -9,6 +9,8 @@ set(banner ../rom/banner_detkit.png)
 set(audio ../rom/sonar.wav)
 set(RSF test.rsf)
 
+make_directory(${CMAKE_CURRENT_BINARY_DIR}/../test_bin)
+
 file(GLOB TEST *.c)
 foreach(case ${TEST})
     get_filename_component(test_we ${case} NAME_WE)
@@ -32,8 +34,17 @@ foreach(case ${TEST})
         ${ROMFS}
     )
 
+    add_custom_command(TARGET ${test_we}_3dsx POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy ${test_we}.3dsx ${CMAKE_CURRENT_BINARY_DIR}/../test_bin
+    )
+
     if(BUILD_CIA)
         add_cia_target(${test_we}.elf ${RSF} ${banner} ${audio})
+        add_custom_command(TARGET ${test_we}_cia POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy ${test_we}.cia ${CMAKE_CURRENT_BINARY_DIR}/../test_bin
+        )
     endif()
+
+    
 
 endforeach()
