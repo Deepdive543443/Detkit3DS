@@ -32,6 +32,15 @@ static void scr_init()
 	lv_obj_t *label = lv_label_create(lv_disp_get_scr_act(disp_top));
 	lv_obj_center(label);
 	lv_label_set_text(label, "Hello LVGL!");
+
+	lv_obj_set_flex_flow(lv_scr_act(), LV_FLEX_FLOW_COLUMN);
+	for(int i =0; i < 3; i++)
+	{
+		label = lv_label_create(lv_scr_act());
+		lv_label_set_text(label, "Hello LVGL!");		
+	}
+
+
 }
 
 
