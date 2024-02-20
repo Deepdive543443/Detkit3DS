@@ -19,6 +19,8 @@ static bool main_loop_locker()
 
 static void cleanup() 
 {
+    destroy_detector(&det);
+    BoxVec_free(&objects);
     HAL_cleanup();
     lv_deinit();
     camExit();
