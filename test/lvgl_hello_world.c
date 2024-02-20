@@ -27,9 +27,9 @@ static void scr_init()
     static lv_disp_drv_t disp_drv_top;        /*Descriptor of a display driver*/
 	disp_top = display_init(GFX_TOP, &draw_buf_top, &*buf1_top, &disp_drv_top);
 
-	lv_disp_set_default(disp_top);
-	lv_obj_set_style_bg_color(lv_scr_act(), lv_color_hex(0xf4cccc), 0);
-	lv_obj_t *label = lv_label_create(lv_scr_act());
+
+	lv_obj_set_style_bg_color(lv_disp_get_scr_act(disp_top), lv_color_hex(0xf4cccc), 0);
+	lv_obj_t *label = lv_label_create(lv_disp_get_scr_act(disp_top));
 	lv_obj_center(label);
 	lv_label_set_text(label, "Hello LVGL!");
 }
