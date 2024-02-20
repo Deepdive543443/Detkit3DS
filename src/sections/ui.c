@@ -596,12 +596,50 @@ void detect_cb(lv_event_t *e)
 
 
 void HALinit()
-{
+{ 
     // Screen init
     gfxInitDefault();
     gfxSetDoubleBuffering(GFX_TOP, true);
     gfxSetDoubleBuffering(GFX_BOTTOM, true);
     gfxSet3D(false);
+
+    // Display init
+    static lv_disp_draw_buf_t draw_buf_btm;
+    static lv_color_t buf1_btm[WIDTH_BTM * HEIGHT_BTM];
+    static lv_disp_drv_t disp_drv_btm;        /*Descriptor of a display driver*/
+    lv_disp_t *disp_btm = display_init(GFX_BOTTOM, &draw_buf_btm, &*buf1_btm, &disp_drv_btm);
+
+    // Initial touch screen's display, ui, and control 
+    lv_disp_set_default(disp_btm);
+    lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE); // We don't want the screen to be scrollable
+
+    // Touchpad init
+    static lv_indev_drv_t indev_drv_touch;
+    lv_indev_drv_init(&indev_drv_touch);      /*Basic initialization*/
+    indev_drv_touch.type = LV_INDEV_TYPE_POINTER;
+    indev_drv_touch.read_cb = touch_cb_3ds;
+    lv_indev_drv_register(&indev_drv_touch); // lv_indev_t *touch_indev
+    
+    // Tick thread init
+    thread_ticking = true;
+    s32 prio = 0;
+    svcGetThreadPriority(&prio, CUR_THREAD_HANDLE);
+    tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio-1, -2, false);
+}
+
+void widgets_init()
+{
+    // Virtual ABXY driver initial
+    virtual_button_driver_init();
+
+    // Input init
+    g = lv_group_create();
+    static lv_indev_drv_t indev_drv_cross;
+    lv_indev_drv_init(&indev_drv_cross);
+    indev_drv_cross.type = LV_INDEV_TYPE_ENCODER;
+    indev_drv_cross.read_cb = encoder_cb_3ds;
+    lv_indev_t *enc_indev = lv_indev_drv_register(&indev_drv_cross);
+    lv_indev_set_group(enc_indev, g);
 
     // Style init
     button_style_init(&btn_btm);
@@ -620,16 +658,6 @@ void HALinit()
     lv_style_set_text_color(&btn_tabview, lv_color_hex(0x000000));
     lv_style_set_bg_color(&btn_tabview, lv_color_hex(0x5b5b5b));
 
-    // Display init
-    static lv_disp_draw_buf_t draw_buf_btm;
-    static lv_color_t buf1_btm[WIDTH_BTM * HEIGHT_BTM];
-    static lv_disp_drv_t disp_drv_btm;        /*Descriptor of a display driver*/
-    lv_disp_t *disp_btm = display_init(GFX_BOTTOM, &draw_buf_btm, &*buf1_btm, &disp_drv_btm);
-
-    // Initial touch screen's display, ui, and control 
-    lv_disp_set_default(disp_btm);
-    lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE); // We don't want the screen to be scrollable
-
     // BG
     LV_IMG_DECLARE(ncnn_bg_transprant);
     lv_obj_t *bg = lv_img_create(lv_scr_act());
@@ -646,13 +674,6 @@ void HALinit()
     lv_obj_center(label);
     lv_obj_add_event_cb(tab_btn, pop_up_tabview_cb, LV_EVENT_CLICKED, NULL);
 
-    // Detector, Detector objects and group of enconder containers
-    det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");    
-    g = lv_group_create();
-
-    // Virtual ABXY initial
-    virtual_button_driver_init();
-
     // Other UI widget
     create_model_list(&det);
     create_LR();
@@ -661,27 +682,8 @@ void HALinit()
     create_btm_btn_container();
     add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(100), " Detect");
 
-
-    // Input init
-    static lv_indev_drv_t indev_drv_cross;
-    lv_indev_drv_init(&indev_drv_cross);
-    indev_drv_cross.type = LV_INDEV_TYPE_ENCODER;
-    indev_drv_cross.read_cb = encoder_cb_3ds;
-    lv_indev_t *enc_indev = lv_indev_drv_register(&indev_drv_cross);
-    lv_indev_set_group(enc_indev, g);
-
-    // Touchpad init
-    static lv_indev_drv_t indev_drv_touch;
-    lv_indev_drv_init(&indev_drv_touch);      /*Basic initialization*/
-    indev_drv_touch.type = LV_INDEV_TYPE_POINTER;
-    indev_drv_touch.read_cb = touch_cb_3ds;
-    lv_indev_drv_register(&indev_drv_touch); // lv_indev_t *touch_indev
-    
-    // Tick thread init
-    thread_ticking = true;
-    s32 prio = 0;
-    svcGetThreadPriority(&prio, CUR_THREAD_HANDLE);
-    tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio-1, -2, false);
+    // Detector, Detector objects and group of enconder containers
+    det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");   
 }
 
 void HAL_cleanup()

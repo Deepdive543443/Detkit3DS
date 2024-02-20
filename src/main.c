@@ -75,6 +75,7 @@ int main(int argc, char** argv)
     // IVGL init
     lv_init();
     HALinit();
+    widgets_init();
 
     // Cam init
     camSetup();
