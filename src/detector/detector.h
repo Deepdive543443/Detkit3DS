@@ -81,11 +81,9 @@ void destroy_detector(Detector *det);
  */
 
 Detector create_nanodet(int input_size, const char* param, const char* bin);
-BoxVec nanodet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *self_ptr);
 
 /**
  * -- FastestDet's modules
  */
 
 Detector create_fastestdet(int input_size, const char* param, const char* bin);
-BoxVec fastestdet_detect(unsigned char *pixels, int pixel_w, int pixel_h, void *self_ptr);
