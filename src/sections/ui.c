@@ -599,9 +599,7 @@ void HALinit()
 { 
     // Screen init
     gfxInitDefault();
-    gfxSetDoubleBuffering(GFX_TOP, true);
     gfxSetDoubleBuffering(GFX_BOTTOM, true);
-    gfxSet3D(false);
 
     // Display init
     static lv_disp_draw_buf_t draw_buf_btm;

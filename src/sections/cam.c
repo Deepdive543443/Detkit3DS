@@ -115,6 +115,9 @@ void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x, u16 y, u16
 void camSetup()
 {
     camInit();
+    gfxSetDoubleBuffering(GFX_TOP, true);
+    gfxSet3D(false);
+    
     CAMU_SetSize(SELECT_OUT1, SIZE_CTR_TOP_LCD, CONTEXT_A);
     CAMU_SetOutputFormat(SELECT_OUT1, OUTPUT_RGB_565, CONTEXT_A);
     CAMU_SetFrameRate(SELECT_OUT1, FRAME_RATE_15);
