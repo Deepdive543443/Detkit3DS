@@ -54,11 +54,35 @@ static void load_img()
     const char *file = "romfs:/button/cam_icon.png";
     uint8_t *pixels = (uint8_t *) stbi_load(file, &width, &height, &n, 0);
 
+
 	lv_obj_t *label = lv_label_create(lv_scr_act());
 	lv_label_set_text_fmt(label, "Width: %d Height: %d Channels: %d", width, height, n);
 
 	lv_obj_t *img = lv_img_create(lv_scr_act());
 	lv_img_set_src(img, LV_SYMBOL_IMAGE);
+
+	uint8_t lvgl_datas[width * height * 3]; 
+	uint8_t *pixels_ptr = pixels;
+	uint8_t *lvgl_data_ptr = lvgl_datas;
+
+
+	for(int h=0; h < height; h++)
+	{
+		for(int w=0; w < width; w++)
+		{
+			uint8_t r = pixels_ptr[0];
+			uint8_t g = pixels_ptr[1];
+			uint8_t b = pixels_ptr[2];
+			uint8_t a = pixels_ptr[3];
+
+			lvgl_data_ptr[0] = ((g & 0x1c) << 3) | ((b & 0xF8) >> 3); // Lower 3 bit of green, 5 bit of Blue
+			lvgl_data_ptr[1] = (r & 0xF8) | ((g & 0xE0) >> 5); // Red 5 bit, Green 3 higher bit
+			lvgl_data_ptr[2] = a; // Alpha channels
+
+			pixels_ptr+=4;
+			lvgl_data_ptr+=3;
+		}
+	}
 
 	const lv_img_dsc_t loaded_img = {
 		.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
@@ -67,11 +91,20 @@ static void load_img()
 		.header.w = width,
 		.header.h = height,
 		.data_size = width * height * n,
-		.data = pixels,
+		.data = lvgl_datas,
 	};
 
 	img = lv_img_create(lv_scr_act());
 	lv_img_set_src(img, &loaded_img);
+
+
+	label = lv_label_create(lv_scr_act());
+	lv_label_set_text(label, "Top compare: ");
+
+	img = lv_img_create(lv_scr_act());
+	LV_IMG_DECLARE(cam_icon_flip);
+	lv_img_set_src(img, &cam_icon_flip);
+
 
 	stbi_image_free(pixels);
 }
