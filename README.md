@@ -38,5 +38,6 @@ All graphics were rendering on CPU
 - [3DS-cmake](https://github.com/Xtansia/3ds-cmake): Toolchain files to build CMake project for 3DS
 - [FTPD-Pro](https://github.com/mtheall/ftpd): FTP Server for 3DS/Switch/Linux.
 - [Citra](https://github.com/citra-emu/citra): 3DS emulator for Windows, Linux, and MacOS
+- [stb](https://github.com/nothings/stb): single-file public domain (or MIT licensed) libraries for C/C++
 - All the legendary works and discovering from GBATemp and other hacking communities
 
