@@ -52,8 +52,6 @@ static lv_img_dsc_t devkitpro;
 static lv_img_dsc_t ftpd_icon;
 static lv_img_dsc_t citra_logo;
 
-lv_img_dsc_t res[8];
-
 // Glob
 jmp_buf exitJmp; //Debug
 
