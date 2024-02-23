@@ -701,7 +701,7 @@ void res_init()
     add_res_depth16("romfs:button/iconL.png", &iconL);
     add_res_depth16("romfs:button/iconR.png", &iconR);
     add_res_depth16("romfs:button/Mid_fill.png", &Mid_fill);
-    add_res_depth16("romfs:logos/ncnn_logo.png", &_ncnn);
+    add_res_depth16("romfs:logos/lvgl_logo.png", &_ncnn);
     add_res_depth16("romfs:logos/lvgl_logo.png", &logo_lvgl);
     add_res_depth16("romfs:logos/devkitpro_logo.png", &devkitpro);
     add_res_depth16("romfs:logos/ftpd_logo.png", &ftpd_icon);
