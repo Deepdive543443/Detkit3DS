@@ -99,17 +99,10 @@ static int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
 		}
 	}
 
-	// lv_img_dsc_t loaded_img = {
-	// 	.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
-	// 	.header.always_zero = 0,
-	// 	.header.reserved = 0,
-	// 	.header.w = width,
-	// 	.header.h = height,
-	// 	.data_size = width * height * n,
-	// 	.data = lvgl_datas,
-	// };
-
-    // *res_buffer = loaded_img;
+    if (lvgl_datas != NULL)
+    {
+        stbi_image_free(pixels);
+    }
 
 	*res_buffer = (lv_img_dsc_t){
 		.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
@@ -695,17 +688,17 @@ void HALinit()
 
 void res_init()
 {
-    add_res_depth16("romfs:ncnn_bg_transparent.png", &ncnn_bg_transprant);
-    add_res_depth16("romfs:button/cam_icon.png", &cam_icon);
-    add_res_depth16("romfs:button/cam_icon_flip.png", &cam_icon_flip);
-    add_res_depth16("romfs:button/iconL.png", &iconL);
-    add_res_depth16("romfs:button/iconR.png", &iconR);
-    add_res_depth16("romfs:button/Mid_fill.png", &Mid_fill);
-    add_res_depth16("romfs:logos/lvgl_logo.png", &_ncnn);
-    add_res_depth16("romfs:logos/lvgl_logo.png", &logo_lvgl);
-    add_res_depth16("romfs:logos/devkitpro_logo.png", &devkitpro);
-    add_res_depth16("romfs:logos/ftpd_logo.png", &ftpd_icon);
-    add_res_depth16("romfs:logos/citra_logo.png", &citra_logo);
+    add_res_depth16("romfs:widgets/bg/ncnn_bg_transparent.png", &ncnn_bg_transprant);
+    add_res_depth16("romfs:widgets/button/cam_icon.png", &cam_icon);
+    add_res_depth16("romfs:widgets/button/cam_icon_flip.png", &cam_icon_flip);
+    add_res_depth16("romfs:widgets/button/iconL.png", &iconL);
+    add_res_depth16("romfs:widgets/button/iconR.png", &iconR);
+    add_res_depth16("romfs:widgets/button/Mid_fill.png", &Mid_fill);
+    add_res_depth16("romfs:widgets/logos/lvgl_logo.png", &_ncnn);
+    add_res_depth16("romfs:widgets/logos/lvgl_logo.png", &logo_lvgl);
+    add_res_depth16("romfs:widgets/logos/devkitpro_logo.png", &devkitpro);
+    add_res_depth16("romfs:widgets/logos/ftpd_logo.png", &ftpd_icon);
+    add_res_depth16("romfs:widgets/logos/citra_logo.png", &citra_logo);
 
 }
 
