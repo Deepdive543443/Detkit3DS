@@ -19,7 +19,6 @@ foreach(case ${TEST})
     set(APP_DESCRIPTION "testing ${test_we}...")
     
     add_executable(${test_we}.elf ${case} ${SECTIONS} ${ASSET})
-    target_include_directories(${test_we}.elf PRIVATE ../../../cpp_libs/stb-master)
     target_include_directories(${test_we}.elf PRIVATE ../src)
 
     target_link_libraries(${test_we}.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !

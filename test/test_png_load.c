@@ -5,12 +5,6 @@
 
 #include "lvgl/lvgl.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
-
 
 static struct timespec start, end;
 static lv_disp_t *disp_top;
