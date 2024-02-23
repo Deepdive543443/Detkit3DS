@@ -107,10 +107,6 @@ static void load_img()
 	label = lv_label_create(lv_scr_act());
 	lv_label_set_text(label, "Top compare: ");
 
-	img = lv_img_create(lv_scr_act());
-	LV_IMG_DECLARE(cam_icon);
-	lv_img_set_src(img, &cam_icon);
-
 	// free(lvgl_datas);
 	stbi_image_free(pixels);
 }

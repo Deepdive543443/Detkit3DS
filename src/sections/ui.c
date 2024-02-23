@@ -46,12 +46,11 @@ static lv_img_dsc_t cam_icon_flip;
 static lv_img_dsc_t iconL;
 static lv_img_dsc_t iconR;
 static lv_img_dsc_t Mid_fill;
-
-LV_IMG_DECLARE(_ncnn);
-LV_IMG_DECLARE(logo_lvgl);
-LV_IMG_DECLARE(devkitpro);
-LV_IMG_DECLARE(ftpd_icon);
-LV_IMG_DECLARE(citra_logo);
+static lv_img_dsc_t _ncnn;
+static lv_img_dsc_t logo_lvgl;
+static lv_img_dsc_t devkitpro;
+static lv_img_dsc_t ftpd_icon;
+static lv_img_dsc_t citra_logo;
 
 lv_img_dsc_t res[8];
 
@@ -458,6 +457,7 @@ static void tab_add_icon_description(lv_obj_t *parent, const lv_img_dsc_t *img, 
     lv_obj_t *icon = lv_img_create(icon_slider);
     lv_img_set_src(icon, img);
     lv_obj_set_style_max_height(icon, 48, 0);
+    lv_obj_set_style_max_width(icon, 48, 0);
 
     lv_obj_t *label = lv_label_create(icon_slider);
     lv_label_set_text(label, description);
@@ -701,6 +701,12 @@ void res_init()
     add_res_depth16("romfs:button/iconL.png", &iconL);
     add_res_depth16("romfs:button/iconR.png", &iconR);
     add_res_depth16("romfs:button/Mid_fill.png", &Mid_fill);
+    add_res_depth16("romfs:logos/ncnn_logo.png", &_ncnn);
+    add_res_depth16("romfs:logos/lvgl_logo.png", &logo_lvgl);
+    add_res_depth16("romfs:logos/devkitpro_logo.png", &devkitpro);
+    add_res_depth16("romfs:logos/ftpd_logo.png", &ftpd_icon);
+    add_res_depth16("romfs:logos/citra_logo.png", &citra_logo);
+
 }
 
 void widgets_init()
@@ -735,7 +741,7 @@ void widgets_init()
     lv_style_set_bg_color(&btn_tabview, lv_color_hex(0x5b5b5b));
 
     // BG
-    // LV_IMG_DECLARE(ncnn_bg_transprant);
+    // ncnn_bg_transprant);
     lv_obj_t *bg = lv_img_create(lv_scr_act());
     lv_img_set_src(bg, &ncnn_bg_transprant);
 
