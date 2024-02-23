@@ -22,6 +22,7 @@ static void cleanup()
     destroy_detector(&det);
     BoxVec_free(&objects);
     HAL_cleanup();
+    res_cleanup();
     lv_deinit();
     camExit();
     gfxExit();

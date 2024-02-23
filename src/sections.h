@@ -63,6 +63,7 @@ void HALinit();
 void res_init();
 void widgets_init();
 void HAL_cleanup();
+void res_cleanup();
 
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);

@@ -117,6 +117,11 @@ static int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
     return 1;
 }
 
+static void dealloc_res(lv_img_dsc_t *res_buffer)
+{
+    free((void *) res_buffer->data);
+}
+
 static void lvgl_tick_thread()
 {
     while(thread_ticking)
@@ -766,4 +771,19 @@ void HAL_cleanup()
     thread_ticking = false;
     threadJoin(tick_thread, U64_MAX);
     threadFree(tick_thread);
+}
+
+void res_cleanup()
+{
+    dealloc_res(&ncnn_bg_transprant);
+    dealloc_res(&cam_icon);
+    dealloc_res(&cam_icon_flip);
+    dealloc_res(&iconL);
+    dealloc_res(&iconR);
+    dealloc_res(&Mid_fill);
+    dealloc_res(&_ncnn);
+    dealloc_res(&logo_lvgl);
+    dealloc_res(&devkitpro);
+    dealloc_res(&ftpd_icon);
+    dealloc_res(&citra_logo);
 }
