@@ -60,6 +60,7 @@ void quit_detect_cb(lv_event_t *e);
 void object_display_cb(lv_event_t *e);
 void detect_cb(lv_event_t *e);
 void HALinit();
+void res_init();
 void widgets_init();
 void HAL_cleanup();
 

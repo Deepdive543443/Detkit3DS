@@ -1,5 +1,8 @@
 #include "sections.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 static lv_group_t *g;
 static lv_obj_t *box_list;  // LVGL Objects
 
@@ -37,16 +40,18 @@ static lv_obj_t *tab_view;// pop up tab view
 
 static Thread tick_thread; //Thread
 
-LV_IMG_DECLARE(cam_icon);
-LV_IMG_DECLARE(cam_icon_flip);
-LV_IMG_DECLARE(iconL);
-LV_IMG_DECLARE(iconR);
-LV_IMG_DECLARE(Mid_fill);
+static lv_img_dsc_t cam_icon;
+static lv_img_dsc_t cam_icon_flip;
+static lv_img_dsc_t iconL;
+static lv_img_dsc_t iconR;
+static lv_img_dsc_t Mid_fill;
 LV_IMG_DECLARE(_ncnn);
 LV_IMG_DECLARE(logo_lvgl);
 LV_IMG_DECLARE(devkitpro);
 LV_IMG_DECLARE(ftpd_icon);
 LV_IMG_DECLARE(citra_logo);
+
+lv_img_dsc_t res[8];
 
 // Glob
 jmp_buf exitJmp; //Debug
@@ -56,6 +61,67 @@ BoxVec objects; // Containers
 bool detecting; // Stage marker
 void *cam_buf;
 bool thread_ticking;
+
+static int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
+{
+    int width, height, n;
+    uint8_t *pixels = (uint8_t *) stbi_load(path, &width, &height, &n, 0);
+    if (pixels == NULL)
+    {
+        return 0;
+    }
+
+    uint8_t *lvgl_datas = malloc(sizeof(uint8_t) * width * height * 3);
+    if (lvgl_datas == NULL)
+    {
+        return 0;
+    }
+
+	uint8_t *pixels_ptr = pixels;
+	uint8_t *lvgl_data_ptr = lvgl_datas;
+
+    for(int h=0; h < height; h++)
+	{
+		for(int w=0; w < width; w++)
+		{
+			uint8_t r = pixels_ptr[0];
+			uint8_t g = pixels_ptr[1];
+			uint8_t b = pixels_ptr[2];
+			uint8_t a = pixels_ptr[3];
+
+			lvgl_data_ptr[0] = ((g & 0x1c) << 3) | ((b & 0xF8) >> 3); // Lower 3 bit of green, 5 bit of Blue
+			lvgl_data_ptr[1] = (r & 0xF8) | ((g & 0xE0) >> 5); // Red 5 bit, Green 3 higher bit
+			lvgl_data_ptr[2] = a; // Alpha channels
+
+			pixels_ptr+=4;
+			lvgl_data_ptr+=3;
+		}
+	}
+
+	// lv_img_dsc_t loaded_img = {
+	// 	.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+	// 	.header.always_zero = 0,
+	// 	.header.reserved = 0,
+	// 	.header.w = width,
+	// 	.header.h = height,
+	// 	.data_size = width * height * n,
+	// 	.data = lvgl_datas,
+	// };
+
+    // *res_buffer = loaded_img;
+
+	*res_buffer = (lv_img_dsc_t){
+		.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+		.header.always_zero = 0,
+		.header.reserved = 0,
+		.header.w = width,
+		.header.h = height,
+		.data_size = width * height * n,
+		.data = lvgl_datas,
+	};
+    
+    return 1;
+}
 
 static void lvgl_tick_thread()
 {
@@ -623,6 +689,15 @@ void HALinit()
     s32 prio = 0;
     svcGetThreadPriority(&prio, CUR_THREAD_HANDLE);
     tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio-1, -2, false);
+}
+
+void res_init()
+{
+    add_res_depth16("romfs:button/cam_icon.png", &cam_icon);
+    add_res_depth16("romfs:button/cam_icon_flip.png", &cam_icon_flip);
+    add_res_depth16("romfs:button/iconL.png", &iconL);
+    add_res_depth16("romfs:button/iconR.png", &iconR);
+    add_res_depth16("romfs:button/Mid_fill.png", &Mid_fill);
 }
 
 void widgets_init()
