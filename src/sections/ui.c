@@ -40,11 +40,13 @@ static lv_obj_t *tab_view;// pop up tab view
 
 static Thread tick_thread; //Thread
 
+static lv_img_dsc_t ncnn_bg_transprant;
 static lv_img_dsc_t cam_icon;
 static lv_img_dsc_t cam_icon_flip;
 static lv_img_dsc_t iconL;
 static lv_img_dsc_t iconR;
 static lv_img_dsc_t Mid_fill;
+
 LV_IMG_DECLARE(_ncnn);
 LV_IMG_DECLARE(logo_lvgl);
 LV_IMG_DECLARE(devkitpro);
@@ -693,6 +695,7 @@ void HALinit()
 
 void res_init()
 {
+    add_res_depth16("romfs:ncnn_bg_transparent.png", &ncnn_bg_transprant);
     add_res_depth16("romfs:button/cam_icon.png", &cam_icon);
     add_res_depth16("romfs:button/cam_icon_flip.png", &cam_icon_flip);
     add_res_depth16("romfs:button/iconL.png", &iconL);
@@ -732,7 +735,7 @@ void widgets_init()
     lv_style_set_bg_color(&btn_tabview, lv_color_hex(0x5b5b5b));
 
     // BG
-    LV_IMG_DECLARE(ncnn_bg_transprant);
+    // LV_IMG_DECLARE(ncnn_bg_transprant);
     lv_obj_t *bg = lv_img_create(lv_scr_act());
     lv_img_set_src(bg, &ncnn_bg_transprant);
 
