@@ -12,6 +12,9 @@ set(banner rom/banner_detkit.png)
 set(audio rom/sonar.wav)
 set(ROMFS romfs)
 
+option(BUILD_CIA "Build CIA package for title manager to install" OFF)
+option(BUILD_TEST "Build test case of different experimental features" OFF)
+
 project(${project_title}.elf)
 # Note that you must copy the cmake folder and the DevkitArm3DS.cmake file in this directory
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake) # Add the cmake folder to the modules paths, so that we can use the tools and find_package for ctrulib
