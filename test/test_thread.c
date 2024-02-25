@@ -117,34 +117,34 @@ int main(int argc, char **argv)
     }
     printf("Pass all testing successfully!\n");
 
-# endif 
+    # endif 
 
-	
+
     consoleSelect(consoleInit(GFX_BOTTOM, NULL));
     printf("\x1b[10;10HPress Start to exit.\n");
-	// Main loop
-	while (aptMainLoop())
-	{
-		//Scan all the inputs. This should be done once for each frame
-		hidScanInput();
+    // Main loop
+    while (aptMainLoop())
+    {
+        //Scan all the inputs. This should be done once for each frame
+        hidScanInput();
 
-		//hidKeysDown returns information about which buttons have been just pressed (and they weren't in the previous frame)
-		u32 kDown = hidKeysDown();
+        //hidKeysDown returns information about which buttons have been just pressed (and they weren't in the previous frame)
+        u32 kDown = hidKeysDown();
 
-		if (kDown & KEY_START) break; // break in order to return to hbmenu
+        if (kDown & KEY_START) break; // break in order to return to hbmenu
 
-		// Flush and swap framebuffers
-		gfxFlushBuffers();
-		gfxSwapBuffers();
+        // Flush and swap framebuffers
+        gfxFlushBuffers();
+        gfxSwapBuffers();
 
-		//Wait for VBlank
-		gspWaitForVBlank();
-	}
+        //Wait for VBlank
+        gspWaitForVBlank();
+    }
     printf("Wating for all thread to terminated...\n");
     ticking = false;
     threadJoin(timer_thread, U64_MAX);
     threadFree(timer_thread);
 
-	gfxExit();
-	return 0;
+    gfxExit();
+    return 0;
 }

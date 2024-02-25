@@ -23,19 +23,19 @@ static void scr_init()
 	HALinit(); // btn screen, driver, and thread init
 
 	// Top screen Display init
-    static lv_disp_draw_buf_t draw_buf_top;
-    static lv_color_t buf1_top[WIDTH_TOP * HEIGHT_TOP];
-    static lv_disp_drv_t disp_drv_top;        /*Descriptor of a display driver*/
+	static lv_disp_draw_buf_t draw_buf_top;
+	static lv_color_t buf1_top[WIDTH_TOP * HEIGHT_TOP];
+	static lv_disp_drv_t disp_drv_top;        /*Descriptor of a display driver*/
 	disp_top = display_init(GFX_TOP, &draw_buf_top, &*buf1_top, &disp_drv_top);
 
 	// Top screen scroll init 
 	lv_group_t *g = lv_group_create();
-    static lv_indev_drv_t indev_drv_cross;
-    lv_indev_drv_init(&indev_drv_cross);
-    indev_drv_cross.type = LV_INDEV_TYPE_ENCODER;
-    indev_drv_cross.read_cb = encoder_cb_3ds;
-    lv_indev_t *enc_indev = lv_indev_drv_register(&indev_drv_cross);
-    lv_indev_set_group(enc_indev, g);
+	static lv_indev_drv_t indev_drv_cross;
+	lv_indev_drv_init(&indev_drv_cross);
+	indev_drv_cross.type = LV_INDEV_TYPE_ENCODER;
+	indev_drv_cross.read_cb = encoder_cb_3ds;
+	lv_indev_t *enc_indev = lv_indev_drv_register(&indev_drv_cross);
+	lv_indev_set_group(enc_indev, g);
 	lv_group_add_obj(g, lv_disp_get_scr_act(disp_top));
 
 
@@ -57,9 +57,9 @@ static void scr_init()
 
 static void load_img()
 {
-    int width, height, n;
-    const char *file = "romfs:/button/cam_icon.png";
-    uint8_t *pixels = (uint8_t *) stbi_load(file, &width, &height, &n, 0);
+	int width, height, n;
+	const char *file = "romfs:/button/cam_icon.png";
+	uint8_t *pixels = (uint8_t *) stbi_load(file, &width, &height, &n, 0);
 
 
 	lv_obj_t *label = lv_label_create(lv_scr_act());
@@ -115,12 +115,12 @@ int main(int argc, char **argv)
 {
 	gfxInitDefault();
 	// Rom file system
-    Result rc = romfsInit();
-    if (rc)
-    {
-        printf("romfs init failed: %08lX\n", rc);
-    }
-	
+	Result rc = romfsInit();
+	if (rc)
+	{
+		printf("romfs init failed: %08lX\n", rc);
+	}
+
 	scr_init();
 	load_img();
 
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 	while (aptMainLoop())
 	{
 		lv_timer_handler();
-        clock_gettime(CLOCK_MONOTONIC, &start);
+		clock_gettime(CLOCK_MONOTONIC, &start);
 		//Scan all the inputs. This should be done once for each frame
 		hidScanInput();
 
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
 		u32 kDown = hidKeysDown();
 
 		if (kDown & KEY_START) break; // break in order to return to hbmenu
-        while (main_loop_locker());
+		while (main_loop_locker());
 	}
 
 	gfxExit();
