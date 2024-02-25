@@ -30,6 +30,7 @@ extern BoxVec objects;
 extern bool detecting;
 extern void *cam_buf;
 
+#define USE_SYS_CORE 0 /*Sys code leads to slower loading speed and it's not available in CIA*/
 extern bool thread_ticking;
 
 

@@ -665,6 +665,10 @@ void HALinit()
     gfxInitDefault();
     gfxSetDoubleBuffering(GFX_BOTTOM, true);
 
+#if USE_SYS_CORE
+    APT_SetAppCpuTimeLimit(80);
+#endif
+
     // Display init
     static lv_disp_draw_buf_t draw_buf_btm;
     static lv_color_t buf1_btm[WIDTH_BTM * HEIGHT_BTM];
@@ -686,7 +690,12 @@ void HALinit()
     thread_ticking = true;
     s32 prio = 0;
     svcGetThreadPriority(&prio, CUR_THREAD_HANDLE);
+
+#if USE_SYS_CORE
+    tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio-1, 1, false);
+#else
     tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio-1, -2, false);
+#endif // USE_SYS_CORE
 }
 
 void res_init()
