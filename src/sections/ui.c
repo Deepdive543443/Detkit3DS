@@ -697,7 +697,7 @@ void res_init()
     add_res_depth16("romfs:widgets/button/iconL.png", &iconL);
     add_res_depth16("romfs:widgets/button/iconR.png", &iconR);
     add_res_depth16("romfs:widgets/button/Mid_fill.png", &Mid_fill);
-    add_res_depth16("romfs:widgets/logos/lvgl_logo.png", &_ncnn);
+    add_res_depth16("romfs:widgets/logos/ncnn_48.png", &_ncnn);
     add_res_depth16("romfs:widgets/logos/lvgl_logo.png", &logo_lvgl);
     add_res_depth16("romfs:widgets/logos/devkitpro_logo.png", &devkitpro);
     add_res_depth16("romfs:widgets/logos/ftpd_logo.png", &ftpd_icon);
