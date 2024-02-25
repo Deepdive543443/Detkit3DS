@@ -76,42 +76,42 @@ static int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
         return 0;
     }
 
-	uint8_t *pixels_ptr = pixels;
-	uint8_t *lvgl_data_ptr = lvgl_datas;
+    uint8_t *pixels_ptr = pixels;
+    uint8_t *lvgl_data_ptr = lvgl_datas;
 
     for(int h=0; h < height; h++)
-	{
-		for(int w=0; w < width; w++)
-		{
-			uint8_t r = pixels_ptr[0];
-			uint8_t g = pixels_ptr[1];
-			uint8_t b = pixels_ptr[2];
-			uint8_t a = pixels_ptr[3];
+    {
+        for(int w=0; w < width; w++)
+        {
+            uint8_t r = pixels_ptr[0];
+            uint8_t g = pixels_ptr[1];
+            uint8_t b = pixels_ptr[2];
+            uint8_t a = pixels_ptr[3];
 
-			lvgl_data_ptr[0] = ((g & 0x1c) << 3) | ((b & 0xF8) >> 3); // Lower 3 bit of green, 5 bit of Blue
-			lvgl_data_ptr[1] = (r & 0xF8) | ((g & 0xE0) >> 5); // Red 5 bit, Green 3 higher bit
-			lvgl_data_ptr[2] = a; // Alpha channels
+            lvgl_data_ptr[0] = ((g & 0x1c) << 3) | ((b & 0xF8) >> 3); // Lower 3 bit of green, 5 bit of Blue
+            lvgl_data_ptr[1] = (r & 0xF8) | ((g & 0xE0) >> 5); // Red 5 bit, Green 3 higher bit
+            lvgl_data_ptr[2] = a; // Alpha channels
 
-			pixels_ptr+=4;
-			lvgl_data_ptr+=3;
-		}
-	}
+            pixels_ptr+=4;
+            lvgl_data_ptr+=3;
+        }
+    }
 
     if (lvgl_datas != NULL)
     {
         stbi_image_free(pixels);
     }
 
-	*res_buffer = (lv_img_dsc_t){
-		.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
-		.header.always_zero = 0,
-		.header.reserved = 0,
-		.header.w = width,
-		.header.h = height,
-		.data_size = width * height * n,
-		.data = lvgl_datas,
-	};
-    
+    *res_buffer = (lv_img_dsc_t){
+        .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+        .header.always_zero = 0,
+        .header.reserved = 0,
+        .header.w = width,
+        .header.h = height,
+        .data_size = width * height * n,
+        .data = lvgl_datas,
+    };
+
     return 1;
 }
 
