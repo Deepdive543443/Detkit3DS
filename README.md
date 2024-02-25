@@ -12,13 +12,20 @@ None real-time object detection powered by:
 
 
 ## Build
-This app has dependencies on Libctru for SDK, NCNN for neural network inference, and LVGL 8.3.11 for UI backend.
+This app has dependencies on Libctru for SDK, NCNN for neural network inference, and LVGL 8.3.11 for UI backend. 
 The main working environment of this project is Ubuntu 22.04.1. Depends on the environment you're using, you might need to rebuild part of the buildtools(bannertool, makerom).
+
+Download source code of 
 
 
 Build this project by:
 ```
+git clone https://github.com/Deepdive543443/Detkit3DS.git
+cd Detkit3DS
 mkdir build && cd build
+wget https://github.com/lvgl/lvgl/archive/refs/tags/v8.3.11.zip
+unzip v8.3.11.zip
+mv lvgl-8.3.11 ../src/lvgl
 cmake -DBUILD_CIA=ON ..
 make -j4
 ```
