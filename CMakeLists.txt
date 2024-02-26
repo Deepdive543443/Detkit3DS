@@ -22,7 +22,7 @@ include(Tools3DS) # Include all the macros and tools needed for 3ds development.
 find_package(CTRULIB REQUIRED) # Look for ctrulib
 
 # Build sub modules
-add_subdirectory(src/detector)
+add_subdirectory(src/detector_c)
 add_subdirectory(src/lvgl-8.3.11)
 
 # Create executable

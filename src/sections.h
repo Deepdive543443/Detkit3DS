@@ -8,7 +8,7 @@
 #include "3ds.h"
 #include "lvgl/lvgl.h"
 
-#include "detector/detector.h"
+#include "detector_c/detector.h"
 
 #define WIDTH_BTM 320
 #define HEIGHT_BTM 240
