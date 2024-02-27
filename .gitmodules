@@ -1,3 +1,3 @@
-[submodule "src/detector_c"]
-	path = src/detector_c
+[submodule "lib/detector_c"]
+	path = lib/detector_c
 	url = https://github.com/Deepdive543443/detector_c
