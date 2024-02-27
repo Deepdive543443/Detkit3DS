@@ -29,9 +29,7 @@ add_subdirectory(lib/lvgl)
 file(GLOB SECTIONS src/sections/*.c)
 add_executable(${project_title}.elf src/main.c ${SECTIONS}) # Create the elf file
 target_include_directories(${project_title}.elf PRIVATE src)
-# target_include_directories(${project_title}.elf PRIVATE lib)
 target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/lib)
-# target_include_directories(${project_title}.elf PRIVATE src)
 
 target_link_libraries(${project_title}.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !
 target_link_libraries(${project_title}.elf detkit)

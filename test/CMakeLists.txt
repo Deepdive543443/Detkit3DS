@@ -20,6 +20,7 @@ foreach(case ${TEST})
     
     add_executable(${test_we}.elf ${case} ${SECTIONS} ${ASSET})
     target_include_directories(${test_we}.elf PRIVATE ../src)
+    target_include_directories(${test_we}.elf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/../lib)
 
     target_link_libraries(${test_we}.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !
     target_link_libraries(${test_we}.elf detkit)
