@@ -23,7 +23,7 @@ find_package(CTRULIB REQUIRED) # Look for ctrulib
 
 # Build sub modules
 add_subdirectory(lib/detector_c)
-add_subdirectory(src/lvgl-8.3.11)
+add_subdirectory(lib/lvgl-8.3.11)
 
 # Create executable
 file(GLOB SECTIONS src/sections/*.c)
