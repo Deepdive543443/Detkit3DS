@@ -17,6 +17,7 @@ The main working environment of this project is Ubuntu 22.04.1. Depends on the e
 
 Pull and setup this project using: 
 ```
+sudo apt install unzip
 git clone https://github.com/Deepdive543443/Detkit3DS.git --recurse-submodules
 cd Detkit3DS
 ./setup.sh
