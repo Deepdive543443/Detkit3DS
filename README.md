@@ -15,14 +15,14 @@ None real-time object detection powered by:
 This app has dependencies on Libctru for SDK, NCNN for neural network inference, and LVGL 8.3.11 for UI backend. 
 The main working environment of this project is Ubuntu 22.04.1. Depends on the environment you're using, you might need to rebuild part of the buildtools(bannertool, makerom).
 
-Pull and setup this project using: 
+Script below will pull and download this project and all submodules required: 
 ```
 sudo apt install unzip cmake
 git clone https://github.com/Deepdive543443/Detkit3DS.git --recurse-submodules
 cd Detkit3DS
 ./setup.sh
 ```
-Build this project by:
+Build this project using:
 ```
 cd build
 cmake -DBUILD_CIA=ON ..
