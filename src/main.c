@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "sections.h"
 
 static void cleanup()
