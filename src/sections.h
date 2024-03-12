@@ -2,7 +2,7 @@
 #define SECTIONS_H
 #include <setjmp.h>
 #include "3ds.h"
-#include "lvgl/lvgl.h"
+#include "lvgl.h"
 #include "detector.h"
 
 #define WIDTH_BTM 320

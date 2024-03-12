@@ -21,14 +21,11 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake) # Add the cmake f
 include(Tools3DS) # Include all the macros and tools needed for 3ds development.
 find_package(CTRULIB REQUIRED) # Look for ctrulib
 
-# Build sub modules
-add_subdirectory(lib/lvgl)
-
-# Create executable
+# Build executable
 file(GLOB SECTIONS src/sections/*.c)
 add_executable(${project_title}.elf src/main.c ${SECTIONS}) # Create the elf file
 target_include_directories(${project_title}.elf PRIVATE src)
-target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/lib)
+# target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
 target_link_libraries(${project_title}.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !
 
@@ -36,7 +33,9 @@ target_link_libraries(${project_title}.elf 3ds::ctrulib) # Link ctrulib, this wi
 target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/build/detector)
 target_link_libraries(${project_title}.elf ${CMAKE_CURRENT_LIST_DIR}/lib/build/detector/libdetkit.a)
 
-target_link_libraries(${project_title}.elf lvgl)
+#Link LVGL
+target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/build/lvgl)
+target_link_libraries(${project_title}.elf ${CMAKE_CURRENT_LIST_DIR}/lib/build/lvgl/liblvgl.a)
 
 set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/ncnn_3ds_master/lib/cmake/ncnn) # Link ncnn(temp)
 find_package(ncnn REQUIRED)

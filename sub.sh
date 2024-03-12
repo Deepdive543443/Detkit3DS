@@ -1,5 +1,11 @@
 mkdir -p build
 cd build
 
-cmake  -DCMAKE_TOOLCHAIN_FILE="../cmake/DevkitArm3DS.cmake" ../lib/detector_c
+cmake -DCMAKE_TOOLCHAIN_FILE="../cmake/DevkitArm3DS.cmake" ../lib/detector_c
 make -j6 install
+
+rm -rf *
+cmake -DCMAKE_TOOLCHAIN_FILE="../cmake/DevkitArm3DS.cmake" ../lib/lvgl
+make -j6 install
+
+rm -rf *
