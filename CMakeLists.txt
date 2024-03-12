@@ -22,7 +22,6 @@ include(Tools3DS) # Include all the macros and tools needed for 3ds development.
 find_package(CTRULIB REQUIRED) # Look for ctrulib
 
 # Build sub modules
-add_subdirectory(lib/detector_c)
 add_subdirectory(lib/lvgl)
 
 # Create executable
@@ -32,8 +31,16 @@ target_include_directories(${project_title}.elf PRIVATE src)
 target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
 target_link_libraries(${project_title}.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !
-target_link_libraries(${project_title}.elf detkit)
+
+#Link detkit
+target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/build/detector)
+target_link_libraries(${project_title}.elf ${CMAKE_CURRENT_LIST_DIR}/lib/build/detector/libdetkit.a)
+
 target_link_libraries(${project_title}.elf lvgl)
+
+set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/ncnn_3ds_master/lib/cmake/ncnn) # Link ncnn(temp)
+find_package(ncnn REQUIRED)
+target_link_libraries(${project_title}.elf ncnn)
 
 add_3dsx_target(${project_title}.elf 
     ${APP_TITLE}

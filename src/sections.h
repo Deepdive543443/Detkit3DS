@@ -3,7 +3,7 @@
 #include <setjmp.h>
 #include "3ds.h"
 #include "lvgl/lvgl.h"
-#include "detector_c/detector.h"
+#include "detector.h"
 
 #define WIDTH_BTM 320
 #define HEIGHT_BTM 240
