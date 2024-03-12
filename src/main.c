@@ -49,7 +49,7 @@ int main(int argc, char **argv)
     // Cam init
     camSetup();
 
-    while (aptMainLoop() || time_stamp_update())
+    while (aptMainLoop())
     {
         lv_timer_handler();
         if (!detecting)
@@ -66,7 +66,7 @@ int main(int argc, char **argv)
         if (kHeld & KEY_START)
             break;
 
-        while (main_loop_locker());
+        main_loop_locker();
     }
 
     cleanup();

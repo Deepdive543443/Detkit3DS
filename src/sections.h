@@ -66,8 +66,7 @@ void touch_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data);
 void encoder_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data);
 
 // thread.c
-bool main_loop_locker();
-bool time_stamp_update();
+void main_loop_locker();
 void hang_err(const char *message);
 void HALinit();
 void HAL_cleanup();

@@ -11,7 +11,6 @@ void *cam_buf;
 bool g_thread_ticking;
 
 static Thread tick_thread; // Thread
-static struct timespec start, end;
 
 static void lvgl_tick_thread()
 {
@@ -22,18 +21,9 @@ static void lvgl_tick_thread()
     }
 }
 
-bool main_loop_locker()
+void main_loop_locker()
 {
-    /* Hands the main loop until it reach the tick time*/
-    clock_gettime(CLOCK_MONOTONIC, &end);
-    uint64_t delta_us = (end.tv_sec - start.tv_sec) * 1000000 + (end.tv_nsec - start.tv_nsec) / 1000;
-    return delta_us < TICK_US;
-}
-
-bool time_stamp_update()
-{
-    clock_gettime(CLOCK_MONOTONIC, &start); 
-    return true;
+    svcSleepThread((s64)TICK_NS);
 }
 
 void hang_err(const char *message)
