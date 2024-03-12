@@ -53,7 +53,6 @@ void object_display_cb(lv_event_t *e);
 void detect_cb(lv_event_t *e);
 void res_init();
 void widgets_init();
-void HAL_cleanup();
 void res_cleanup();
 
 // input.c
@@ -67,9 +66,10 @@ void touch_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data);
 void encoder_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data);
 
 // thread.c
-void hang_err(const char *message);
-void HALinit();
 bool main_loop_locker();
 bool time_stamp_update();
+void hang_err(const char *message);
+void HALinit();
+void HAL_cleanup();
 
 #endif // SECTIONS_H
