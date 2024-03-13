@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "3ds.h"
 #include "sections.h"
-#include "lvgl/lvgl.h"
 
 static lv_disp_t *disp_top;
 
@@ -42,7 +41,7 @@ int main(int argc, char **argv)
 	scr_init();
 
 	// Main loop
-	while (aptMainLoop() || time_stamp_update())
+	while (aptMainLoop())
 	{
 		lv_timer_handler();
 		// Scan all the inputs. This should be done once for each frame
@@ -53,8 +52,7 @@ int main(int argc, char **argv)
 
 		if (kDown & KEY_START)
 			break; // break in order to return to hbmenu
-		while (main_loop_locker())
-			;
+		main_loop_locker();
 	}
 
 	gfxExit();
