@@ -10,19 +10,23 @@ None real-time object detection powered by:
 - Nanodet-Plus(int8) (~6s)
 - Fastest Det (~4s)
 
+## Release
+https://github.com/Deepdive543443/Detkit3DS/releases
 
 ## Build
-This app has dependencies on Libctru for SDK, NCNN for neural network inference, and LVGL 8.3.11 for UI backend. 
-The main working environment of this project is Ubuntu 22.04.1. Depends on the environment you're using, you might need to rebuild part of the buildtools(bannertool, makerom).
+This project has dependencies on DevkitARM, NCNN, and LVGL. 
+A Linux environment like Ubuntu 20.04 is recommanded to build this project. WSL is also recommanded for windows user.
+#### Install DevkitARM toolchain follow the official guide [DevkitPRO](https://devkitpro.org/wiki/Getting_Started)
+Or using the guide line from [this repo](https://github.com/Deepdive543443/Benchncnn-3DS)
 
-Script below will pull and download this project and all submodules required: 
+#### Pull this repo and its submodules, download and build all the submodules
 ```
 sudo apt install unzip cmake
 git clone https://github.com/Deepdive543443/Detkit3DS.git --recurse-submodules
 cd Detkit3DS
 ./setup.sh
 ```
-Build this project using:
+#### Build the executatble
 ```
 cd build
 cmake -DBUILD_CIA=ON ..
