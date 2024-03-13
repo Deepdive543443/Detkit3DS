@@ -35,9 +35,7 @@ make -j4
 Install the .cia using a title manager or running the .3dsx from Homebrew launcher.
 
 ## Known issues and limitation
-The virtual button driver sometimes cannot be deallocated which lead to some unexpected behaviour
-
-All graphics were rendering on CPU
+- Still trying to figure how GPU rendering on 3DS works
 
 ## Credit
 - [NCNN](https://github.com/Tencent/ncnn): High performance neural network inference computing framework for mobile platform, easy to use and port
