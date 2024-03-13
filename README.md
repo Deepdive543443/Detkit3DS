@@ -1,7 +1,7 @@
 # ![icon_detkit](https://github.com/Deepdive543443/Detkit_UI/assets/83911295/6b4f854c-e74b-4065-a4ce-83fce7fa3662) Detkit3DS
 
 ![MVIMG_20240223_221721](https://github.com/Deepdive543443/Detkit3DS/assets/83911295/af55da55-4aa9-41e2-b09f-c8a09e860425)
-Detkit3DS is a tiny object detection app for Nintendo 3DS, powered by NCNN and LVGL 8.3.11
+A tiny object detection app for Nintendo 3DS, powered by NCNN and LVGL 8.3.11
 
 ## Features 
 Detkit3DS is built upon NCNN, LVGL 8.3.11, and my previous project DetkitNCNN.
