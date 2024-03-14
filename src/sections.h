@@ -5,37 +5,34 @@
 #include "detector.h"
 #include "lvgl.h"
 
-#define WIDTH_BTM  320
-#define HEIGHT_BTM 240
-
+#define WIDTH_BTM   320
+#define HEIGHT_BTM  240
 #define WIDTH_TOP   400
 #define HEIGHT_TOP  240
-#define SCRSIZE_TOP WIDTH_TOP *HEIGHT_TOP
+#define SCRSIZE_TOP WIDTH_TOP * HEIGHT_TOP
 
-#define STACKSIZE (4 * 1024)
-#define TICK_MS   1               // Millisec a tick
-#define TICK_US   TICK_MS * 1000  // Microsec a tick
-#define TICK_NS   TICK_US * 1000  // Nanosec a tick
+#define STACKSIZE    (4 * 1024)
+#define TICK_MS      1               // Millisec a tick
+#define TICK_US      TICK_MS * 1000  // Microsec a tick
+#define TICK_NS      TICK_US * 1000  // Nanosec a tick
+#define USE_SYS_CORE 0               /*Sys code leads to slower loading speed and it's not available in CIA*/
+
+typedef enum {
+    CAM_CLOSE,
+    CAM_STREAM,
+    CAM_HANG
+} CamState;
 
 // Glob
-extern jmp_buf exitJmp;
-
-extern Detector det;
-extern BoxVec   objects;
-extern bool     detecting;
-extern void    *cam_buf;
-
-#define USE_SYS_CORE 0 /*Sys code leads to slower loading speed and it's not available in CIA*/
-extern bool g_thread_ticking;
+extern jmp_buf  g_exitJmp;
+extern Detector g_det;
+extern CamState g_camState;
 
 // cam.c
 #define WAIT_TIMEOUT 1000000000ULL
-
-void pause_cam_capture(void *cam_buf);
-void writeCamToFramebufferRGB565_filter(void *fb, void *img, u16 x, u16 y, u16 width, u16 height, float weight);
-void writeCamToFramebufferRGB565(void *fb, void *img, u16 x, u16 y, u16 width, u16 height);
-void writeCamToPixels(unsigned char *pixels, void *img, u16 x0, u16 y0, u16 width, u16 height);
+void writeCamToPixels(unsigned char *pixels, u16 x0, u16 y0, u16 width, u16 height);
 void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x0, u16 y0, u16 width, u16 height);
+void pause_cam_capture();
 void camSetup();
 bool camUpdate();
 
@@ -53,7 +50,7 @@ void object_display_cb(lv_event_t *e);
 void detect_cb(lv_event_t *e);
 void res_init();
 void widgets_init();
-void res_cleanup();
+void ui_cleanup();
 
 // input.c
 void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);

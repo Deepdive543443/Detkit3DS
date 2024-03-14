@@ -49,6 +49,8 @@ static lv_img_dsc_t devkitpro;
 static lv_img_dsc_t ftpd_icon;
 static lv_img_dsc_t citra_logo;
 
+static BoxVec s_objects;
+
 static int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
 {
     int      width, height, n;
@@ -153,14 +155,14 @@ static lv_obj_t *create_box_list()
     lv_obj_t *btn;
     lv_list_add_text(boxxes, "Press B to continue");
     char detected[40];
-    sprintf(detected, "Found %d items", objects.num_item);
+    sprintf(detected, "Found %d items", s_objects.num_item);
     btn = lv_list_add_btn(boxxes, LV_SYMBOL_FILE, detected);
     lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, 0);
     lv_group_add_obj(g, btn);
 
-    for (size_t i = 0; i < objects.num_item; i++)
+    for (size_t i = 0; i < s_objects.num_item; i++)
     {
-        BoxInfo obj = BoxVec_getItem(i, &objects);
+        BoxInfo obj = BoxVec_getItem(i, &s_objects);
         char    list_item[40];
         int     label = obj.label;
         int     x1    = obj.x1;
@@ -182,19 +184,18 @@ static void model_list_hanlder(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t       *obj  = lv_event_get_target(e);
-    Detector       *det  = (Detector *)lv_event_get_user_data(e);
     if (code == LV_EVENT_VALUE_CHANGED)
     {
-        destroy_detector(det);
+        destroy_detector(&g_det);
         uint16_t model_idx = lv_dropdown_get_selected(obj);
         switch (model_idx)
         {
             case 0:
-                *det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
+                g_det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
                 break;
 
             case 1:
-                *det = create_fastestdet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
+                g_det = create_fastestdet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
                 break;
 
             default:
@@ -203,7 +204,7 @@ static void model_list_hanlder(lv_event_t *e)
     }
 }
 
-static void create_model_list(Detector *det)
+static void create_model_list()
 {
     lv_obj_t *models = lv_dropdown_create(lv_scr_act());
     lv_dropdown_set_options(models,
@@ -212,7 +213,7 @@ static void create_model_list(Detector *det)
 
     lv_obj_align(models, LV_ALIGN_TOP_MID, 0, -10);
     lv_obj_set_width(models, 150);
-    lv_obj_add_event_cb(models, model_list_hanlder, LV_EVENT_ALL, det);
+    lv_obj_add_event_cb(models, model_list_hanlder, LV_EVENT_ALL, 0);
 }
 
 static void create_LR()
@@ -512,10 +513,10 @@ void pop_up_tabview_cb(lv_event_t *e)
     lv_event_code_t code = lv_event_get_code(e);
     if (code == LV_EVENT_CLICKED)
     {
-        if (!detecting)
+        if (g_camState == CAM_STREAM)
         {
-            detecting = true;
-            pause_cam_capture(cam_buf);
+            g_camState = CAM_HANG;
+            pause_cam_capture();
         }
 
         tab_Ac_Li();
@@ -527,8 +528,8 @@ void close_tabview_cb(lv_event_t *e)
     lv_event_code_t code = lv_event_get_code(e);
     if (code == LV_EVENT_CLICKED)
     {
-        detecting = false;
-        pause_cam_capture(cam_buf);
+        g_camState = CAM_STREAM;
+        pause_cam_capture();
         lv_obj_del_async(tab_bg);
     }
 }
@@ -538,14 +539,14 @@ void quit_detect_cb(lv_event_t *e)
     lv_event_code_t code = lv_event_get_code(e);
     if (code == LV_EVENT_CLICKED)
     {
-        if (detecting)
+        if (g_camState == CAM_HANG)
         {
             lv_obj_clean(btm_btn_container);
             remove_virtual_btn(KEY_B);
             remove_virtual_btn(KEY_A);
             add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(100), " Detect");
             lv_obj_del(box_list);
-            detecting = false;
+            g_camState = CAM_STREAM;
         }
     }
 }
@@ -558,15 +559,15 @@ void object_display_cb(lv_event_t *e)
     if (code == LV_EVENT_CLICKED)
     {
         unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
-        writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
+        writeCamToPixels(pixels, 0, 0, WIDTH_TOP, HEIGHT_TOP);
 
         int idx = lv_obj_get_child_id(item) - 2;
         if (idx < 0)
         {
-            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
+            draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &s_objects);
         } else
         {
-            BoxInfo obj = BoxVec_getItem(idx, &objects);
+            BoxInfo obj = BoxVec_getItem(idx, &s_objects);
 
             BoxVec box_Vec_temp;
             create_box_vector(&box_Vec_temp, 1);
@@ -591,23 +592,23 @@ void detect_cb(lv_event_t *e)
 
     if (code == LV_EVENT_CLICKED)
     {
-        if (detecting)
+        if (g_camState == CAM_HANG)
         {
             lv_obj_del(box_list);
         }
-        detecting = true;
+        g_camState = CAM_HANG;
         lv_obj_clean(btm_btn_container);
         remove_virtual_btn(KEY_A);
-        BoxVec_free(&objects);
-        pause_cam_capture(cam_buf);
+        BoxVec_free(&s_objects);
+        pause_cam_capture();
 
         // Inference
         unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
-        writeCamToPixels(pixels, cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
-        objects = det.detect(pixels, WIDTH_TOP, HEIGHT_TOP, &det);
+        writeCamToPixels(pixels, 0, 0, WIDTH_TOP, HEIGHT_TOP);
+        s_objects = g_det.detect(pixels, WIDTH_TOP, HEIGHT_TOP, &g_det);
 
         // Print inference outputs
-        draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
+        draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &s_objects);
         writePixelsToFrameBuffer(gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), pixels, 0, 0, WIDTH_TOP, HEIGHT_TOP);
 
         gfxFlushBuffers();
@@ -687,7 +688,7 @@ void widgets_init()
     lv_obj_add_event_cb(tab_btn, pop_up_tabview_cb, LV_EVENT_CLICKED, NULL);
 
     // Other UI widget
-    create_model_list(&det);
+    create_model_list();
     create_LR();
 
     btm_btn_container = lv_obj_create(lv_scr_act());
@@ -695,10 +696,10 @@ void widgets_init()
     add_btm_btn(btm_btn_container, KEY_A, detect_cb, lv_pct(100), " Detect");
 
     // Detector, Detector objects and group of enconder containers
-    det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
+    g_det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
 }
 
-void res_cleanup()
+void ui_cleanup()
 {
     dealloc_res(&ncnn_bg_transprant);
     dealloc_res(&cam_icon);
@@ -711,4 +712,5 @@ void res_cleanup()
     dealloc_res(&devkitpro);
     dealloc_res(&ftpd_icon);
     dealloc_res(&citra_logo);
+    BoxVec_free(&s_objects);
 }

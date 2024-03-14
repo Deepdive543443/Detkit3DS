@@ -1,12 +1,10 @@
-#include <stdlib.h>
 #include "sections.h"
 
 static void cleanup()
 {
-    destroy_detector(&det);
-    BoxVec_free(&objects);
+    destroy_detector(&g_det);
     HAL_cleanup();
-    res_cleanup();
+    ui_cleanup();
     lv_deinit();
     camExit();
     gfxExit();
@@ -15,29 +13,12 @@ static void cleanup()
 
 int main(int argc, char **argv)
 {
-    if (setjmp(exitJmp))
+    if (setjmp(g_exitJmp))
     {
         cleanup();
         return 0;
     }
 
-    // Rom file system
-    Result rc = romfsInit();
-    if (rc)
-    {
-        char err[40];
-        sprintf(err, "romfs init failed: %08lX\n", rc);
-        hang_err(err);
-    }
-
-    // Camera framebuffer init
-    cam_buf = malloc(SCRSIZE_TOP * 2);  // RBG565 frame buffer
-    if (!cam_buf)
-    {
-        hang_err("Failed to allocate memory for Camera!");
-    }
-
-    detecting = false;
     u32 kHeld;
 
     // IVGL init
@@ -51,11 +32,8 @@ int main(int argc, char **argv)
 
     while (aptMainLoop())
     {
+        if (camUpdate()) continue;
         lv_timer_handler();
-        if (!detecting)
-        {
-            if (camUpdate()) continue;
-        }
 
         // User input
         hidScanInput();

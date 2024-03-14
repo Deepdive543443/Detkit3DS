@@ -3,18 +3,17 @@
 #include "sections.h"
 
 // Glob
-jmp_buf  exitJmp;  // Debug
-Detector det;
-BoxVec   objects;    // Containers
-bool     detecting;  // Stage marker
+jmp_buf  g_exitJmp;  // Debug
+Detector g_det;
 void    *cam_buf;
-bool     g_thread_ticking;
+
+static bool s_thread_ticking;
 
 static Thread tick_thread;  // Thread
 
 static void lvgl_tick_thread()
 {
-    while (g_thread_ticking)
+    while (s_thread_ticking)
     {
         svcSleepThread((s64)TICK_NS);
         lv_tick_inc(TICK_MS);
@@ -34,12 +33,21 @@ void hang_err(const char *message)
         hidScanInput();
         u32 kDown = hidKeysDown();
 
-        if (kDown & KEY_START) longjmp(exitJmp, 1);
+        if (kDown & KEY_START) longjmp(g_exitJmp, 1);
     }
 }
 
 void HALinit()
 {
+    // Rom file system
+    Result rc = romfsInit();
+    if (rc)
+    {
+        char err[40];
+        sprintf(err, "romfs init failed: %08lX\n", rc);
+        hang_err(err);
+    }
+
     // Screen init
     gfxInitDefault();
     gfxSetDoubleBuffering(GFX_BOTTOM, true);
@@ -66,7 +74,7 @@ void HALinit()
     lv_indev_drv_register(&indev_drv_touch);  // lv_indev_t *touch_indev
 
     // Tick thread init
-    g_thread_ticking = true;
+    s_thread_ticking = true;
     s32 prio         = 0;
     svcGetThreadPriority(&prio, CUR_THREAD_HANDLE);
 
@@ -79,7 +87,7 @@ void HALinit()
 
 void HAL_cleanup()
 {
-    g_thread_ticking = false;
+    s_thread_ticking = false;
     threadJoin(tick_thread, U64_MAX);
     threadFree(tick_thread);
 }

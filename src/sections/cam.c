@@ -1,46 +1,17 @@
+#include <stdlib.h>
 #include "sections.h"
 
+static void  *cam_buf = NULL;
 static u32    bufSize;
 static Handle camReceiveEvent[2] = {0};
 static bool   captureInterrupted;
 static s32    index_handler = 0;
+CamState      g_camState    = CAM_CLOSE;
 
-void pause_cam_capture(void *cam_buf)
-{
-    writeCamToFramebufferRGB565_filter(gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), cam_buf, 0, 0, WIDTH_TOP,
-                                       HEIGHT_TOP, 0.5);
-
-    // Flush and swap framebuffers
-    gfxFlushBuffers();
-    gfxScreenSwapBuffers(GFX_TOP, true);
-    gspWaitForVBlank();
-}
-
-void writeCamToFramebufferRGB565_filter(void *fb, void *img, u16 x, u16 y, u16 width, u16 height, float weight)
-{
-    writeCamToFramebufferRGB565(fb, img, x, y, width, height);
-    u8 *fb_8 = (u8 *)fb;
-    int i, j, k, draw_x, draw_y;
-    for (j = 0; j < height; j++)
-    {
-        for (i = 0; i < width; i++)
-        {
-            draw_y = y + height - j - 1;
-            draw_x = x + i;
-            u32 v  = (draw_y + draw_x * height) * 3;
-            for (k = 0; k < 3; k++)
-            {
-                fb_8[v + k] *= (1 - weight);
-                fb_8[v + k] += 255 * weight;
-            }
-        }
-    }
-}
-
-void writeCamToFramebufferRGB565(void *fb, void *img, u16 x, u16 y, u16 width, u16 height)
+static void writeCamToFramebufferRGB565(void *fb, u16 x, u16 y, u16 width, u16 height)
 {
     u8  *fb_8   = (u8 *)fb;
-    u16 *img_16 = (u16 *)img;
+    u16 *img_16 = (u16 *)cam_buf;
     int  i, j, draw_x, draw_y;
     for (j = 0; j < height; j++)
     {
@@ -60,9 +31,30 @@ void writeCamToFramebufferRGB565(void *fb, void *img, u16 x, u16 y, u16 width, u
     }
 }
 
-void writeCamToPixels(unsigned char *pixels, void *img, u16 x0, u16 y0, u16 width, u16 height)
+static void writeCamToFramebufferRGB565_filter(void *fb, u16 x, u16 y, u16 width, u16 height, float weight)
 {
-    u16           *img_16  = (u16 *)img;
+    writeCamToFramebufferRGB565(fb, x, y, width, height);
+    u8 *fb_8 = (u8 *)fb;
+    int i, j, k, draw_x, draw_y;
+    for (j = 0; j < height; j++)
+    {
+        for (i = 0; i < width; i++)
+        {
+            draw_y = y + height - j - 1;
+            draw_x = x + i;
+            u32 v  = (draw_y + draw_x * height) * 3;
+            for (k = 0; k < 3; k++)
+            {
+                fb_8[v + k] *= (1 - weight);
+                fb_8[v + k] += 255 * weight;
+            }
+        }
+    }
+}
+
+void writeCamToPixels(unsigned char *pixels, u16 x0, u16 y0, u16 width, u16 height)
+{
+    u16           *img_16  = (u16 *)cam_buf;
     unsigned char *mat_ptr = pixels;
     u16            data;
 
@@ -104,8 +96,26 @@ void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x, u16 y, u16
     }
 }
 
+void pause_cam_capture()
+{
+    writeCamToFramebufferRGB565_filter(gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 0, 0, WIDTH_TOP, HEIGHT_TOP,
+                                       0.5);
+
+    // Flush and swap framebuffers
+    gfxFlushBuffers();
+    gfxScreenSwapBuffers(GFX_TOP, true);
+    gspWaitForVBlank();
+}
+
 void camSetup()
 {
+    // Camera framebuffer init
+    cam_buf = malloc(SCRSIZE_TOP * 2);  // RBG565 frame buffer
+    if (!cam_buf)
+    {
+        hang_err("Failed to allocate memory for Camera!");
+    }
+
     camInit();
     gfxSetDoubleBuffering(GFX_TOP, true);
     gfxSet3D(false);
@@ -126,10 +136,13 @@ void camSetup()
     CAMU_ClearBuffer(PORT_CAM1);
     CAMU_StartCapture(PORT_CAM1);
     CAMU_PlayShutterSound(SHUTTER_SOUND_TYPE_MOVIE);
+    g_camState = CAM_STREAM;
 }
 
 bool camUpdate()
 {
+    if (g_camState == CAM_HANG) return 0;
+
     if (camReceiveEvent[1] == 0)
     {
         CAMU_SetReceiving(&camReceiveEvent[1], cam_buf, PORT_CAM1, SCRSIZE_TOP * 2, (s16)bufSize);
@@ -162,7 +175,7 @@ bool camUpdate()
             break;
     }
 
-    writeCamToFramebufferRGB565(gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), cam_buf, 0, 0, WIDTH_TOP, HEIGHT_TOP);
+    writeCamToFramebufferRGB565(gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 0, 0, WIDTH_TOP, HEIGHT_TOP);
 
     // Flush and swap framebuffers
     gfxFlushBuffers();
