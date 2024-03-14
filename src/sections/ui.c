@@ -4,7 +4,7 @@
 #include "stb_image.h"
 
 static lv_group_t *g;
-static lv_obj_t *box_list; // LVGL Objects
+static lv_obj_t   *box_list;  // LVGL Objects
 
 static lv_obj_t *btn_A;
 static lv_obj_t *btn_B;
@@ -20,14 +20,14 @@ static lv_indev_t *indev_X;
 static lv_indev_t *indev_Y;
 static lv_indev_t *indev_L;
 static lv_indev_t *indev_R;
-static lv_point_t point_array_A[1];
-static lv_point_t point_array_B[1];
-static lv_point_t point_array_X[1];
-static lv_point_t point_array_Y[1];
-static lv_point_t point_array_L[1];
-static lv_point_t point_array_R[1];
+static lv_point_t  point_array_A[1];
+static lv_point_t  point_array_B[1];
+static lv_point_t  point_array_X[1];
+static lv_point_t  point_array_Y[1];
+static lv_point_t  point_array_L[1];
+static lv_point_t  point_array_R[1];
 
-static lv_indev_drv_t drv_virbtn[4]; // Encoder A, B, X, Y
+static lv_indev_drv_t drv_virbtn[4];  // Encoder A, B, X, Y
 
 static lv_style_t btn_btm;
 static lv_style_t btn_press;
@@ -35,7 +35,7 @@ static lv_style_t btn_shoulder_press;
 static lv_style_t btn_tabview;
 
 static lv_obj_t *tab_bg;
-static lv_obj_t *tab_view; // pop up tab view
+static lv_obj_t *tab_view;  // pop up tab view
 
 static lv_img_dsc_t ncnn_bg_transprant;
 static lv_img_dsc_t cam_icon;
@@ -51,7 +51,7 @@ static lv_img_dsc_t citra_logo;
 
 static int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
 {
-    int width, height, n;
+    int      width, height, n;
     uint8_t *pixels = (uint8_t *)stbi_load(path, &width, &height, &n, 0);
     if (pixels == NULL)
     {
@@ -64,7 +64,7 @@ static int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
         return 0;
     }
 
-    uint8_t *pixels_ptr = pixels;
+    uint8_t *pixels_ptr    = pixels;
     uint8_t *lvgl_data_ptr = lvgl_datas;
 
     for (int h = 0; h < height; h++)
@@ -76,9 +76,9 @@ static int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
             uint8_t b = pixels_ptr[2];
             uint8_t a = pixels_ptr[3];
 
-            lvgl_data_ptr[0] = ((g & 0x1c) << 3) | ((b & 0xF8) >> 3); // Lower 3 bit of green, 5 bit of Blue
-            lvgl_data_ptr[1] = (r & 0xF8) | ((g & 0xE0) >> 5);        // Red 5 bit, Green 3 higher bit
-            lvgl_data_ptr[2] = a;                                     // Alpha channels
+            lvgl_data_ptr[0] = ((g & 0x1c) << 3) | ((b & 0xF8) >> 3);  // Lower 3 bit of green, 5 bit of Blue
+            lvgl_data_ptr[1] = (r & 0xF8) | ((g & 0xE0) >> 5);         // Red 5 bit, Green 3 higher bit
+            lvgl_data_ptr[2] = a;                                      // Alpha channels
 
             pixels_ptr += 4;
             lvgl_data_ptr += 3;
@@ -91,22 +91,19 @@ static int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
     }
 
     *res_buffer = (lv_img_dsc_t){
-        .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
+        .header.cf          = LV_IMG_CF_TRUE_COLOR_ALPHA,
         .header.always_zero = 0,
-        .header.reserved = 0,
-        .header.w = width,
-        .header.h = height,
-        .data_size = width * height * n,
-        .data = lvgl_datas,
+        .header.reserved    = 0,
+        .header.w           = width,
+        .header.h           = height,
+        .data_size          = width * height * n,
+        .data               = lvgl_datas,
     };
 
     return 1;
 }
 
-static void dealloc_res(lv_img_dsc_t *res_buffer)
-{
-    free((void *)res_buffer->data);
-}
+static void dealloc_res(lv_img_dsc_t *res_buffer) { free((void *)res_buffer->data); }
 
 static void button_style_init(lv_style_t *btn)
 {
@@ -122,34 +119,33 @@ static void button_style_init(lv_style_t *btn)
 
 static void virtual_button_driver_init()
 {
-    drv_virbtn[0].type = LV_INDEV_TYPE_BUTTON;
+    drv_virbtn[0].type    = LV_INDEV_TYPE_BUTTON;
     drv_virbtn[0].read_cb = virtual_A_cb;
-    indev_A = lv_indev_drv_register(&drv_virbtn[0]);
-    point_array_A[0] = (lv_point_t){-1, -1};
+    indev_A               = lv_indev_drv_register(&drv_virbtn[0]);
+    point_array_A[0]      = (lv_point_t){-1, -1};
     lv_indev_set_button_points(indev_A, point_array_A);
 
-    drv_virbtn[1].type = LV_INDEV_TYPE_BUTTON;
+    drv_virbtn[1].type    = LV_INDEV_TYPE_BUTTON;
     drv_virbtn[1].read_cb = virtual_B_cb;
-    indev_B = lv_indev_drv_register(&drv_virbtn[1]);
-    point_array_B[0] = (lv_point_t){-1, -1};
+    indev_B               = lv_indev_drv_register(&drv_virbtn[1]);
+    point_array_B[0]      = (lv_point_t){-1, -1};
     lv_indev_set_button_points(indev_B, point_array_B);
 
-    drv_virbtn[2].type = LV_INDEV_TYPE_BUTTON;
+    drv_virbtn[2].type    = LV_INDEV_TYPE_BUTTON;
     drv_virbtn[2].read_cb = virtual_X_cb;
-    indev_X = lv_indev_drv_register(&drv_virbtn[2]);
-    point_array_X[0] = (lv_point_t){-1, -1};
+    indev_X               = lv_indev_drv_register(&drv_virbtn[2]);
+    point_array_X[0]      = (lv_point_t){-1, -1};
     lv_indev_set_button_points(indev_X, point_array_Y);
 
-    drv_virbtn[3].type = LV_INDEV_TYPE_BUTTON;
+    drv_virbtn[3].type    = LV_INDEV_TYPE_BUTTON;
     drv_virbtn[3].read_cb = virtual_Y_cb;
-    indev_Y = lv_indev_drv_register(&drv_virbtn[3]);
-    point_array_Y[0] = (lv_point_t){-1, -1};
+    indev_Y               = lv_indev_drv_register(&drv_virbtn[3]);
+    point_array_Y[0]      = (lv_point_t){-1, -1};
     lv_indev_set_button_points(indev_Y, point_array_Y);
 }
 
 static lv_obj_t *create_box_list()
 {
-
     lv_obj_t *boxxes = lv_list_create(lv_scr_act());
     lv_obj_set_size(boxxes, WIDTH_BTM, 160);
     lv_obj_align(boxxes, LV_ALIGN_TOP_MID, 0, 40);
@@ -165,13 +161,13 @@ static lv_obj_t *create_box_list()
     for (size_t i = 0; i < objects.num_item; i++)
     {
         BoxInfo obj = BoxVec_getItem(i, &objects);
-        char list_item[40];
-        int label = obj.label;
-        int x1 = obj.x1;
-        int x2 = obj.x2;
-        int y1 = obj.y1;
-        int y2 = obj.y2;
-        float prob = obj.prob * 100;
+        char    list_item[40];
+        int     label = obj.label;
+        int     x1    = obj.x1;
+        int     x2    = obj.x2;
+        int     y1    = obj.y1;
+        int     y2    = obj.y2;
+        float   prob  = obj.prob * 100;
 
         sprintf(list_item, "%15s %03.1f [%3d,%3d,%3d,%3d]", class_names[label], prob, x1, x2, y1, y2);
         btn = lv_list_add_btn(boxxes, LV_SYMBOL_GPS, list_item);
@@ -185,24 +181,24 @@ static lv_obj_t *create_box_list()
 static void model_list_hanlder(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t *obj = lv_event_get_target(e);
-    Detector *det = (Detector *)lv_event_get_user_data(e);
+    lv_obj_t       *obj  = lv_event_get_target(e);
+    Detector       *det  = (Detector *)lv_event_get_user_data(e);
     if (code == LV_EVENT_VALUE_CHANGED)
     {
         destroy_detector(det);
         uint16_t model_idx = lv_dropdown_get_selected(obj);
         switch (model_idx)
         {
-        case 0:
-            *det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
-            break;
+            case 0:
+                *det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
+                break;
 
-        case 1:
-            *det = create_fastestdet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
-            break;
+            case 1:
+                *det = create_fastestdet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
+                break;
 
-        default:
-            break;
+            default:
+                break;
         };
     }
 }
@@ -210,8 +206,9 @@ static void model_list_hanlder(lv_event_t *e)
 static void create_model_list(Detector *det)
 {
     lv_obj_t *models = lv_dropdown_create(lv_scr_act());
-    lv_dropdown_set_options(models, "NanoDet-plus\n"
-                                    "FastestDet");
+    lv_dropdown_set_options(models,
+                            "NanoDet-plus\n"
+                            "FastestDet");
 
     lv_obj_align(models, LV_ALIGN_TOP_MID, 0, -10);
     lv_obj_set_width(models, 150);
@@ -237,22 +234,24 @@ static void create_LR()
     lv_obj_add_event_cb(btn_R, detect_cb, LV_EVENT_ALL, 0); /*Display the press stage of two button*/
 
     lv_obj_update_layout(btn_L);
-    point_array_L[0] = (lv_point_t){(btn_L->coords.x1 + btn_L->coords.x2) / 2, (btn_L->coords.y1 + btn_L->coords.y2) / 2};
+    point_array_L[0] =
+        (lv_point_t){(btn_L->coords.x1 + btn_L->coords.x2) / 2, (btn_L->coords.y1 + btn_L->coords.y2) / 2};
 
     void (*functions[2])() = {virtual_L_cb, virtual_R_cb};
     static lv_indev_drv_t drv_list_LR[2];
 
-    drv_list_LR[0].type = LV_INDEV_TYPE_BUTTON;
+    drv_list_LR[0].type    = LV_INDEV_TYPE_BUTTON;
     drv_list_LR[0].read_cb = functions[0];
-    indev_L = lv_indev_drv_register(&drv_list_LR[0]);
+    indev_L                = lv_indev_drv_register(&drv_list_LR[0]);
     lv_indev_set_button_points(indev_L, point_array_L);
 
     lv_obj_update_layout(btn_R);
-    point_array_R[0] = (lv_point_t){(btn_R->coords.x1 + btn_R->coords.x2) / 2, (btn_R->coords.y1 + btn_R->coords.y2) / 2};
+    point_array_R[0] =
+        (lv_point_t){(btn_R->coords.x1 + btn_R->coords.x2) / 2, (btn_R->coords.y1 + btn_R->coords.y2) / 2};
 
-    drv_list_LR[1].type = LV_INDEV_TYPE_BUTTON;
+    drv_list_LR[1].type    = LV_INDEV_TYPE_BUTTON;
     drv_list_LR[1].read_cb = functions[1];
-    indev_R = lv_indev_drv_register(&drv_list_LR[1]);
+    indev_R                = lv_indev_drv_register(&drv_list_LR[1]);
     lv_indev_set_button_points(indev_R, point_array_R);
 }
 
@@ -281,37 +280,37 @@ static void add_btm_btn(lv_obj_t *cont, u32 key, void *callback, lv_coord_t widt
 
     switch (key)
     {
-    case KEY_A:
+        case KEY_A:
 
-        btn_A = lv_btn_create(cont);
-        btn_ptr = btn_A;
-        icon_label[0] = 'A';
-        break;
+            btn_A         = lv_btn_create(cont);
+            btn_ptr       = btn_A;
+            icon_label[0] = 'A';
+            break;
 
-    case KEY_B:
+        case KEY_B:
 
-        btn_B = lv_btn_create(cont);
-        btn_ptr = btn_B;
-        icon_label[0] = 'B';
-        break;
+            btn_B         = lv_btn_create(cont);
+            btn_ptr       = btn_B;
+            icon_label[0] = 'B';
+            break;
 
-    case KEY_X:
+        case KEY_X:
 
-        btn_X = lv_btn_create(cont);
-        btn_ptr = btn_X;
-        icon_label[0] = 'X';
-        break;
+            btn_X         = lv_btn_create(cont);
+            btn_ptr       = btn_X;
+            icon_label[0] = 'X';
+            break;
 
-    case KEY_Y:
+        case KEY_Y:
 
-        btn_Y = lv_btn_create(cont);
-        btn_ptr = btn_Y;
-        icon_label[0] = 'Y';
-        break;
+            btn_Y         = lv_btn_create(cont);
+            btn_ptr       = btn_Y;
+            icon_label[0] = 'Y';
+            break;
 
-    default:
-        hang_err("Fail to create button");
-        break;
+        default:
+            hang_err("Fail to create button");
+            break;
     }
 
     // Style
@@ -321,7 +320,7 @@ static void add_btm_btn(lv_obj_t *cont, u32 key, void *callback, lv_coord_t widt
     lv_obj_add_style(btn_ptr, &btn_press, LV_STATE_PRESSED);
 
     // Icon
-    icon = lv_obj_create(btn_ptr);
+    icon       = lv_obj_create(btn_ptr);
     label_icon = lv_label_create(icon);
     lv_label_set_text(label_icon, icon_label);
     lv_obj_set_style_text_color(label_icon, lv_color_hex(0x353535), 0);
@@ -352,32 +351,36 @@ static void add_btm_btn(lv_obj_t *cont, u32 key, void *callback, lv_coord_t widt
     lv_obj_update_layout(btn_ptr);
     switch (key)
     {
-    case KEY_A:
-        point_array_A[0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
-        lv_indev_set_button_points(indev_A, point_array_A);
+        case KEY_A:
+            point_array_A[0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
+                                            (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            lv_indev_set_button_points(indev_A, point_array_A);
 
-        break;
+            break;
 
-    case KEY_B:
-        point_array_B[0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
-        lv_indev_set_button_points(indev_B, point_array_B);
+        case KEY_B:
+            point_array_B[0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
+                                            (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            lv_indev_set_button_points(indev_B, point_array_B);
 
-        break;
+            break;
 
-    case KEY_X:
-        point_array_X[0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
-        lv_indev_set_button_points(indev_X, point_array_X);
+        case KEY_X:
+            point_array_X[0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
+                                            (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            lv_indev_set_button_points(indev_X, point_array_X);
 
-        break;
+            break;
 
-    case KEY_Y:
-        point_array_Y[0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2, (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
-        lv_indev_set_button_points(indev_Y, point_array_Y);
-        break;
+        case KEY_Y:
+            point_array_Y[0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
+                                            (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            lv_indev_set_button_points(indev_Y, point_array_Y);
+            break;
 
-    default:
-        hang_err("Fail to register virtual button");
-        break;
+        default:
+            hang_err("Fail to register virtual button");
+            break;
     }
 }
 
@@ -385,32 +388,32 @@ static void remove_virtual_btn(u32 key)
 {
     switch (key)
     {
-    case KEY_A:
-        point_array_A[0] = (lv_point_t){-1, -1};
-        lv_indev_set_button_points(indev_A, point_array_A);
+        case KEY_A:
+            point_array_A[0] = (lv_point_t){-1, -1};
+            lv_indev_set_button_points(indev_A, point_array_A);
 
-        break;
+            break;
 
-    case KEY_B:
-        point_array_B[0] = (lv_point_t){-1, -1};
-        lv_indev_set_button_points(indev_B, point_array_B);
+        case KEY_B:
+            point_array_B[0] = (lv_point_t){-1, -1};
+            lv_indev_set_button_points(indev_B, point_array_B);
 
-        break;
+            break;
 
-    case KEY_X:
-        point_array_X[0] = (lv_point_t){-1, -1};
-        lv_indev_set_button_points(indev_X, point_array_X);
+        case KEY_X:
+            point_array_X[0] = (lv_point_t){-1, -1};
+            lv_indev_set_button_points(indev_X, point_array_X);
 
-        break;
+            break;
 
-    case KEY_Y:
-        point_array_Y[0] = (lv_point_t){-1, -1};
-        lv_indev_set_button_points(indev_Y, point_array_Y);
-        break;
+        case KEY_Y:
+            point_array_Y[0] = (lv_point_t){-1, -1};
+            lv_indev_set_button_points(indev_Y, point_array_Y);
+            break;
 
-    default:
-        hang_err("Invalid virtual btn input");
-        break;
+        default:
+            hang_err("Invalid virtual btn input");
+            break;
     }
 }
 
@@ -480,13 +483,18 @@ static void tab_Ac_Li()
     lv_obj_t *tab2 = lv_tabview_add_tab(tab_view, "About");
     lv_obj_set_width(tab2, 280);
     lv_obj_t *licences = lv_label_create(tab2);
-    lv_label_set_text(licences, "This software is provided 'as-is', without any express or implied warranty."
-                                "In no event will the authors be held liable for any damages arising from the use of this software. "
-                                "Permission is granted to anyone to use this software for any purpose, including commercial applications, "
-                                "and to alter it and redistribute it freely, subject to the following restrictions:\n\n"
-                                "1.   The origin of this software must not be misrepresented; you must not claim that you wrote the original software. If you use this software in a product, an acknowledgment in the product documentation would be appreciated but is not required.\n"
-                                "2.   Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.\n"
-                                "3.   This notice may not be removed or altered from any source distribution.");
+    lv_label_set_text(
+        licences,
+        "This software is provided 'as-is', without any express or implied warranty."
+        "In no event will the authors be held liable for any damages arising from the use of this software. "
+        "Permission is granted to anyone to use this software for any purpose, including commercial applications, "
+        "and to alter it and redistribute it freely, subject to the following restrictions:\n\n"
+        "1.   The origin of this software must not be misrepresented; you must not claim that you wrote the original "
+        "software. If you use this software in a product, an acknowledgment in the product documentation would be "
+        "appreciated but is not required.\n"
+        "2.   Altered source versions must be plainly marked as such, and must not be misrepresented as being the "
+        "original software.\n"
+        "3.   This notice may not be removed or altered from any source distribution.");
     lv_label_set_long_mode(licences, LV_LABEL_LONG_WRAP);
     lv_obj_set_width(licences, 250);
 
@@ -545,7 +553,7 @@ void quit_detect_cb(lv_event_t *e)
 void object_display_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    lv_obj_t *item = lv_event_get_target(e);
+    lv_obj_t       *item = lv_event_get_target(e);
 
     if (code == LV_EVENT_CLICKED)
     {
@@ -556,8 +564,7 @@ void object_display_cb(lv_event_t *e)
         if (idx < 0)
         {
             draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
-        }
-        else
+        } else
         {
             BoxInfo obj = BoxVec_getItem(idx, &objects);
 
@@ -568,13 +575,7 @@ void object_display_cb(lv_event_t *e)
             BoxVec_free(&box_Vec_temp);
         }
 
-        writePixelsToFrameBuffer(
-            gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL),
-            pixels,
-            0,
-            0,
-            WIDTH_TOP,
-            HEIGHT_TOP);
+        writePixelsToFrameBuffer(gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), pixels, 0, 0, WIDTH_TOP, HEIGHT_TOP);
 
         gfxFlushBuffers();
         gfxScreenSwapBuffers(GFX_TOP, true);
@@ -607,13 +608,7 @@ void detect_cb(lv_event_t *e)
 
         // Print inference outputs
         draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &objects);
-        writePixelsToFrameBuffer(
-            gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL),
-            pixels,
-            0,
-            0,
-            WIDTH_TOP,
-            HEIGHT_TOP);
+        writePixelsToFrameBuffer(gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), pixels, 0, 0, WIDTH_TOP, HEIGHT_TOP);
 
         gfxFlushBuffers();
         gfxScreenSwapBuffers(GFX_TOP, true);
@@ -653,9 +648,9 @@ void widgets_init()
     g = lv_group_create();
     static lv_indev_drv_t indev_drv_cross;
     lv_indev_drv_init(&indev_drv_cross);
-    indev_drv_cross.type = LV_INDEV_TYPE_ENCODER;
+    indev_drv_cross.type    = LV_INDEV_TYPE_ENCODER;
     indev_drv_cross.read_cb = encoder_cb_3ds;
-    lv_indev_t *enc_indev = lv_indev_drv_register(&indev_drv_cross);
+    lv_indev_t *enc_indev   = lv_indev_drv_register(&indev_drv_cross);
     lv_indev_set_group(enc_indev, g);
 
     // Style init

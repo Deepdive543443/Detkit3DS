@@ -4,15 +4,15 @@
 #include "3ds.h"
 #include "sections.h"
 
-#define TEST_THREAD 1
+#define TEST_THREAD    1
 #define TEST_INFERENCE 1
 
 #define DURATION_MILLION_SEC 1000000
-#define MILLION_SEC 1000
-#define STACKSIZE (4 * 1024)
+#define MILLION_SEC          1000
+#define STACKSIZE            (4 * 1024)
 
-static int timer = 0;
-static bool ticking = false;
+static int    timer   = 0;
+static bool   ticking = false;
 static Thread timer_thread;
 
 void timer_thread_func()
@@ -39,7 +39,8 @@ int main(int argc, char **argv)
 {
     gfxInitDefault();
 
-    // Initialize console on top screen. Using NULL as the second argument tells the console library to use the internal console structure as current one
+    // Initialize console on top screen. Using NULL as the second argument tells the console library to use the internal
+    // console structure as current one
     consoleInit(GFX_TOP, NULL);
 
 #if USE_SYS_CORE
@@ -99,7 +100,7 @@ int main(int argc, char **argv)
             clock_gettime(CLOCK_MONOTONIC, &start);
             unsigned char *pixels_cpy = (unsigned char *)malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
             memset(pixels_cpy, 0.5f, sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
-            det = create_fastestdet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
+            det            = create_fastestdet(352, "romfs:FastestDet.param", "romfs:FastestDet.bin");
             BoxVec objects = det.detect(pixels_cpy, WIDTH_TOP, HEIGHT_TOP, &det);
             printf("(FastestDet) Detected %d items, (%lldms): \n", objects.num_item, ticker());
 
@@ -121,11 +122,11 @@ int main(int argc, char **argv)
         // Scan all the inputs. This should be done once for each frame
         hidScanInput();
 
-        // hidKeysDown returns information about which buttons have been just pressed (and they weren't in the previous frame)
+        // hidKeysDown returns information about which buttons have been just pressed (and they weren't in the previous
+        // frame)
         u32 kDown = hidKeysDown();
 
-        if (kDown & KEY_START)
-            break; // break in order to return to hbmenu
+        if (kDown & KEY_START) break;  // break in order to return to hbmenu
 
         // Flush and swap framebuffers
         gfxFlushBuffers();

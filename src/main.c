@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     }
 
     // Camera framebuffer init
-    cam_buf = malloc(SCRSIZE_TOP * 2); // RBG565 frame buffer
+    cam_buf = malloc(SCRSIZE_TOP * 2);  // RBG565 frame buffer
     if (!cam_buf)
     {
         hang_err("Failed to allocate memory for Camera!");
@@ -54,8 +54,7 @@ int main(int argc, char **argv)
         lv_timer_handler();
         if (!detecting)
         {
-            if (camUpdate())
-                continue;
+            if (camUpdate()) continue;
         }
 
         // User input
@@ -63,8 +62,7 @@ int main(int argc, char **argv)
         kHeld = hidKeysHeld();
 
         // Quit App
-        if (kHeld & KEY_START)
-            break;
+        if (kHeld & KEY_START) break;
 
         main_loop_locker();
     }

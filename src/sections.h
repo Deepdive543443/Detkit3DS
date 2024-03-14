@@ -2,28 +2,28 @@
 #define SECTIONS_H
 #include <setjmp.h>
 #include "3ds.h"
-#include "lvgl.h"
 #include "detector.h"
+#include "lvgl.h"
 
-#define WIDTH_BTM 320
+#define WIDTH_BTM  320
 #define HEIGHT_BTM 240
 
-#define WIDTH_TOP 400
-#define HEIGHT_TOP 240
+#define WIDTH_TOP   400
+#define HEIGHT_TOP  240
 #define SCRSIZE_TOP WIDTH_TOP *HEIGHT_TOP
 
 #define STACKSIZE (4 * 1024)
-#define TICK_MS 1              // Millisec a tick
-#define TICK_US TICK_MS * 1000 // Microsec a tick
-#define TICK_NS TICK_US * 1000 // Nanosec a tick
+#define TICK_MS   1               // Millisec a tick
+#define TICK_US   TICK_MS * 1000  // Microsec a tick
+#define TICK_NS   TICK_US * 1000  // Nanosec a tick
 
 // Glob
 extern jmp_buf exitJmp;
 
 extern Detector det;
-extern BoxVec objects;
-extern bool detecting;
-extern void *cam_buf;
+extern BoxVec   objects;
+extern bool     detecting;
+extern void    *cam_buf;
 
 #define USE_SYS_CORE 0 /*Sys code leads to slower loading speed and it's not available in CIA*/
 extern bool g_thread_ticking;
@@ -40,9 +40,9 @@ void camSetup();
 bool camUpdate();
 
 // display.c
-void writePic2FrameBuf565(void *fb, lv_color_t *color, u16 x, u16 y, u16 w, u16 h);
-void flush_cb_3ds_btm(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
-void flush_cb_3ds_top(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
+void       writePic2FrameBuf565(void *fb, lv_color_t *color, u16 x, u16 y, u16 w, u16 h);
+void       flush_cb_3ds_btm(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
+void       flush_cb_3ds_top(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
 lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_color_t *buf1, lv_disp_drv_t *disp_drv);
 
 // ui.c
@@ -71,4 +71,4 @@ void hang_err(const char *message);
 void HALinit();
 void HAL_cleanup();
 
-#endif // SECTIONS_H
+#endif  // SECTIONS_H
