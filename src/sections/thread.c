@@ -5,7 +5,6 @@
 // Glob
 jmp_buf  g_exitJmp;  // Debug
 Detector g_det;
-void    *cam_buf;
 
 static bool s_thread_ticking;
 

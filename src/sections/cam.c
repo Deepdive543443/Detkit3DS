@@ -1,17 +1,17 @@
 #include <stdlib.h>
 #include "sections.h"
 
-static void  *cam_buf = NULL;
-static u32    bufSize;
-static Handle camReceiveEvent[2] = {0};
-static bool   captureInterrupted;
-static s32    index_handler = 0;
-CamState      g_camState    = CAM_CLOSE;
+CamState      g_camState           = CAM_CLOSE;
+static Handle s_camReceiveEvent[2] = {0};
+static void  *s_cam_buf            = NULL;
+static s32    s_index_handler      = 0;
+static u32    s_bufSize;
+static bool   s_captureInterrupted;
 
 static void writeCamToFramebufferRGB565(void *fb, u16 x, u16 y, u16 width, u16 height)
 {
     u8  *fb_8   = (u8 *)fb;
-    u16 *img_16 = (u16 *)cam_buf;
+    u16 *img_16 = (u16 *)s_cam_buf;
     int  i, j, draw_x, draw_y;
     for (j = 0; j < height; j++)
     {
@@ -54,7 +54,7 @@ static void writeCamToFramebufferRGB565_filter(void *fb, u16 x, u16 y, u16 width
 
 void writeCamToPixels(unsigned char *pixels, u16 x0, u16 y0, u16 width, u16 height)
 {
-    u16           *img_16  = (u16 *)cam_buf;
+    u16           *img_16  = (u16 *)s_cam_buf;
     unsigned char *mat_ptr = pixels;
     u16            data;
 
@@ -110,8 +110,8 @@ void pause_cam_capture()
 void camSetup()
 {
     // Camera framebuffer init
-    cam_buf = malloc(SCRSIZE_TOP * 2);  // RBG565 frame buffer
-    if (!cam_buf)
+    s_cam_buf = malloc(SCRSIZE_TOP * 2);  // RBG565 frame buffer
+    if (!s_cam_buf)
     {
         hang_err("Failed to allocate memory for Camera!");
     }
@@ -128,11 +128,11 @@ void camSetup()
     CAMU_SetAutoWhiteBalance(SELECT_OUT1, true);
     CAMU_SetTrimming(PORT_CAM1, false);
 
-    CAMU_GetMaxBytes(&bufSize, WIDTH_TOP, HEIGHT_TOP);
-    CAMU_SetTransferBytes(PORT_CAM1, bufSize, WIDTH_TOP, HEIGHT_TOP);
+    CAMU_GetMaxBytes(&s_bufSize, WIDTH_TOP, HEIGHT_TOP);
+    CAMU_SetTransferBytes(PORT_CAM1, s_bufSize, WIDTH_TOP, HEIGHT_TOP);
     CAMU_Activate(SELECT_OUT1);
 
-    CAMU_GetBufferErrorInterruptEvent(&camReceiveEvent[0], PORT_CAM1);
+    CAMU_GetBufferErrorInterruptEvent(&s_camReceiveEvent[0], PORT_CAM1);
     CAMU_ClearBuffer(PORT_CAM1);
     CAMU_StartCapture(PORT_CAM1);
     CAMU_PlayShutterSound(SHUTTER_SOUND_TYPE_MOVIE);
@@ -143,31 +143,26 @@ bool camUpdate()
 {
     if (g_camState == CAM_HANG) return 0;
 
-    if (camReceiveEvent[1] == 0)
-    {
-        CAMU_SetReceiving(&camReceiveEvent[1], cam_buf, PORT_CAM1, SCRSIZE_TOP * 2, (s16)bufSize);
-    }
-
-    if (captureInterrupted)
+    if (s_camReceiveEvent[1] == 0)
     {
         CAMU_StartCapture(PORT_CAM1);
-        captureInterrupted = false;
+        s_captureInterrupted = false;
     }
 
-    svcWaitSynchronizationN(&index_handler, camReceiveEvent, 2, false, WAIT_TIMEOUT);
-    switch (index_handler)
+    svcWaitSynchronizationN(&s_index_handler, s_camReceiveEvent, 2, false, WAIT_TIMEOUT);
+    switch (s_index_handler)
     {
         case 0:
-            svcCloseHandle(camReceiveEvent[1]);
-            camReceiveEvent[1] = 0;
-            captureInterrupted = true;
+            svcCloseHandle(s_camReceiveEvent[1]);
+            s_camReceiveEvent[1] = 0;
+            s_captureInterrupted = true;
 
-            return captureInterrupted;
+            return s_captureInterrupted;
             break;
 
         case 1:
-            svcCloseHandle(camReceiveEvent[1]);
-            camReceiveEvent[1] = 0;
+            svcCloseHandle(s_camReceiveEvent[1]);
+            s_camReceiveEvent[1] = 0;
 
             break;
 
@@ -182,5 +177,5 @@ bool camUpdate()
     gfxScreenSwapBuffers(GFX_TOP, true);
     gspWaitForVBlank();
 
-    return captureInterrupted;
+    return s_captureInterrupted;
 }
