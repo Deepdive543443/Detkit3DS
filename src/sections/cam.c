@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "sections.h"
 
-static void  *cam_buf = NULL;
+static void  *s_cam_buf = NULL;
 static u32    bufSize;
 static Handle camReceiveEvent[2] = {0};
 static bool   captureInterrupted;
@@ -11,7 +11,7 @@ CamState      g_camState    = CAM_CLOSE;
 static void writeCamToFramebufferRGB565(void *fb, u16 x, u16 y, u16 width, u16 height)
 {
     u8  *fb_8   = (u8 *)fb;
-    u16 *img_16 = (u16 *)cam_buf;
+    u16 *img_16 = (u16 *)s_cam_buf;
     int  i, j, draw_x, draw_y;
     for (j = 0; j < height; j++)
     {
@@ -54,7 +54,7 @@ static void writeCamToFramebufferRGB565_filter(void *fb, u16 x, u16 y, u16 width
 
 void writeCamToPixels(unsigned char *pixels, u16 x0, u16 y0, u16 width, u16 height)
 {
-    u16           *img_16  = (u16 *)cam_buf;
+    u16           *img_16  = (u16 *)s_cam_buf;
     unsigned char *mat_ptr = pixels;
     u16            data;
 
@@ -110,8 +110,8 @@ void pause_cam_capture()
 void camSetup()
 {
     // Camera framebuffer init
-    cam_buf = malloc(SCRSIZE_TOP * 2);  // RBG565 frame buffer
-    if (!cam_buf)
+    s_cam_buf = malloc(SCRSIZE_TOP * 2);  // RBG565 frame buffer
+    if (!s_cam_buf)
     {
         hang_err("Failed to allocate memory for Camera!");
     }
@@ -145,7 +145,7 @@ bool camUpdate()
 
     if (camReceiveEvent[1] == 0)
     {
-        CAMU_SetReceiving(&camReceiveEvent[1], cam_buf, PORT_CAM1, SCRSIZE_TOP * 2, (s16)bufSize);
+        CAMU_SetReceiving(&camReceiveEvent[1], s_cam_buf, PORT_CAM1, SCRSIZE_TOP * 2, (s16)bufSize);
     }
 
     if (captureInterrupted)
