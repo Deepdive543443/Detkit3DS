@@ -26,9 +26,6 @@ find_library(LIBCTRU_LIBRARY NAMES ctru libctru.a
           PATHS ${CTRULIB_PATHS}
           PATH_SUFFIXES lib libctru/lib )
 
-set(LIBCTRU_LIBRARIES ${LIBCTRU_LIBRARY} )
-set(LIBCTRU_INCLUDE_DIRS ${LIBCTRU_INCLUDE_DIR} )
-
 include(FindPackageHandleStandardArgs)
 # handle the QUIETLY and REQUIRED arguments and set LIBCTRU_FOUND to TRUE
 # if all listed variables are TRUE

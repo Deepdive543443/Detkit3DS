@@ -1,12 +1,12 @@
 #include <stdlib.h>
 #include "sections.h"
 
-static void  *s_cam_buf = NULL;
-static u32    s_bufSize;
+CamState      g_camState           = CAM_CLOSE;
 static Handle s_camReceiveEvent[2] = {0};
+static void  *s_cam_buf            = NULL;
+static s32    s_index_handler      = 0;
 static bool   s_captureInterrupted;
-static s32    s_index_handler = 0;
-CamState      g_camState    = CAM_CLOSE;
+static u32    s_bufSize;
 
 static void writeCamToFramebufferRGB565(void *fb, u16 x, u16 y, u16 width, u16 height)
 {

@@ -20,6 +20,8 @@ project(${project_title}.elf)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake) # Add the cmake folder to the modules paths, so that we can use the tools and find_package for ctrulib
 include(Tools3DS) # Include all the macros and tools needed for 3ds development.
 find_package(CTRULIB REQUIRED) # Look for ctrulib
+find_package(CITRO3D REQUIRED)
+find_package(CITRO2D REQUIRED)
 
 # Build executable
 file(GLOB SECTIONS src/sections/*.c)
@@ -27,7 +29,10 @@ add_executable(${project_title}.elf src/main.c ${SECTIONS}) # Create the elf fil
 target_include_directories(${project_title}.elf PRIVATE src)
 # target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
+target_link_libraries(${project_title}.elf 3ds::citro2d)
+target_link_libraries(${project_title}.elf 3ds::citro3d)
 target_link_libraries(${project_title}.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !
+target_link_libraries(${project_title}.elf m)
 
 #Link detkit
 target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/build/detector)
