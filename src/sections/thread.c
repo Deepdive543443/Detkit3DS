@@ -6,9 +6,8 @@
 jmp_buf  g_exitJmp;  // Debug
 Detector g_det;
 
-static bool s_thread_ticking;
-
-static Thread tick_thread;  // Thread
+static bool   s_thread_ticking;
+static Thread s_tick_thread;  // Thread
 
 static void lvgl_tick_thread()
 {
@@ -78,15 +77,15 @@ void HALinit()
     svcGetThreadPriority(&prio, CUR_THREAD_HANDLE);
 
 #if USE_SYS_CORE
-    tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio - 1, 1, false);
+    s_tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio - 1, 1, false);
 #else
-    tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio - 1, -2, false);
+    s_tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio - 1, -2, false);
 #endif  // USE_SYS_CORE
 }
 
 void HAL_cleanup()
 {
     s_thread_ticking = false;
-    threadJoin(tick_thread, U64_MAX);
-    threadFree(tick_thread);
+    threadJoin(s_tick_thread, U64_MAX);
+    threadFree(s_tick_thread);
 }
