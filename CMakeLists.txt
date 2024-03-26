@@ -24,7 +24,7 @@ find_package(CITRO3D REQUIRED)
 find_package(CITRO2D REQUIRED)
 
 # Build executable
-file(GLOB SECTIONS src/sections/*.c)
+file(GLOB_RECURSE SECTIONS src/sections/*.c)
 add_executable(${project_title}.elf src/main.c ${SECTIONS}) # Create the elf file
 target_include_directories(${project_title}.elf PRIVATE src)
 # target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/lib)

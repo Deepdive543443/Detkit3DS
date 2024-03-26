@@ -1,4 +1,4 @@
-#include "sections.h"
+#include "sections/display.h"
 
 static void flush_cb_3ds(gfxScreen_t gfx_scr, lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
 {
@@ -79,5 +79,4 @@ lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_co
     disp_drv->draw_buf    = draw_buf;
     disp_drv->direct_mode = 1;
     return lv_disp_drv_register(disp_drv);
-    ;
 }

@@ -17,55 +17,14 @@
 #define TICK_NS      TICK_US * 1000  // Nanosec a tick
 #define USE_SYS_CORE 0               /*Sys code leads to slower loading speed and it's not available in CIA*/
 
-typedef enum {
-    CAM_CLOSE,
-    CAM_STREAM,
-    CAM_HANG
-} CamState;
+#include "sections/cam.h"
+#include "sections/display.h"
+#include "sections/input.h"
+#include "sections/thread.h"
+#include "sections/ui.h"
+#include "sections/widgets/widget.h"
 
 // Glob
 extern jmp_buf  g_exitJmp;
 extern Detector g_det;
-extern CamState g_camState;
-
-// cam.c
-#define WAIT_TIMEOUT 1000000000ULL
-void writeCamToPixels(unsigned char *pixels, u16 x0, u16 y0, u16 width, u16 height);
-void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x0, u16 y0, u16 width, u16 height);
-void pause_cam_capture();
-void camSetup();
-bool camUpdate();
-
-// display.c
-void       writePic2FrameBuf565(void *fb, lv_color_t *color, u16 x, u16 y, u16 w, u16 h);
-void       flush_cb_3ds_btm(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
-void       flush_cb_3ds_top(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p);
-lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_color_t *buf1, lv_disp_drv_t *disp_drv);
-
-// ui.c
-void pop_up_tabview_cb(lv_event_t *e);
-void close_tabview_cb(lv_event_t *e);
-void quit_detect_cb(lv_event_t *e);
-void object_display_cb(lv_event_t *e);
-void detect_cb(lv_event_t *e);
-void res_init();
-void widgets_init();
-void ui_cleanup();
-
-// input.c
-void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
-void virtual_B_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
-void virtual_X_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
-void virtual_Y_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
-void virtual_L_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
-void virtual_R_cb(lv_indev_drv_t *drv, lv_indev_data_t *data);
-void touch_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data);
-void encoder_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data);
-
-// thread.c
-void main_loop_locker();
-void hang_err(const char *message);
-void HALinit();
-void HAL_cleanup();
-
 #endif  // SECTIONS_H

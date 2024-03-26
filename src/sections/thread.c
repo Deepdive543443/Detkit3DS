@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <time.h>
-#include "sections.h"
+#include "sections/thread.h"
 
 // Glob
 jmp_buf  g_exitJmp;  // Debug

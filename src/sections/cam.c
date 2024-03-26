@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "sections.h"
+#include "sections/cam.h"
 
 CamState      g_camState           = CAM_CLOSE;
 static Handle s_camReceiveEvent[2] = {0};

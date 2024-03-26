@@ -1,4 +1,7 @@
-#include "sections.h"
+#include "sections/input.h"
+
+static lv_indev_drv_t indev_drv_cross;
+static lv_indev_t    *enc_indev = NULL;
 
 static void virtual_press_cb(u32 key, lv_indev_drv_t *drv, lv_indev_data_t *data)
 {
@@ -60,3 +63,13 @@ void encoder_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data)
         data->state = LV_INDEV_STATE_RELEASED;
     }
 }
+
+void encoder_driver_init()
+{
+    lv_indev_drv_init(&indev_drv_cross);
+    indev_drv_cross.type    = LV_INDEV_TYPE_ENCODER;
+    indev_drv_cross.read_cb = encoder_cb_3ds;
+    enc_indev               = lv_indev_drv_register(&indev_drv_cross);
+}
+
+void encoder_driver_set_group(lv_group_t *group) { lv_indev_set_group(enc_indev, group); }

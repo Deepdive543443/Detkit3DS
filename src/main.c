@@ -24,7 +24,6 @@ int main(int argc, char **argv)
     // IVGL init
     lv_init();
     HALinit();
-    res_init();
     widgets_init();
 
     // Cam init
