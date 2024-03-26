@@ -22,7 +22,7 @@
 #include "sections/input.h"
 #include "sections/thread.h"
 #include "sections/ui.h"
-#include "sections/widgets/widget.h"
+#include "sections/ui/widget.h"
 
 // Glob
 extern jmp_buf  g_exitJmp;
