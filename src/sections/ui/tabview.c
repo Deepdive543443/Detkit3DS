@@ -12,8 +12,7 @@ static lv_obj_t *tab_view = NULL;
 static void close_tabview_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
-    if (code == LV_EVENT_CLICKED)
-    {
+    if (code == LV_EVENT_CLICKED) {
         g_camState = CAM_STREAM;
         ui_layer_pop();
     }

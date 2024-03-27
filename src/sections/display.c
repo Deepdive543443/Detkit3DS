@@ -1,5 +1,9 @@
 #include "sections/display.h"
 
+static lv_disp_draw_buf_t draw_buf_btm;
+static lv_color_t         buf1_btm[WIDTH_BTM * HEIGHT_BTM];
+static lv_disp_drv_t      disp_drv_btm; /*Descriptor of a display driver*/
+
 static void flush_cb_3ds(gfxScreen_t gfx_scr, lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
 {
     /* Update and swap frame buffer
@@ -26,10 +30,8 @@ void writePic2FrameBuf565(void *fb, lv_color_t *color, u16 x, u16 y, u16 w, u16 
     u8 *fb_8 = (u8 *)fb;
 
     u16 i, j, draw_x, draw_y;
-    for (j = 0; j < h; j++)
-    {
-        for (i = 0; i < w; i++)
-        {
+    for (j = 0; j < h; j++) {
+        for (i = 0; i < w; i++) {
             draw_y = y + h - j - 1;
             draw_x = x + i;
 
@@ -52,31 +54,30 @@ void flush_cb_3ds_top(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *co
     flush_cb_3ds(GFX_TOP, disp, area, color_p);
 }
 
-lv_disp_t *display_init(gfxScreen_t gfx_scr, lv_disp_draw_buf_t *draw_buf, lv_color_t *buf1, lv_disp_drv_t *disp_drv)
+lv_disp_t *display_init(gfxScreen_t gfx_scr)
 {
-    lv_disp_drv_init(disp_drv);
+    lv_disp_drv_init(&disp_drv_btm);
 
-    switch (gfx_scr)
-    {
+    switch (gfx_scr) {
         case GFX_TOP:
-            lv_disp_draw_buf_init(draw_buf, buf1, NULL, WIDTH_TOP * HEIGHT_TOP);
-            disp_drv->flush_cb = flush_cb_3ds_top; /*Set your driver function*/
-            disp_drv->hor_res  = WIDTH_TOP;        /*Set the horizontal resolution of the display*/
-            disp_drv->ver_res  = HEIGHT_TOP;       /*Set the vertical resolution of the display*/
+            lv_disp_draw_buf_init(&draw_buf_btm, buf1_btm, NULL, WIDTH_TOP * HEIGHT_TOP);
+            disp_drv_btm.flush_cb = flush_cb_3ds_top; /*Set your driver function*/
+            disp_drv_btm.hor_res  = WIDTH_TOP;        /*Set the horizontal resolution of the display*/
+            disp_drv_btm.ver_res  = HEIGHT_TOP;       /*Set the vertical resolution of the display*/
             break;
 
         case GFX_BOTTOM:
-            lv_disp_draw_buf_init(draw_buf, buf1, NULL, WIDTH_BTM * HEIGHT_BTM);
-            disp_drv->flush_cb = flush_cb_3ds_btm; /*Set your driver function*/
-            disp_drv->hor_res  = WIDTH_BTM;        /*Set the horizontal resolution of the display*/
-            disp_drv->ver_res  = HEIGHT_BTM;       /*Set the vertical resolution of the display*/
+            lv_disp_draw_buf_init(&draw_buf_btm, buf1_btm, NULL, WIDTH_BTM * HEIGHT_BTM);
+            disp_drv_btm.flush_cb = flush_cb_3ds_btm; /*Set your driver function*/
+            disp_drv_btm.hor_res  = WIDTH_BTM;        /*Set the horizontal resolution of the display*/
+            disp_drv_btm.ver_res  = HEIGHT_BTM;       /*Set the vertical resolution of the display*/
             break;
 
         default:
             break;
     }
 
-    disp_drv->draw_buf    = draw_buf;
-    disp_drv->direct_mode = 1;
-    return lv_disp_drv_register(disp_drv);
+    disp_drv_btm.draw_buf    = &draw_buf_btm;
+    disp_drv_btm.direct_mode = 1;
+    return lv_disp_drv_register(&disp_drv_btm);
 }

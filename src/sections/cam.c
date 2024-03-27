@@ -13,10 +13,8 @@ static void writeCamToFramebufferRGB565(void *fb, u16 x, u16 y, u16 width, u16 h
     u8  *fb_8   = (u8 *)fb;
     u16 *img_16 = (u16 *)s_cam_buf;
     int  i, j, draw_x, draw_y;
-    for (j = 0; j < height; j++)
-    {
-        for (i = 0; i < width; i++)
-        {
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width; i++) {
             draw_y      = y + height - j - 1;
             draw_x      = x + i;
             u32 v       = (draw_y + draw_x * height) * 3;
@@ -36,15 +34,12 @@ static void writeCamToFramebufferRGB565_filter(void *fb, u16 x, u16 y, u16 width
     writeCamToFramebufferRGB565(fb, x, y, width, height);
     u8 *fb_8 = (u8 *)fb;
     int i, j, k, draw_x, draw_y;
-    for (j = 0; j < height; j++)
-    {
-        for (i = 0; i < width; i++)
-        {
+    for (j = 0; j < height; j++) {
+        for (i = 0; i < width; i++) {
             draw_y = y + height - j - 1;
             draw_x = x + i;
             u32 v  = (draw_y + draw_x * height) * 3;
-            for (k = 0; k < 3; k++)
-            {
+            for (k = 0; k < 3; k++) {
                 fb_8[v + k] *= (1 - weight);
                 fb_8[v + k] += 255 * weight;
             }
@@ -58,10 +53,8 @@ void writeCamToPixels(unsigned char *pixels, u16 x0, u16 y0, u16 width, u16 heig
     unsigned char *mat_ptr = pixels;
     u16            data;
 
-    for (int j = y0; j < height; j++)
-    {
-        for (int i = x0; i < width; i++)
-        {
+    for (int j = y0; j < height; j++) {
+        for (int i = x0; i < width; i++) {
             data = img_16[j * width + i];
 
             mat_ptr[0] = (unsigned char)((data & 0x1F) << 3);
@@ -79,10 +72,8 @@ void writePixelsToFrameBuffer(void *fb, unsigned char *pixels, u16 x, u16 y, u16
     unsigned char *pixels_ptr = pixels;
 
     int draw_x, draw_y;
-    for (int j = 0; j < height; j++)
-    {
-        for (int i = 0; i < width; i++)
-        {
+    for (int j = 0; j < height; j++) {
+        for (int i = 0; i < width; i++) {
             draw_y = y + height - j - 1;
             draw_x = x + i;
             u32 v  = (draw_y + draw_x * height) * 3;
@@ -111,10 +102,7 @@ void camSetup()
 {
     // Camera framebuffer init
     s_cam_buf = malloc(SCRSIZE_TOP * 2);  // RBG565 frame buffer
-    if (!s_cam_buf)
-    {
-        hang_err("Failed to allocate memory for Camera!");
-    }
+    if (!s_cam_buf) hang_err("Failed to allocate memory for Camera!");
 
     camInit();
     gfxSetDoubleBuffering(GFX_TOP, true);
@@ -144,19 +132,15 @@ bool camUpdate()
     if (g_camState == CAM_HANG) return 0;
 
     if (s_camReceiveEvent[1] == 0)
-    {
         CAMU_SetReceiving(&s_camReceiveEvent[1], s_cam_buf, PORT_CAM1, SCRSIZE_TOP * 2, (s16)s_bufSize);
-    }
 
-    if (s_captureInterrupted)
-    {
+    if (s_captureInterrupted) {
         CAMU_StartCapture(PORT_CAM1);
         s_captureInterrupted = false;
     }
 
     svcWaitSynchronizationN(&s_index_handler, s_camReceiveEvent, 2, false, WAIT_TIMEOUT);
-    switch (s_index_handler)
-    {
+    switch (s_index_handler) {
         case 0:
             svcCloseHandle(s_camReceiveEvent[1]);
             s_camReceiveEvent[1] = 0;

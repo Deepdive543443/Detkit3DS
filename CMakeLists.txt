@@ -1,9 +1,11 @@
 # Build all objects using cmake -DBUILD_TEST=ON -DBUILD_CIA=ON ..
-set(CMAKE_TOOLCHAIN_FILE cmake/DevkitArm3DS.cmake)
+set(CMAKE_TOOLCHAIN_FILE cmake/DevkitArm3DS-toolchain.cmake)
 set(project_title DetKit3DS)
 cmake_minimum_required(VERSION 3.14)
 
 set(APP_TITLE ${project_title})
+
+# Rom components(icon, sound effect, rom file system, etc)
 set(APP_DESCRIPTION "DetKitNCNN with UI backend")
 set(APP_AUTHOR Deepdive543443)
 set(APP_ICON rom/icon_detkit.png)
@@ -16,22 +18,21 @@ option(BUILD_CIA "Build CIA package for title manager to install" OFF)
 option(BUILD_TEST "Build test case of different experimental features" OFF)
 
 project(${project_title}.elf)
-# Note that you must copy the cmake folder and the DevkitArm3DS.cmake file in this directory
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake) # Add the cmake folder to the modules paths, so that we can use the tools and find_package for ctrulib
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 include(Tools3DS) # Include all the macros and tools needed for 3ds development.
-find_package(CTRULIB REQUIRED) # Look for ctrulib
+find_package(CTRULIB REQUIRED)
 find_package(CITRO3D REQUIRED)
 find_package(CITRO2D REQUIRED)
 
 # Build executable
 file(GLOB_RECURSE SECTIONS src/sections/*.c)
-add_executable(${project_title}.elf src/main.c ${SECTIONS}) # Create the elf file
+add_executable(${project_title}.elf src/main.c ${SECTIONS})
 target_include_directories(${project_title}.elf PRIVATE src)
-# target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
+# Link ctrulib, this will also setup the include directories
 target_link_libraries(${project_title}.elf 3ds::citro2d)
 target_link_libraries(${project_title}.elf 3ds::citro3d)
-target_link_libraries(${project_title}.elf 3ds::ctrulib) # Link ctrulib, this will also setup the include directories !
+target_link_libraries(${project_title}.elf 3ds::ctrulib)
 target_link_libraries(${project_title}.elf m)
 
 #Link detkit
@@ -42,7 +43,8 @@ target_link_libraries(${project_title}.elf ${CMAKE_CURRENT_LIST_DIR}/lib/build/d
 target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/build/lvgl)
 target_link_libraries(${project_title}.elf ${CMAKE_CURRENT_LIST_DIR}/lib/build/lvgl/liblvgl.a)
 
-set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/ncnn_3ds_master/lib/cmake/ncnn) # Link ncnn(temp)
+# Link ncnn
+set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/ncnn_3ds_master/lib/cmake/ncnn)
 find_package(ncnn REQUIRED)
 target_link_libraries(${project_title}.elf ncnn)
 

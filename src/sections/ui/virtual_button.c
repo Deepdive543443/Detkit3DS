@@ -34,8 +34,7 @@ static void button_style_init(lv_style_t *btn)
 
 static void virtual_button_driver_init()
 {
-    for (int i = 0; i < 4; i++)
-    {
+    for (int i = 0; i < 4; i++) {
         s_drv_virbtn[i].type    = LV_INDEV_TYPE_BUTTON;
         s_drv_virbtn[i].read_cb = s_virbtn_callbacks[i];
         s_btn_indev_list[i]     = lv_indev_drv_register(&s_drv_virbtn[i]);
@@ -69,8 +68,7 @@ void add_btm_btn(Button key, void *callback, lv_coord_t width, const char *label
 
     char icon_label[2] = {'\0'};
 
-    switch (key)
-    {
+    switch (key) {
         case BTN_A:
 
             s_btn_obj_list[BTN_A] = lv_btn_create(btm_btn_container);
@@ -140,29 +138,26 @@ void add_btm_btn(Button key, void *callback, lv_coord_t width, const char *label
     lv_obj_add_event_cb(btn_ptr, callback, LV_EVENT_ALL, 0);
 
     lv_obj_update_layout(btn_ptr);
-    switch (key)
-    {
+    lv_point_t initial_point = {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
+                                (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+    switch (key) {
         case BTN_A:
-            s_btn_corr_list[BTN_A][0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
-                                                     (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            s_btn_corr_list[BTN_A][0] = initial_point;
             lv_indev_set_button_points(s_btn_indev_list[BTN_A], s_btn_corr_list[BTN_A]);
             break;
 
         case BTN_B:
-            s_btn_corr_list[BTN_B][0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
-                                                     (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            s_btn_corr_list[BTN_B][0] = initial_point;
             lv_indev_set_button_points(s_btn_indev_list[BTN_B], s_btn_corr_list[BTN_B]);
             break;
 
         case BTN_X:
-            s_btn_corr_list[BTN_X][0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
-                                                     (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            s_btn_corr_list[BTN_X][0] = initial_point;
             lv_indev_set_button_points(s_btn_indev_list[BTN_X], s_btn_corr_list[BTN_X]);
             break;
 
         case BTN_Y:
-            s_btn_corr_list[BTN_Y][0] = (lv_point_t){(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
-                                                     (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
+            s_btn_corr_list[BTN_Y][0] = initial_point;
             lv_indev_set_button_points(s_btn_indev_list[BTN_Y], s_btn_corr_list[BTN_Y]);
             break;
 
@@ -226,14 +221,12 @@ void remove_LR()
 
 void remove_virtual_btn(Button key)
 {
-    if (btm_btn_container != NULL)
-    {
+    if (btm_btn_container != NULL) {
         lv_obj_del_async(btm_btn_container);
         btm_btn_container = NULL;
     }
 
-    switch (key)
-    {
+    switch (key) {
         case BTN_A:
             s_btn_corr_list[BTN_A][0] = (lv_point_t){-1, -1};
             lv_indev_set_button_points(s_btn_indev_list[BTN_A], s_btn_corr_list[BTN_A]);

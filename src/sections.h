@@ -1,5 +1,6 @@
 #ifndef SECTIONS_H
 #define SECTIONS_H
+
 #include <setjmp.h>
 #include "3ds.h"
 #include "detector.h"
@@ -27,4 +28,5 @@
 // Glob
 extern jmp_buf  g_exitJmp;
 extern Detector g_det;
+
 #endif  // SECTIONS_H

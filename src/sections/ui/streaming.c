@@ -7,12 +7,10 @@ static void model_list_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t       *obj  = lv_event_get_target(e);
-    if (code == LV_EVENT_VALUE_CHANGED)
-    {
+    if (code == LV_EVENT_VALUE_CHANGED) {
         destroy_detector(&g_det);
         uint16_t model_idx = lv_dropdown_get_selected(obj);
-        switch (model_idx)
-        {
+        switch (model_idx) {
             case 0:
                 g_det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
                 break;
@@ -43,15 +41,12 @@ static void detect_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
 
-    if (code == LV_EVENT_CLICKED)
-    {
+    if (code == LV_EVENT_CLICKED) {
         g_camState = CAM_HANG;
         pause_cam_capture();
 
-        if (g_ui_stack[g_num_ui_layer].idx == LAYER_RESULT)
-        {
-            ui_layer_pop();
-        }
+        if (g_ui_stack[g_num_ui_layer].idx == LAYER_RESULT) ui_layer_pop();
+
         ui_layer_join(LAYER_RESULT);
     }
 }
@@ -60,8 +55,7 @@ static void tabview_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
 
-    if (code == LV_EVENT_CLICKED)
-    {
+    if (code == LV_EVENT_CLICKED) {
         g_camState = CAM_HANG;
         pause_cam_capture();
 

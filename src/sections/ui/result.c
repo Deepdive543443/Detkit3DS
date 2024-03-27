@@ -10,17 +10,14 @@ static void object_display_cb(lv_event_t *e)
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t       *item = lv_event_get_target(e);
 
-    if (code == LV_EVENT_CLICKED)
-    {
+    if (code == LV_EVENT_CLICKED) {
         unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
         writeCamToPixels(pixels, 0, 0, WIDTH_TOP, HEIGHT_TOP);
 
         int idx = lv_obj_get_child_id(item) - 2;
-        if (idx < 0)
-        {
+        if (idx < 0) {
             draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &s_objects);
-        } else
-        {
+        } else {
             BoxInfo obj = BoxVec_getItem(idx, &s_objects);
 
             BoxVec box_Vec_temp;
@@ -44,8 +41,7 @@ static void quit_detect_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
 
-    if (code == LV_EVENT_CLICKED)
-    {
+    if (code == LV_EVENT_CLICKED) {
         g_camState = CAM_STREAM;
         ui_layer_pop();
     }
@@ -65,8 +61,7 @@ static void create_box_list()
     lv_obj_add_event_cb(btn, object_display_cb, LV_EVENT_ALL, 0);
     lv_group_add_obj(group, btn);
 
-    for (size_t i = 0; i < s_objects.num_item; i++)
-    {
+    for (size_t i = 0; i < s_objects.num_item; i++) {
         BoxInfo obj = BoxVec_getItem(i, &s_objects);
         char    list_item[40];
         int     label = obj.label;

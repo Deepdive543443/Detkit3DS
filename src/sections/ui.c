@@ -1,10 +1,9 @@
 #include "sections.h"
-
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-UI_activity        g_ui_stack[LAYER_NUM];
 int                g_num_ui_layer = -1;
+UI_activity        g_ui_stack[LAYER_NUM];
 static UI_activity s_activity_table[LAYER_NUM];
 
 static void UI_activities_init()
@@ -17,19 +16,14 @@ static void UI_activities_init()
 
 void ui_layer_join(UI_layer layer)
 {
-    if (g_num_ui_layer != -1)
-    {
-        g_ui_stack[g_num_ui_layer].onLeave();
-    }
+    if (g_num_ui_layer != -1) g_ui_stack[g_num_ui_layer].onLeave();
 
-    if (g_num_ui_layer < LAYER_NUM)
-    {
+    if (g_num_ui_layer < LAYER_NUM) {
         g_num_ui_layer++;
         g_ui_stack[g_num_ui_layer] = s_activity_table[layer];
         g_ui_stack[g_num_ui_layer].onCreate();
         g_ui_stack[g_num_ui_layer].onEnter();
-    } else
-    {
+    } else {
         char msg_err[40];
         sprintf(msg_err, "Fail to add layer: %d\n", layer);
         hang_err(msg_err);
@@ -38,14 +32,12 @@ void ui_layer_join(UI_layer layer)
 
 void ui_layer_pop()
 {
-    if (g_num_ui_layer >= 0)
-    {
+    if (g_num_ui_layer >= 0) {
         g_ui_stack[g_num_ui_layer].onLeave();
         g_ui_stack[g_num_ui_layer].onDestroy();
         g_num_ui_layer--;
         g_ui_stack[g_num_ui_layer].onEnter();
-    } else
-    {
+    } else {
         hang_err("No UI to on stack\n");
     }
 }
@@ -53,25 +45,14 @@ void ui_layer_pop()
 int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
 {
     int      width, height, n;
-    uint8_t *pixels = (uint8_t *)stbi_load(path, &width, &height, &n, 0);
-    if (pixels == NULL)
-    {
-        return 0;
-    }
-
+    uint8_t *pixels     = (uint8_t *)stbi_load(path, &width, &height, &n, 0);
     uint8_t *lvgl_datas = malloc(sizeof(uint8_t) * width * height * 3);
-    if (lvgl_datas == NULL)
-    {
-        return 0;
-    }
+    if (lvgl_datas == NULL || pixels == NULL) return 0;
 
     uint8_t *pixels_ptr    = pixels;
     uint8_t *lvgl_data_ptr = lvgl_datas;
-
-    for (int h = 0; h < height; h++)
-    {
-        for (int w = 0; w < width; w++)
-        {
+    for (int h = 0; h < height; h++) {
+        for (int w = 0; w < width; w++) {
             uint8_t r = pixels_ptr[0];
             uint8_t g = pixels_ptr[1];
             uint8_t b = pixels_ptr[2];
@@ -86,10 +67,7 @@ int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
         }
     }
 
-    if (lvgl_datas != NULL)
-    {
-        stbi_image_free(pixels);
-    }
+    if (lvgl_datas != NULL) stbi_image_free(pixels);
 
     *res_buffer = (lv_img_dsc_t){
         .header.cf          = LV_IMG_CF_TRUE_COLOR_ALPHA,
@@ -114,15 +92,11 @@ void widgets_init()
 
     button_init();
     ui_layer_join(LAYER_STREAMING);
-
-    // Detector, Detector objects and group of enconder containers
-    g_det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
 }
 
 void ui_cleanup()
 {
-    while (g_num_ui_layer > 0)
-    {
+    while (g_num_ui_layer > 0) {
         ui_layer_pop(g_ui_stack[g_num_ui_layer].idx);
         g_num_ui_layer--;
     }
