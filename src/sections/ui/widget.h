@@ -23,7 +23,7 @@ void button_init();
 void widgets_init();
 void ui_cleanup();
 
-// Layers
+// Layers activities
 UI_activity ui_background_activities();
 UI_activity ui_stream_activities();
 UI_activity ui_result_activities();

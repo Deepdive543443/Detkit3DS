@@ -28,7 +28,6 @@ static void object_display_cb(lv_event_t *e)
         }
 
         writePixelsToFrameBuffer(gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), pixels, 0, 0, WIDTH_TOP, HEIGHT_TOP);
-
         gfxFlushBuffers();
         gfxScreenSwapBuffers(GFX_TOP, true);
         gspWaitForVBlank();
@@ -51,7 +50,7 @@ static void create_box_list()
 {
     box_list = lv_list_create(lv_scr_act());
     lv_obj_set_size(box_list, WIDTH_BTM, 160);
-    lv_obj_align(box_list, LV_ALIGN_TOP_MID, 0, 40);
+    lv_obj_align(box_list, LV_ALIGN_TOP_MID, 0, 48);
 
     lv_obj_t *btn;
     lv_list_add_text(box_list, "Press B to continue");
@@ -92,7 +91,6 @@ static void ui_result_onCreate()
     // Print inference outputs
     draw_boxxes(pixels, WIDTH_TOP, HEIGHT_TOP, &s_objects);
     writePixelsToFrameBuffer(gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), pixels, 0, 0, WIDTH_TOP, HEIGHT_TOP);
-
     gfxFlushBuffers();
     gfxScreenSwapBuffers(GFX_TOP, true);
     gspWaitForVBlank();
