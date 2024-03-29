@@ -1,7 +1,10 @@
 #include "sections.h"
 
-static lv_obj_t *models   = NULL;
-static lv_obj_t *hint_msg = NULL;
+static lv_obj_t *models           = NULL;
+static lv_obj_t *hint_msg         = NULL;
+static lv_obj_t *battery_symbol   = NULL;
+static lv_obj_t *cam_state_symbol = NULL;
+static lv_obj_t *time_msg         = NULL;
 
 static void model_list_cb(lv_event_t *e)
 {
@@ -23,18 +26,6 @@ static void model_list_cb(lv_event_t *e)
                 break;
         };
     }
-}
-
-static void create_model_list()
-{
-    models = lv_dropdown_create(lv_scr_act());
-    lv_dropdown_set_options(models,
-                            "NanoDet-plus\n"
-                            "FastestDet");
-
-    lv_obj_align(models, LV_ALIGN_TOP_MID, 0, -10);
-    lv_obj_set_width(models, 150);
-    lv_obj_add_event_cb(models, model_list_cb, LV_EVENT_ALL, 0);  // TODO
 }
 
 static void detect_cb(lv_event_t *e)
@@ -63,6 +54,18 @@ static void tabview_cb(lv_event_t *e)
     }
 }
 
+static void create_model_list()
+{
+    models = lv_dropdown_create(lv_scr_act());
+    lv_dropdown_set_options(models,
+                            "NanoDet-plus\n"
+                            "FastestDet");
+
+    lv_obj_align(models, LV_ALIGN_TOP_MID, 0, -10);
+    lv_obj_set_width(models, 150);
+    lv_obj_add_event_cb(models, model_list_cb, LV_EVENT_ALL, 0);  // TODO
+}
+
 static void ui_stream_onCreate()
 {
     create_LR(detect_cb);
@@ -71,6 +74,18 @@ static void ui_stream_onCreate()
     hint_msg = lv_label_create(lv_scr_act());
     lv_label_set_text(hint_msg, "Press L, R, or A to detect");
     lv_obj_center(hint_msg);
+
+    cam_state_symbol = lv_label_create(lv_scr_act());
+    lv_label_set_text(cam_state_symbol, LV_SYMBOL_PLAY);
+    lv_obj_align(cam_state_symbol, LV_ALIGN_TOP_MID, 0, 30);
+
+    battery_symbol = lv_label_create(lv_scr_act());
+    lv_label_set_text(battery_symbol, LV_SYMBOL_BATTERY_3);
+    lv_obj_align(battery_symbol, LV_ALIGN_TOP_RIGHT, -8, 30);
+
+    time_msg = lv_label_create(lv_scr_act());
+    lv_label_set_text(time_msg, "114 : 514");
+    lv_obj_align(time_msg, LV_ALIGN_TOP_RIGHT, -35, 28);
 }
 
 static void ui_stream_onEnter()
@@ -92,7 +107,14 @@ static void ui_stream_onDestroy()
 {
     remove_LR();
     lv_obj_del_async(hint_msg);
-    hint_msg = NULL;
+    lv_obj_del_async(cam_state_symbol);
+    lv_obj_del_async(battery_symbol);
+    lv_obj_del_async(time_msg);
+
+    hint_msg         = NULL;
+    cam_state_symbol = NULL;
+    battery_symbol   = NULL;
+    time_msg         = NULL;
 }
 
 UI_activity ui_stream_activities()

@@ -12,11 +12,10 @@
 #define HEIGHT_TOP  240
 #define SCRSIZE_TOP WIDTH_TOP * HEIGHT_TOP
 
-#define STACKSIZE    (4 * 1024)
-#define TICK_MS      1               // Millisec a tick
-#define TICK_US      TICK_MS * 1000  // Microsec a tick
-#define TICK_NS      TICK_US * 1000  // Nanosec a tick
-#define USE_SYS_CORE 0               /*Sys code leads to slower loading speed and it's not available in CIA*/
+#define STACKSIZE (4 * 1024)
+#define TICK_MS   1               // Millisec a tick
+#define TICK_US   TICK_MS * 1000  // Microsec a tick
+#define TICK_NS   TICK_US * 1000  // Nanosec a tick
 
 #include "sections/cam.h"
 #include "sections/display.h"

@@ -51,11 +51,6 @@ void HALinit()
     APT_SetAppCpuTimeLimit(80);
 #endif
 
-    // Display init
-    lv_disp_t *disp_btm = display_init(GFX_BOTTOM);
-    lv_disp_set_default(disp_btm);
-    lv_obj_clear_flag(lv_scr_act(), LV_OBJ_FLAG_SCROLLABLE);  // We don't want the screen to be scrollable
-
     // Tick thread init
     s_thread_ticking = true;
     s32 prio         = 0;

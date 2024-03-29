@@ -16,6 +16,17 @@ set(ROMFS romfs)
 
 option(BUILD_CIA "Build CIA package for title manager to install" OFF)
 option(BUILD_TEST "Build test case of different experimental features" OFF)
+option(USE_SYS_CORE "Made threads on sys core" OFF)
+
+if(BUILD_CIA)
+    add_definitions(-DBUILD_CIA)
+endif()
+
+if(USE_SYS_CORE)
+    add_definitions(-DUSE_SYS_CORE)
+endif()
+
+
 
 project(${project_title}.elf)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
