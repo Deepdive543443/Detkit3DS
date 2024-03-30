@@ -66,9 +66,11 @@ add_3dsx_target(${project_title}.elf
     ${APP_ICON}
     ${ROMFS}
 )
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${project_title}.3dsx DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/3dsx)
 
 if(BUILD_CIA)
     add_cia_target(${project_title}.elf ${RSF} ${banner} ${audio})
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${project_title}.cia DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/cia)
 endif()
 
 if(BUILD_TEST)

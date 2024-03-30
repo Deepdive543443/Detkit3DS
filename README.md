@@ -32,7 +32,7 @@ cd Detkit3DS
 ```
 cd build
 cmake -DBUILD_CIA=ON ..
-make -j4
+make -j6 install
 ```
 Install the .cia using a title manager or running the .3dsx from Homebrew launcher.
 
