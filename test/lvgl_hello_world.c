@@ -24,15 +24,27 @@ int main(int argc, char **argv)
 
     HALinit();
 
+    touchPosition touch;
+
     // Main loop
     while (aptMainLoop()) {
         lv_timer_handler();
         // Scan all the inputs. This should be done once for each frame
         hidScanInput();
+        hidTouchRead(&touch);
 
         u32 kDown = hidKeysDown();
 
         if (kDown & KEY_START) break;  // break in order to return to hbmenu
+
+        if (kDown & KEY_A) LV_DRAW_TEXT(disp_top, "Hello LVGL!");
+
+        if (touch.px >= 5 && touch.py >= 5)
+            lv_obj_set_style_bg_color(lv_disp_get_scr_act(disp_btm), lv_color_hex(0xffdbac), 0);
+
+        else
+            lv_obj_set_style_bg_color(lv_disp_get_scr_act(disp_btm), lv_color_hex(0xffffff), 0);
+
         main_loop_locker();
     }
 

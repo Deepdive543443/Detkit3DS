@@ -15,6 +15,16 @@ static void flush_cb_3ds(gfxScreen_t gfx_scr, lv_disp_drv_t *disp, const lv_area
     lv_disp_flush_ready(disp);
 }
 
+static void flush_cb_3ds_btm(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
+{
+    flush_cb_3ds(GFX_BOTTOM, disp, area, color_p);
+}
+
+static void flush_cb_3ds_top(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
+{
+    flush_cb_3ds(GFX_TOP, disp, area, color_p);
+}
+
 void writePic2FrameBuf565(void *fb, lv_color_t *color, u16 x, u16 y, u16 w, u16 h)
 {
     /* Display the LVGL buffer on 3DS screen
@@ -38,16 +48,6 @@ void writePic2FrameBuf565(void *fb, lv_color_t *color, u16 x, u16 y, u16 w, u16 
             fb_8[v]     = color[j * w + i].ch.blue << 3;   //(data & 0x1F) << 3;
         }
     }
-}
-
-void flush_cb_3ds_btm(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
-{
-    flush_cb_3ds(GFX_BOTTOM, disp, area, color_p);
-}
-
-void flush_cb_3ds_top(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
-{
-    flush_cb_3ds(GFX_TOP, disp, area, color_p);
 }
 
 lv_disp_t *display_init(gfxScreen_t gfx_scr)
