@@ -63,7 +63,7 @@ void HALinit()
 #endif  // USE_SYS_CORE
 
     // Detector init
-    g_det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
+    g_det = detector_init();
 }
 
 void HAL_cleanup()
