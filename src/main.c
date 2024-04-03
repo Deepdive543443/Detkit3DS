@@ -12,14 +12,10 @@ static void cleanup()
 
 int main(int argc, char **argv)
 {
-#ifndef BUILD_CIA
-    u32 kHeld;
-
     if (setjmp(g_exitJmp)) {
         cleanup();
         return 0;
     }
-#endif  // BUILD_CIA
 
     // IVGL init
     lv_init();
@@ -29,6 +25,10 @@ int main(int argc, char **argv)
 
     // Cam init
     camSetup();
+
+#ifndef BUILD_CIA
+    u32 kHeld;
+#endif  // BUILD_CIA
 
     while (aptMainLoop()) {
         if (camUpdate()) continue;
