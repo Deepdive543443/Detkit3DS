@@ -55,7 +55,7 @@ target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR
 target_link_libraries(${project_title}.elf ${CMAKE_CURRENT_LIST_DIR}/lib/build/lvgl/liblvgl.a)
 
 # Link ncnn
-set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/ncnn_3ds_master/lib/cmake/ncnn)
+set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/build/ncnn_3ds_master/lib/cmake/ncnn)
 find_package(ncnn REQUIRED)
 target_link_libraries(${project_title}.elf ncnn)
 

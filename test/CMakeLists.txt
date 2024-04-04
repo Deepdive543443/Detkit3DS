@@ -26,14 +26,14 @@ foreach(case ${TEST})
     target_link_libraries(${test_we}.elf m)
     
     #Link detkit
-    target_include_directories(${test_we}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/..//lib/build/detector)
-    target_link_libraries(${test_we}.elf ${CMAKE_CURRENT_LIST_DIR}/..//lib/build/detector/libdetkit.a)
+    target_include_directories(${test_we}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../lib/build/detector)
+    target_link_libraries(${test_we}.elf ${CMAKE_CURRENT_LIST_DIR}/../lib/build/detector/libdetkit.a)
     
     #Link LVGL
-    target_include_directories(${test_we}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/..//lib/build/lvgl)
-    target_link_libraries(${test_we}.elf ${CMAKE_CURRENT_LIST_DIR}/..//lib/build/lvgl/liblvgl.a)
+    target_include_directories(${test_we}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../lib/build/lvgl)
+    target_link_libraries(${test_we}.elf ${CMAKE_CURRENT_LIST_DIR}/../lib/build/lvgl/liblvgl.a)
     
-    set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/../lib/ncnn_3ds_master/lib/cmake/ncnn) # Link ncnn(temp)
+    set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/../lib/build/ncnn_3ds_master/lib/cmake/ncnn) # Link ncnn(temp)
     find_package(ncnn REQUIRED)
     target_link_libraries(${test_we}.elf ncnn)
 
