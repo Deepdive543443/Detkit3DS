@@ -13,7 +13,7 @@ static void model_list_cb(lv_event_t *e)
         uint16_t model_idx = lv_dropdown_get_selected(obj);
         switch (model_idx) {
             case 0:
-                g_det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
+                g_det = create_nanodet_plus(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
                 break;
 
             case 1:
