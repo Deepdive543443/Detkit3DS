@@ -26,7 +26,7 @@ Or using the guide line from [this repo](https://github.com/Deepdive543443/Bench
 sudo apt install unzip cmake
 git clone https://github.com/Deepdive543443/Detkit3DS.git --recurse-submodules
 cd Detkit3DS
-./setup.sh
+./setup.sh lvgl ncnn detkit
 ```
 #### Build the executatble
 ```

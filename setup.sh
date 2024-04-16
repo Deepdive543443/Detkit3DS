@@ -44,12 +44,3 @@ mkdir -p $SCRIPT_DIR/lib/build
 build_module "$1"
 build_module "$2"
 build_module "$3"
-# if [ "$" == "" ] 
-# then
-#   build_module("")
-#   build_module(lvgl)
-#   build_module(ncnn)
-#   build_module(detkit)
-# else
-#   build_module(detkit)
-# fi
