@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.0)
 set (CMAKE_CXX_STANDARD 11)
 project(lvgl VERSION 0.1.0 LANGUAGES C CXX)
 
-file( GLOB_RECURSE LIB_SOURCES ${CMAKE_CURRENT_LIST_DIR}/lvgl-8.3.11/*.c )
+file( GLOB_RECURSE LIB_SOURCES ${CMAKE_CURRENT_LIST_DIR}/lvgl-8.3.11/src/*.c )
 add_library( lvgl ${LIB_SOURCES} )
 target_include_directories( lvgl PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lvgl-8.3.11)
 target_include_directories( lvgl PRIVATE ${CMAKE_CURRENT_LIST_DIR})
