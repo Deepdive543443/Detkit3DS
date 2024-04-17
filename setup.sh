@@ -26,7 +26,10 @@ ncnn)
 detkit)
     cd $SCRIPT_DIR/build
     rm -rf *
-    cmake -DCMAKE_TOOLCHAIN_FILE="$SCRIPT_DIR/cmake/DevkitArm3DS-toolchain.cmake" -DNCNN_DIR="$SCRIPT_DIR/lib/build/ncnn_3ds/lib/cmake/ncnn" $SCRIPT_DIR/lib/detector_c
+    cmake -DCMAKE_TOOLCHAIN_FILE="$SCRIPT_DIR/cmake/DevkitArm3DS-toolchain.cmake" \
+        -DNCNN_DIR="$SCRIPT_DIR/lib/build/ncnn_3ds/lib/cmake/ncnn" \
+        -DBUILD_C=ON \
+        $SCRIPT_DIR/lib/detector_c
     make -j6 install
     mv install $SCRIPT_DIR/lib/build/detector
     rm -rf *

@@ -48,7 +48,7 @@ target_link_libraries(${project_title}.elf m)
 
 #Link detkit
 target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/build/detector)
-target_link_libraries(${project_title}.elf ${CMAKE_CURRENT_LIST_DIR}/lib/build/detector/libdetkit.a)
+target_link_libraries(${project_title}.elf ${CMAKE_CURRENT_LIST_DIR}/lib/build/detector/libdetkit_c.a)
 
 #Link LVGL
 target_include_directories(${project_title}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/build/lvgl)
