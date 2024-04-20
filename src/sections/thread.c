@@ -62,8 +62,8 @@ void HALinit()
     s_tick_thread = threadCreate(lvgl_tick_thread, NULL, STACKSIZE, prio - 1, -2, false);
 #endif  // USE_SYS_CORE
 
-    // Detector init
-    g_det = detector_init();
+    display_init(GFX_BOTTOM);
+    camSetup();
 }
 
 void HAL_cleanup()

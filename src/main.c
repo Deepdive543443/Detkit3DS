@@ -19,12 +19,8 @@ int main(int argc, char **argv)
 
     // IVGL init
     lv_init();
-    display_init(GFX_BOTTOM);
     HALinit();
     widgets_init();
-
-    // Cam init
-    camSetup();
 
 #ifndef BUILD_CIA
     u32 kHeld;

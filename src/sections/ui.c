@@ -92,6 +92,9 @@ void widgets_init()
 
     button_init();
     ui_layer_join(LAYER_STREAMING);
+
+    // Detector init
+    g_det = detector_init();
 }
 
 void ui_cleanup()
