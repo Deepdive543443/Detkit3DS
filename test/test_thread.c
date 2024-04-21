@@ -82,7 +82,7 @@ int main(int argc, char **argv)
             clock_gettime(CLOCK_MONOTONIC, &start);
             unsigned char *pixels_cpy = (unsigned char *)malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
             memset(pixels_cpy, 0.5f, sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);
-            det = create_nanodet(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
+            det = create_nanodet_plus(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
             BoxVec objects = det.detect(pixels_cpy, WIDTH_TOP, HEIGHT_TOP, &det);
             printf("(Nanodet) Detected %d items, (%lldms): \n", objects.num_item, ticker());
 

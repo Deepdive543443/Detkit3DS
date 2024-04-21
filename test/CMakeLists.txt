@@ -27,13 +27,12 @@ foreach(case ${TEST})
     
     #Link detkit
     target_include_directories(${test_we}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../lib/build/detector)
-    target_link_libraries(${test_we}.elf ${CMAKE_CURRENT_LIST_DIR}/../lib/build/detector/libdetkit.a)
+    target_link_libraries(${test_we}.elf ${CMAKE_CURRENT_LIST_DIR}/../lib/build/detector/libdetkit_c.a)
     
     #Link LVGL
     target_include_directories(${test_we}.elf PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../lib/build/lvgl)
     target_link_libraries(${test_we}.elf ${CMAKE_CURRENT_LIST_DIR}/../lib/build/lvgl/liblvgl.a)
     
-    set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/../lib/build/ncnn_3ds_master/lib/cmake/ncnn) # Link ncnn(temp)
     find_package(ncnn REQUIRED)
     target_link_libraries(${test_we}.elf ncnn)
 
