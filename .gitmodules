@@ -1,3 +1,9 @@
 [submodule "lib/detector_c"]
 	path = lib/detector_c
 	url = https://github.com/Deepdive543443/detector_c
+[submodule "lib/ncnn"]
+	path = lib/ncnn
+	url = https://github.com/Tencent/ncnn
+[submodule "lib/liblvgl/lvgl"]
+	path = lib/liblvgl/lvgl
+	url = https://github.com/lvgl/lvgl
