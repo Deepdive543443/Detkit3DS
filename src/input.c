@@ -1,4 +1,4 @@
-#include "sections/input.h"
+#include "input.h"
 
 static lv_indev_drv_t s_indev_drv_touch;
 static lv_indev_drv_t s_indev_drv_cross;
@@ -16,19 +16,7 @@ static void virtual_press_cb(u32 key, lv_indev_drv_t *drv, lv_indev_data_t *data
     }
 }
 
-void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_A, drv, data); }
-
-void virtual_B_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_B, drv, data); }
-
-void virtual_X_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_X, drv, data); }
-
-void virtual_Y_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_Y, drv, data); }
-
-void virtual_L_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_L, drv, data); }
-
-void virtual_R_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_R, drv, data); }
-
-void touch_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data)
+static void touch_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data)
 {
     touchPosition touch;
     hidTouchRead(&touch);
@@ -41,7 +29,7 @@ void touch_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data)
     }
 }
 
-void encoder_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data)
+static void encoder_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data)
 {
     u32 kHeld = hidKeysHeld();
 
@@ -56,6 +44,18 @@ void encoder_cb_3ds(lv_indev_drv_t *drv, lv_indev_data_t *data)
         data->state = LV_INDEV_STATE_RELEASED;
     }
 }
+
+void virtual_A_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_A, drv, data); }
+
+void virtual_B_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_B, drv, data); }
+
+void virtual_X_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_X, drv, data); }
+
+void virtual_Y_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_Y, drv, data); }
+
+void virtual_L_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_L, drv, data); }
+
+void virtual_R_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_R, drv, data); }
 
 void encoder_driver_init()
 {

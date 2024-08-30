@@ -2,19 +2,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-int                g_num_ui_layer = -1;
-UI_activity        g_ui_stack[LAYER_NUM];
-static UI_activity s_activity_table[LAYER_NUM];
+int          g_num_ui_layer = -1;
+UI_CALLBACKS g_ui_stack[LAYER_NUM];
 
-static void UI_activities_init()
-{
-    s_activity_table[LAYER_BACKGROUND] = ui_background_activities();
-    s_activity_table[LAYER_STREAMING]  = ui_stream_activities();
-    s_activity_table[LAYER_TABVIEW]    = ui_tabview_activities();
-    s_activity_table[LAYER_RESULT]     = ui_result_activities();
-}
+static UI_CALLBACKS s_activity_table[LAYER_NUM];
 
-void ui_layer_join(UI_layer layer)
+void ui_layer_join(UI_LAYER layer)
 {
     if (g_num_ui_layer != -1) g_ui_stack[g_num_ui_layer].onLeave();
 
@@ -87,7 +80,10 @@ void dealloc_res(lv_img_dsc_t *res_buffer) { free((void *)res_buffer->data); }
 void widgets_init()
 {
     encoder_driver_init();
-    UI_activities_init();
+    s_activity_table[LAYER_BACKGROUND] = g_ui_background;
+    s_activity_table[LAYER_STREAMING]  = g_ui_stream;
+    s_activity_table[LAYER_TABVIEW]    = g_ui_tabview;
+    s_activity_table[LAYER_RESULT]     = g_ui_result;
     ui_layer_join(LAYER_BACKGROUND);
 
     button_init();

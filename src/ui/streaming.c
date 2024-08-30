@@ -1,4 +1,4 @@
-#include "sections.h"
+#include "ui.h"
 
 static lv_obj_t *models         = NULL;
 static lv_obj_t *hint_msg       = NULL;
@@ -103,12 +103,9 @@ static void ui_stream_onDestroy()
     battery_symbol = NULL;
 }
 
-UI_activity ui_stream_activities()
-{
-    return (UI_activity){.onCreate  = ui_stream_onCreate,
-                         .onEnter   = ui_stream_onEnter,
-                         .update    = ui_stream_update,
-                         .onLeave   = ui_stream_onLeave,
-                         .onDestroy = ui_stream_onDestroy,
-                         .idx       = LAYER_STREAMING};
-}
+UI_CALLBACKS g_ui_stream = {.onCreate  = ui_stream_onCreate,
+                            .onEnter   = ui_stream_onEnter,
+                            .update    = ui_stream_update,
+                            .onLeave   = ui_stream_onLeave,
+                            .onDestroy = ui_stream_onDestroy,
+                            .idx       = LAYER_STREAMING};

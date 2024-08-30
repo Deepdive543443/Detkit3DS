@@ -9,7 +9,7 @@ typedef enum {
     LAYER_RESULT,
     LAYER_TABVIEW,
     LAYER_NUM
-} UI_layer;
+} UI_LAYER;
 
 typedef struct {
     void (*onCreate)(void);
@@ -17,14 +17,21 @@ typedef struct {
     void (*update)(void);
     void (*onLeave)(void);
     void (*onDestroy)(void);
-    UI_layer idx;
-} UI_activity;
+    UI_LAYER idx;
+} UI_CALLBACKS;
 
-extern UI_activity g_ui_stack[LAYER_NUM];
+extern UI_CALLBACKS g_ui_stack[LAYER_NUM];
 extern int         g_num_ui_layer;
 
-void ui_layer_join(UI_layer layer); /*Add a layer to stack and run the init function*/
+extern UI_CALLBACKS g_ui_background;
+extern UI_CALLBACKS g_ui_stream;
+extern UI_CALLBACKS g_ui_result;
+extern UI_CALLBACKS g_ui_tabview;
+
+
+void ui_layer_join(UI_LAYER layer); /*Add a layer to stack and run the init function*/
 void ui_layer_pop();
+void ui_cleanup();
 int  add_res_depth16(const char *path, lv_img_dsc_t *res_buffer);
 void dealloc_res(lv_img_dsc_t *res_buffer);
 

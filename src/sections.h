@@ -17,12 +17,12 @@
 #define TICK_US   TICK_MS * 1000  // Microsec a tick
 #define TICK_NS   TICK_US * 1000  // Nanosec a tick
 
-#include "sections/cam.h"
-#include "sections/display.h"
-#include "sections/input.h"
-#include "sections/thread.h"
-#include "sections/ui.h"
-#include "sections/ui/widget.h"
+#include "cam.h"
+#include "display.h"
+#include "input.h"
+#include "thread.h"
+#include "ui.h"
+#include "widget.h"
 
 // Glob
 extern jmp_buf  g_exitJmp;

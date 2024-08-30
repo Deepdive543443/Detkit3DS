@@ -21,12 +21,5 @@ void create_LR();
 void remove_LR();
 void button_init();
 void widgets_init();
-void ui_cleanup();
-
-// Layers activities
-UI_activity ui_background_activities();
-UI_activity ui_stream_activities();
-UI_activity ui_result_activities();
-UI_activity ui_tabview_activities();
 
 #endif  // WIDGET_H

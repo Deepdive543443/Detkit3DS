@@ -1,4 +1,4 @@
-#include "sections.h"
+#include "ui.h"
 
 static lv_img_dsc_t ncnn_logo;
 static lv_img_dsc_t logo_lvgl;
@@ -138,12 +138,9 @@ static void ui_tabview_onDestroy()
     dealloc_res(&citra_logo);
 }
 
-UI_activity ui_tabview_activities()
-{
-    return (UI_activity){.onCreate  = ui_tabview_onCreate,
-                         .onEnter   = ui_tabview_onEnter,
-                         .update    = ui_tabview_update,
-                         .onLeave   = ui_tabview_onLeave,
-                         .onDestroy = ui_tabview_onDestroy,
-                         .idx       = LAYER_TABVIEW};
-}
+UI_CALLBACKS g_ui_tabview = {.onCreate  = ui_tabview_onCreate,
+                             .onEnter   = ui_tabview_onEnter,
+                             .update    = ui_tabview_update,
+                             .onLeave   = ui_tabview_onLeave,
+                             .onDestroy = ui_tabview_onDestroy,
+                             .idx       = LAYER_TABVIEW};

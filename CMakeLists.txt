@@ -36,9 +36,9 @@ find_package(CITRO3D REQUIRED)
 find_package(CITRO2D REQUIRED)
 
 # Build executable
-file(GLOB_RECURSE SECTIONS src/sections/*.c)
-add_executable(${project_title}.elf src/main.c ${SECTIONS})
-target_include_directories(${project_title}.elf PRIVATE src)
+file(GLOB_RECURSE SECTIONS src/*.c)
+add_executable(${project_title}.elf ${SECTIONS})
+target_include_directories(${project_title}.elf PRIVATE src lib)
 
 # Link ctrulib, this will also setup the include directories
 target_link_libraries(${project_title}.elf 3ds::citro2d)
@@ -59,18 +59,18 @@ set(ncnn_DIR ${CMAKE_CURRENT_LIST_DIR}/lib/build/ncnn_3ds/lib/cmake/ncnn)
 find_package(ncnn REQUIRED)
 target_link_libraries(${project_title}.elf ncnn)
 
-add_3dsx_target(${project_title}.elf 
+if(BUILD_CIA)
+    add_cia_target(${project_title}.elf ${RSF} ${banner} ${audio})
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${project_title}.cia DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/cia)
+else()
+    add_3dsx_target(${project_title}.elf 
     ${APP_TITLE}
     ${APP_DESCRIPTION}
     ${APP_AUTHOR}
     ${APP_ICON}
     ${ROMFS}
-)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${project_title}.3dsx DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/3dsx)
-
-if(BUILD_CIA)
-    add_cia_target(${project_title}.elf ${RSF} ${banner} ${audio})
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${project_title}.cia DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/cia)
+    )
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${project_title}.3dsx DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/3dsx)
 endif()
 
 if(BUILD_TEST)

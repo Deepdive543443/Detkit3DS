@@ -1,4 +1,4 @@
-#include "sections.h"
+#include "ui.h"
 
 static lv_img_dsc_t ncnn_bg_transprant;
 static lv_obj_t    *bg = NULL;
@@ -26,12 +26,9 @@ static void ui_background_onDestroy()
     dealloc_res(&ncnn_bg_transprant);
 }
 
-UI_activity ui_background_activities()
-{
-    return (UI_activity){.onCreate  = ui_background_onCreate,
-                         .onEnter   = ui_background_onEnter,
-                         .update    = ui_background_update,
-                         .onLeave   = ui_background_onLeave,
-                         .onDestroy = ui_background_onDestroy,
-                         .idx       = LAYER_BACKGROUND};
-}
+UI_CALLBACKS g_ui_background = {.onCreate  = ui_background_onCreate,
+                                .onEnter   = ui_background_onEnter,
+                                .update    = ui_background_update,
+                                .onLeave   = ui_background_onLeave,
+                                .onDestroy = ui_background_onDestroy,
+                                .idx       = LAYER_BACKGROUND};

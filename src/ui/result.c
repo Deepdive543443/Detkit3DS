@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "sections.h"
+#include "ui.h"
 
 static lv_group_t *group    = NULL;
 static lv_obj_t   *box_list = NULL;  // LVGL Objects
@@ -121,12 +121,9 @@ static void ui_result_onDestroy()
     box_list = NULL;
 }
 
-UI_activity ui_result_activities()
-{
-    return (UI_activity){.onCreate  = ui_result_onCreate,
-                         .onEnter   = ui_result_onEnter,
-                         .update    = ui_result_update,
-                         .onLeave   = ui_result_onLeave,
-                         .onDestroy = ui_result_onDestroy,
-                         .idx       = LAYER_RESULT};
-}
+UI_CALLBACKS g_ui_result = {.onCreate  = ui_result_onCreate,
+                            .onEnter   = ui_result_onEnter,
+                            .update    = ui_result_update,
+                            .onLeave   = ui_result_onLeave,
+                            .onDestroy = ui_result_onDestroy,
+                            .idx       = LAYER_RESULT};
