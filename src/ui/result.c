@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "ui.h"
 
 static lv_group_t *group    = NULL;
