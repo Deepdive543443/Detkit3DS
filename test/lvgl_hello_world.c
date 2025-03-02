@@ -22,7 +22,7 @@ int main(int argc, char **argv)
     LV_DRAW_TEXT(disp_btm, LV_SYMBOL_BATTERY_3);
     LV_DRAW_TEXT(disp_btm, LV_SYMBOL_BATTERY_FULL);
 
-    HALinit();
+    dev_init();
 
     touchPosition touch;
 
@@ -45,10 +45,10 @@ int main(int argc, char **argv)
         else
             lv_obj_set_style_bg_color(lv_disp_get_scr_act(disp_btm), lv_color_hex(0xffffff), 0);
 
-        main_loop_locker();
+        frame_ctl();
     }
 
-    HAL_cleanup();
+    dev_cleanup();
     gfxExit();
     return 0;
 }

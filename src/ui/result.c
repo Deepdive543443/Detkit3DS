@@ -82,7 +82,7 @@ static void create_box_list()
 static void ui_result_onCreate()
 {
     group = lv_group_create();
-    encoder_driver_set_group(group);
+    input_drv_set_group(group);
 
     // Inference
     unsigned char *pixels = malloc(sizeof(unsigned char) * WIDTH_TOP * HEIGHT_TOP * 3);

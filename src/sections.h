@@ -17,12 +17,9 @@
 #define TICK_US   TICK_MS * 1000  // Microsec a tick
 #define TICK_NS   TICK_US * 1000  // Nanosec a tick
 
-#include "cam.h"
-#include "display.h"
 #include "input.h"
-#include "thread.h"
+#include "device.h"
 #include "ui.h"
-#include "widget.h"
 
 // Glob
 extern jmp_buf  g_exitJmp;

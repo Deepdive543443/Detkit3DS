@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <time.h>
-#include "thread.h"
+#include "device.h"
 
 // Glob
 jmp_buf  g_exitJmp;  // Debug
@@ -17,7 +17,7 @@ static void lvgl_tick_thread()
     }
 }
 
-void main_loop_locker() { svcSleepThread((s64)TICK_NS); }
+void frame_ctl() { svcSleepThread((s64)TICK_NS); }
 
 void hang_err(const char *message)
 {
@@ -33,7 +33,7 @@ void hang_err(const char *message)
     }
 }
 
-void HALinit()
+void dev_init()
 {
     // Rom file system
     Result rc = romfsInit();
@@ -51,6 +51,8 @@ void HALinit()
     APT_SetAppCpuTimeLimit(80);
 #endif
 
+    lv_init();
+
     // Tick thread init
     s_thread_ticking = true;
     s32 prio         = 0;
@@ -66,7 +68,7 @@ void HALinit()
     camSetup();
 }
 
-void HAL_cleanup()
+void dev_cleanup()
 {
     destroy_detector(&g_det);
     s_thread_ticking = false;

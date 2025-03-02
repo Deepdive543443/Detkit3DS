@@ -76,6 +76,8 @@ static void ui_stream_onCreate()
     battery_symbol = lv_label_create(lv_scr_act());
     lv_label_set_text(battery_symbol, LV_SYMBOL_BATTERY_3);
     lv_obj_align(battery_symbol, LV_ALIGN_TOP_RIGHT, -8, 30);
+
+    g_det = create_nanodet_plus(320, "romfs:nanodet-plus-m_416_int8.param", "romfs:nanodet-plus-m_416_int8.bin");
 }
 
 static void ui_stream_onEnter()

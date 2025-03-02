@@ -2,7 +2,7 @@
 
 static void cleanup()
 {
-    HAL_cleanup();
+    dev_cleanup();
     ui_cleanup();
     lv_deinit();
     camExit();
@@ -18,9 +18,8 @@ int main(int argc, char **argv)
     }
 
     // IVGL init
-    lv_init();
-    HALinit();
-    widgets_init();
+    dev_init();
+    ui_init();
 
 #ifndef BUILD_CIA
     u32 kHeld;
@@ -36,7 +35,7 @@ int main(int argc, char **argv)
         if (kHeld & KEY_START) break;
 #endif  // BUILD_CIA
 
-        main_loop_locker();
+        frame_ctl();
     }
 
     cleanup();

@@ -1,4 +1,4 @@
-#include "display.h"
+#include "device.h"
 
 static void flush_cb_3ds(gfxScreen_t gfx_scr, lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
 {
@@ -50,15 +50,14 @@ void writePic2FrameBuf565(void *fb, lv_color_t *color, u16 x, u16 y, u16 w, u16 
     }
 }
 
+static lv_disp_drv_t      disp_drv_top, disp_drv_btm;
+static lv_disp_draw_buf_t draw_buf_struct_top, draw_buf_struct_btm;
+static lv_color_t         buf1_top[WIDTH_TOP * HEIGHT_TOP], buf1_btm[WIDTH_BTM * HEIGHT_BTM];
 lv_disp_t *display_init(gfxScreen_t gfx_scr)
 {
     lv_disp_t *display = NULL;
     switch (gfx_scr) {
         case GFX_TOP:
-
-            static lv_disp_drv_t      disp_drv_top;
-            static lv_disp_draw_buf_t draw_buf_struct_top;
-            static lv_color_t         buf1_top[WIDTH_TOP * HEIGHT_TOP];
             lv_disp_drv_init(&disp_drv_top);
             lv_disp_draw_buf_init(&draw_buf_struct_top, buf1_top, NULL, WIDTH_TOP * HEIGHT_TOP);
             disp_drv_top.flush_cb    = flush_cb_3ds_top; /*Set your driver function*/
@@ -70,10 +69,6 @@ lv_disp_t *display_init(gfxScreen_t gfx_scr)
             break;
 
         case GFX_BOTTOM:
-
-            static lv_disp_drv_t      disp_drv_btm;
-            static lv_disp_draw_buf_t draw_buf_struct_btm;
-            static lv_color_t         buf1_btm[WIDTH_BTM * HEIGHT_BTM];
             lv_disp_drv_init(&disp_drv_btm);
             lv_disp_draw_buf_init(&draw_buf_struct_btm, buf1_btm, NULL, WIDTH_BTM * HEIGHT_BTM);
             disp_drv_btm.flush_cb    = flush_cb_3ds_btm; /*Set your driver function*/

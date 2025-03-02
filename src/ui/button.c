@@ -140,31 +140,9 @@ void add_btm_btn(Button key, void *callback, lv_coord_t width, const char *label
     lv_obj_update_layout(btn_ptr);
     lv_point_t initial_point = {(btn_ptr->coords.x1 + btn_ptr->coords.x2) / 2,
                                 (btn_ptr->coords.y1 + btn_ptr->coords.y2) / 2};
-    switch (key) {
-        case BTN_A:
-            s_btn_corr_list[BTN_A][0] = initial_point;
-            lv_indev_set_button_points(s_btn_indev_list[BTN_A], s_btn_corr_list[BTN_A]);
-            break;
 
-        case BTN_B:
-            s_btn_corr_list[BTN_B][0] = initial_point;
-            lv_indev_set_button_points(s_btn_indev_list[BTN_B], s_btn_corr_list[BTN_B]);
-            break;
-
-        case BTN_X:
-            s_btn_corr_list[BTN_X][0] = initial_point;
-            lv_indev_set_button_points(s_btn_indev_list[BTN_X], s_btn_corr_list[BTN_X]);
-            break;
-
-        case BTN_Y:
-            s_btn_corr_list[BTN_Y][0] = initial_point;
-            lv_indev_set_button_points(s_btn_indev_list[BTN_Y], s_btn_corr_list[BTN_Y]);
-            break;
-
-        default:
-            hang_err("Fail to register virtual button");
-            break;
-    }
+    s_btn_corr_list[key][0] = initial_point;
+    lv_indev_set_button_points(s_btn_indev_list[key], s_btn_corr_list[key]);
 }
 
 void create_LR(void *callback)

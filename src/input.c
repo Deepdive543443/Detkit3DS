@@ -57,7 +57,7 @@ void virtual_L_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb
 
 void virtual_R_cb(lv_indev_drv_t *drv, lv_indev_data_t *data) { virtual_press_cb(KEY_R, drv, data); }
 
-void encoder_driver_init()
+void input_drv_init()
 {
     // Cross button and analog stick init
     lv_indev_drv_init(&s_indev_drv_cross);
@@ -72,4 +72,4 @@ void encoder_driver_init()
     lv_indev_drv_register(&s_indev_drv_touch);
 }
 
-void encoder_driver_set_group(lv_group_t *group) { lv_indev_set_group(s_enc_indev, group); }
+void input_drv_set_group(lv_group_t *group) { lv_indev_set_group(s_enc_indev, group); }

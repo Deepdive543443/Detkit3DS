@@ -77,9 +77,9 @@ int add_res_depth16(const char *path, lv_img_dsc_t *res_buffer)
 
 void dealloc_res(lv_img_dsc_t *res_buffer) { free((void *)res_buffer->data); }
 
-void widgets_init()
+void ui_init()
 {
-    encoder_driver_init();
+    input_drv_init();
     s_activity_table[LAYER_BACKGROUND] = g_ui_background;
     s_activity_table[LAYER_STREAMING]  = g_ui_stream;
     s_activity_table[LAYER_TABVIEW]    = g_ui_tabview;
@@ -88,9 +88,6 @@ void widgets_init()
 
     button_init();
     ui_layer_join(LAYER_STREAMING);
-
-    // Detector init
-    g_det = detector_init();
 }
 
 void ui_cleanup()
